@@ -1130,7 +1130,7 @@ static void sub_8140454(struct Sprite *sprite)
     sprite->data[4]++;
     if (sprite->data[4] == 40)
     {
-        PlaySE(SE_PIN);
+        PlaySE(SE_RG_BALL_CLICK);
         BlendPalettes(0x10000 << sprite->oam.paletteNum, 8, RGB(0, 0, 0));
         MakeCaptureStars(sprite);
         return;

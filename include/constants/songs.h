@@ -374,6 +374,8 @@
 #define MUS_VS_AQUA_MAGMA_LEADER     466 // MUS_BATTLE30
 #define MUS_GSC_RADIO_TOWER_TAKEOVER 467
 
+#define SE_RG_BALL_CLICK             468 // FRLG Poké Ball capture click
+
 #define MUS_ROUTE_118  0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
 
 #endif  // GUARD_CONSTANTS_SONGS_H

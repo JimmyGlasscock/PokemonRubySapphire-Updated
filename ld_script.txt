@@ -1210,6 +1210,7 @@ SECTIONS {
         sound/songs/mus_vs_elite_four.o(.rodata);
         sound/songs/mus_vs_aqua_magma_leader.o(.rodata);
         sound/songs/mus_radio_tower_takeover.o(.rodata);
+        sound/songs/se_rg_ball_click.o(.rodata);
     } =0
 
     lib_rodata :
