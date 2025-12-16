@@ -815,10 +815,9 @@ static void sub_8046FBC(struct Sprite *sprite)
 
     sprite->data[4]++;
     if (sprite->data[4] == 40)
-    {
         return;
-    }
-    else if (sprite->data[4] == 95)
+    
+    if (sprite->data[4] == 95)
     {
         gDoingBattleAnim = 0;
         m4aMPlayAllStop();

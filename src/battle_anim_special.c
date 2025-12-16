@@ -64,6 +64,7 @@ static void sub_81404E4(struct Sprite *sprite);
 static void sub_81405C8(struct Sprite *sprite);
 static void sub_81406BC(struct Sprite *sprite);
 static void sub_81407F4(struct Sprite *sprite);
+static void SpriteCB_CaptureStar_Flicker(struct Sprite *sprite);
 static void PokeBallOpenParticleAnimation_Step1(struct Sprite *sprite);
 static void PokeBallOpenParticleAnimation_Step2(struct Sprite *sprite);
 static void DestroyBallOpenAnimationParticle(struct Sprite *sprite);
@@ -1128,7 +1129,17 @@ static void sub_8140454(struct Sprite *sprite)
 
     sprite->data[4]++;
     if (sprite->data[4] == 40)
+    {
+        PlaySE(SE_PIN);
+        BlendPalettes(0x10000 << sprite->oam.paletteNum, 8, RGB(0, 0, 0));
+        MakeCaptureStars(sprite);
         return;
+    }
+
+    if (sprite->data[4] == 60)
+    {
+        BeginNormalPaletteFade(0x10000 << sprite->oam.paletteNum, 0, 16, 0, RGB(0, 0, 0));
+    }
 
     if (sprite->data[4] == 95)
     {
@@ -1349,6 +1360,96 @@ void PokeBallOpenParticleAnimation(u8 taskId)
     }
 
     gTasks[taskId].data[0]++;
+}
+
+#define sDuration  data[0]
+#define sTargetX   data[2]
+#define sTargetY   data[4]
+#define sAmplitude data[5]
+
+// Capture star positions relative to pokeball
+struct CaptureStar
+{
+    s8 xOffset;
+    s8 yOffset;
+    s8 amplitude;
+};
+
+static const struct CaptureStar sCaptureStars[] =
+{
+    {
+        .xOffset = 10,
+        .yOffset = 2,
+        .amplitude = -3,
+    },
+    {
+        .xOffset = 15,
+        .yOffset = 0,
+        .amplitude = -4,
+    },
+    {
+        .xOffset = -10,
+        .yOffset = 2,
+        .amplitude = -4,
+    },
+};
+
+void MakeCaptureStars(struct Sprite *sprite)
+{
+    u32 i;
+    u8 subpriority;
+    u8 ballIndex = 4; // Master Ball particles (tag 0xD6F0)
+
+    if (sprite->subpriority)
+    {
+        subpriority = sprite->subpriority - 1;
+    }
+    else
+    {
+        subpriority = 0;
+        sprite->subpriority = 1;
+    }
+
+    // Load master ball particle graphics for stars
+    if (GetSpriteTileStartByTag(gBallOpenParticleSpritesheets[ballIndex].tag) == 0xFFFF)
+    {
+        LoadCompressedObjectPic(&gBallOpenParticleSpritesheets[ballIndex]);
+        LoadCompressedObjectPalette(&gBallOpenParticlePalettes[ballIndex]);
+    }
+
+    for (i = 0; i < ARRAY_COUNT(sCaptureStars); i++)
+    {
+        u8 spriteId = CreateSprite(&gSpriteTemplates_840B3B4[ballIndex], sprite->x, sprite->y, subpriority);
+        if (spriteId != MAX_SPRITES)
+        {
+            if (gMain.inBattle)
+                ewram17840.unkA++;
+
+            gSprites[spriteId].sDuration = 24;
+            gSprites[spriteId].sTargetX = sprite->x + sCaptureStars[i].xOffset;
+            gSprites[spriteId].sTargetY = sprite->y + sCaptureStars[i].yOffset;
+            gSprites[spriteId].sAmplitude = sCaptureStars[i].amplitude;
+            InitAnimArcTranslation(&gSprites[spriteId]);
+            gSprites[spriteId].callback = SpriteCB_CaptureStar_Flicker;
+            StartSpriteAnim(&gSprites[spriteId], gBallOpenParticleAnimNums[ballIndex]);
+        }
+    }
+}
+
+#undef sDuration
+#undef sTargetX
+#undef sTargetY
+#undef sAmplitude
+
+static void SpriteCB_CaptureStar_Flicker(struct Sprite *sprite)
+{
+    sprite->invisible = !sprite->invisible;
+    if (TranslateAnimArc(sprite))
+    {
+        if (gMain.inBattle)
+            ewram17840.unkA--;
+        DestroySprite(sprite);
+    }
 }
 
 static void PokeBallOpenParticleAnimation_Step1(struct Sprite *sprite)
