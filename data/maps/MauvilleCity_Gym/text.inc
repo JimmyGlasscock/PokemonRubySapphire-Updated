@@ -114,3 +114,5 @@ MauvilleCity_Gym_Text_180F64:: @ 8180F64
 	.string "MAUVILLE CITY POKéMON GYM\p"
 	.string "WATTSON'S CERTIFIED TRAINERS:\n"
 	.string "{PLAYER}$"
+
+	.include "data/maps/MauvilleCity_Gym/text_rematch.inc"

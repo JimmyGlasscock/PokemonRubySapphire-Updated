@@ -66,6 +66,7 @@ MauvilleCity_Gym_EventScript_1565A7:: @ 81565A7
 	end
 
 MauvilleCity_Gym_EventScript_1565AB:: @ 81565AB
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, MauvilleCity_Gym_EventScript_WattsonRematch
 	trainerbattle_single TRAINER_WATTSON, MauvilleCity_Gym_Text_180C32, MauvilleCity_Gym_Text_180D64, MauvilleCity_Gym_EventScript_1565DB, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM34, MauvilleCity_Gym_EventScript_15661D
 	compare VAR_NEW_MAUVILLE_STATE, 2
@@ -73,6 +74,46 @@ MauvilleCity_Gym_EventScript_1565AB:: @ 81565AB
 	msgbox MauvilleCity_Gym_Text_180EDB, MSGBOX_DEFAULT
 	release
 	end
+
+MauvilleCity_Gym_EventScript_WattsonRematch:: @ 81565C0
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, MauvilleCity_Gym_EventScript_WattsonRematchPostBattle
+	msgbox MauvilleCity_Gym_Text_WattsonRematchIntro, MSGBOX_DEFAULT
+	msgbox MauvilleCity_Gym_Text_WattsonRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq MauvilleCity_Gym_EventScript_WattsonRematchDecline
+	msgbox MauvilleCity_Gym_Text_WattsonRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WATTSON_REMATCH, MauvilleCity_Gym_Text_WattsonRematchDefeat
+	setflag FLAG_TEMP_1
+	call MauvilleCity_Gym_EventScript_GiveMagnet
+	release
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchDecline:: @ 81565E0
+	msgbox MauvilleCity_Gym_Text_WattsonRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_EventScript_WattsonRematchPostBattle:: @ 81565E9
+	goto_if_unset FLAG_RECEIVED_MAGNET_WATTSON, MauvilleCity_Gym_EventScript_GiveMagnet
+	msgbox MauvilleCity_Gym_Text_WattsonRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+MauvilleCity_Gym_EventScript_GiveMagnet:: @ 81565F8
+	goto_if_set FLAG_RECEIVED_MAGNET_WATTSON, MauvilleCity_Gym_EventScript_AlreadyHaveMagnet
+	msgbox MauvilleCity_Gym_Text_WattsonGiveMagnet, MSGBOX_DEFAULT
+	giveitem ITEM_MAGNET
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_MAGNET_WATTSON
+	msgbox MauvilleCity_Gym_Text_WattsonExplainMagnet, MSGBOX_DEFAULT
+	return
+
+MauvilleCity_Gym_EventScript_AlreadyHaveMagnet:: @ 8156610
+	msgbox MauvilleCity_Gym_Text_WattsonRematchPostBattle, MSGBOX_DEFAULT
+	return
 
 MauvilleCity_Gym_EventScript_1565DB:: @ 81565DB
 	message MauvilleCity_Gym_Text_180DAF

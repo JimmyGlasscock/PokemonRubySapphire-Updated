@@ -59,11 +59,52 @@ LavaridgeTown_Gym_1F_EventScript_153740:: @ 8153740
 	return
 
 LavaridgeTown_Gym_1F_EventScript_153741:: @ 8153741
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
 	trainerbattle_single TRAINER_FLANNERY, LavaridgeTown_Gym_1F_Text_176801, LavaridgeTown_Gym_1F_Text_176960, LavaridgeTown_Gym_1F_EventScript_153766, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_1537A7
 	msgbox LavaridgeTown_Gym_1F_Text_176C4A, MSGBOX_DEFAULT
 	release
 	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematch:: @ 8153750
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, LavaridgeTown_Gym_1F_EventScript_FlanneryRematchPostBattle
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryRematchIntro, MSGBOX_DEFAULT
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_FLANNERY_REMATCH, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat
+	setflag FLAG_TEMP_1
+	call LavaridgeTown_Gym_1F_EventScript_GiveCharcoal
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchDecline:: @ 8153770
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryRematchPostBattle:: @ 8153779
+	goto_if_unset FLAG_RECEIVED_CHARCOAL_FLANNERY, LavaridgeTown_Gym_1F_EventScript_GiveCharcoal
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_GiveCharcoal:: @ 8153788
+	goto_if_set FLAG_RECEIVED_CHARCOAL_FLANNERY, LavaridgeTown_Gym_1F_EventScript_AlreadyHaveCharcoal
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryGiveCharcoal, MSGBOX_DEFAULT
+	giveitem ITEM_CHARCOAL
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_CHARCOAL_FLANNERY
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryExplainCharcoal, MSGBOX_DEFAULT
+	return
+
+LavaridgeTown_Gym_1F_EventScript_AlreadyHaveCharcoal:: @ 81537A0
+	msgbox LavaridgeTown_Gym_1F_Text_FlanneryRematchPostBattle, MSGBOX_DEFAULT
+	return
 
 LavaridgeTown_Gym_1F_EventScript_153766:: @ 8153766
 	message LavaridgeTown_Gym_1F_Text_176A62

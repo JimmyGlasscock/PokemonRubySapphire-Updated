@@ -3592,6 +3592,72 @@ const struct TrainerMonNoItemCustomMoves gTrainerParty_BrawlyRematch[] = {
     }
 };
 
+const struct TrainerMonNoItemCustomMoves gTrainerParty_WattsonRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_MANECTRIC,
+        .moves = MOVE_THUNDERBOLT, MOVE_CRUNCH, MOVE_THUNDER_WAVE, MOVE_QUICK_ATTACK
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_MAGNETON,
+        .moves = MOVE_THUNDERBOLT, MOVE_TRI_ATTACK, MOVE_METAL_SOUND, MOVE_THUNDER_WAVE
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_RAICHU,
+        .moves = MOVE_THUNDER, MOVE_IRON_TAIL, MOVE_FOCUS_PUNCH, MOVE_SURF
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_LANTURN,
+        .moves = MOVE_THUNDER, MOVE_SURF, MOVE_ICE_BEAM, MOVE_CONFUSE_RAY
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_AMPHAROS,
+        .moves = MOVE_THUNDER, MOVE_FOCUS_PUNCH, MOVE_FIRE_PUNCH, MOVE_LIGHT_SCREEN
+    }
+};
+
+const struct TrainerMonNoItemCustomMoves gTrainerParty_FlanneryRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_CAMERUPT,
+        .moves = MOVE_ERUPTION, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_AMNESIA
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_MAGCARGO,
+        .moves = MOVE_OVERHEAT, MOVE_ROCK_SLIDE, MOVE_BODY_SLAM, MOVE_FLAMETHROWER
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_TORKOAL,
+        .moves = MOVE_OVERHEAT, MOVE_IRON_DEFENSE, MOVE_BODY_SLAM, MOVE_EXPLOSION
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_NINETALES,
+        .moves = MOVE_OVERHEAT, MOVE_WILL_O_WISP, MOVE_CONFUSE_RAY, MOVE_FLAMETHROWER
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_HOUNDOOM,
+        .moves = MOVE_OVERHEAT, MOVE_CRUNCH, MOVE_SUNNY_DAY, MOVE_SOLAR_BEAM
+    }
+};
+
 const struct TrainerMonNoItemCustomMoves gTrainerParty_Wattson[] = {
     {
 	.iv = 200,

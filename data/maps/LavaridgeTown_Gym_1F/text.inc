@@ -138,3 +138,5 @@ LavaridgeTown_Gym_1F_Text_176CCA:: @ 8176CCA
 	.string "LAVARIDGE TOWN POKéMON GYM\p"
 	.string "FLANNERY'S CERTIFIED TRAINERS:\n"
 	.string "{PLAYER}$"
+
+	.include "data/maps/LavaridgeTown_Gym_1F/text_rematch.inc"
