@@ -3559,6 +3559,39 @@ const struct TrainerMonNoItemCustomMoves gTrainerParty_Brawly[] = {
     }
 };
 
+const struct TrainerMonNoItemCustomMoves gTrainerParty_BrawlyRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_MACHAMP,
+        .moves = MOVE_CROSS_CHOP, MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_STRENGTH
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_BRELOOM,
+        .moves = MOVE_SKY_UPPERCUT, MOVE_MACH_PUNCH, MOVE_SPORE, MOVE_GIGA_DRAIN
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_HARIYAMA,
+        .moves = MOVE_CROSS_CHOP, MOVE_BELLY_DRUM, MOVE_EARTHQUAKE, MOVE_ROCK_TOMB
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_MEDICHAM,
+        .moves = MOVE_HI_JUMP_KICK, MOVE_PSYCHIC, MOVE_THUNDER_PUNCH, MOVE_ICE_PUNCH
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_BLAZIKEN,
+        .moves = MOVE_BLAZE_KICK, MOVE_SKY_UPPERCUT, MOVE_EARTHQUAKE, MOVE_AERIAL_ACE
+    }
+};
+
 const struct TrainerMonNoItemCustomMoves gTrainerParty_Wattson[] = {
     {
 	.iv = 200,

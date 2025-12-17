@@ -95,11 +95,52 @@ DewfordTown_Gym_EventScript_153151:: @ 8153151
 	return
 
 DewfordTown_Gym_EventScript_153152:: @ 8153152
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, DewfordTown_Gym_EventScript_BrawlyRematch
 	trainerbattle_single TRAINER_BRAWLY, DewfordTown_Gym_Text_175182, DewfordTown_Gym_Text_175246, DewfordTown_Gym_EventScript_153177, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_1531B5
 	msgbox DewfordTown_Gym_Text_175412, MSGBOX_DEFAULT
 	release
 	end
+
+DewfordTown_Gym_EventScript_BrawlyRematch:: @ 8153161
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, DewfordTown_Gym_EventScript_BrawlyRematchPostBattle
+	msgbox DewfordTown_Gym_Text_BrawlyRematchIntro, MSGBOX_DEFAULT
+	msgbox DewfordTown_Gym_Text_BrawlyRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq DewfordTown_Gym_EventScript_BrawlyRematchDecline
+	msgbox DewfordTown_Gym_Text_BrawlyRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_BRAWLY_REMATCH, DewfordTown_Gym_Text_BrawlyRematchDefeat
+	setflag FLAG_TEMP_1
+	call DewfordTown_Gym_EventScript_GiveBlackBelt
+	release
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchDecline:: @ 8153185
+	msgbox DewfordTown_Gym_Text_BrawlyRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_EventScript_BrawlyRematchPostBattle:: @ 815318E
+	goto_if_unset FLAG_RECEIVED_BLACK_BELT_BRAWLY, DewfordTown_Gym_EventScript_GiveBlackBelt
+	msgbox DewfordTown_Gym_Text_BrawlyRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+DewfordTown_Gym_EventScript_GiveBlackBelt:: @ 815319D
+	goto_if_set FLAG_RECEIVED_BLACK_BELT_BRAWLY, DewfordTown_Gym_EventScript_AlreadyHaveBlackBelt
+	msgbox DewfordTown_Gym_Text_BrawlyGiveBlackBelt, MSGBOX_DEFAULT
+	giveitem ITEM_BLACK_BELT
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_BLACK_BELT_BRAWLY
+	msgbox DewfordTown_Gym_Text_BrawlyExplainBlackBelt, MSGBOX_DEFAULT
+	return
+
+DewfordTown_Gym_EventScript_AlreadyHaveBlackBelt:: @ 81531B0
+	msgbox DewfordTown_Gym_Text_BrawlyRematchPostBattle, MSGBOX_DEFAULT
+	return
 
 DewfordTown_Gym_EventScript_153177:: @ 8153177
 	call DewfordTown_Gym_EventScript_153117

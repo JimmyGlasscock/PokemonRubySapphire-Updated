@@ -105,3 +105,5 @@ DewfordTown_Gym_Text_175490:: @ 8175490
 	.string "DEWFORD TOWN POKéMON GYM\p"
 	.string "BRAWLY'S CERTIFIED TRAINERS:\n"
 	.string "{PLAYER}$"
+
+	.include "data/maps/DewfordTown_Gym/text_rematch.inc"
