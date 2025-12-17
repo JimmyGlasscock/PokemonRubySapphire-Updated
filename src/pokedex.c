@@ -2214,7 +2214,7 @@ static void CreateMonDexNum(u16 entryNum, u8 x, u8 y, u16 screenBase)
     text[3] = EOS;
     *(u16 *)(BG_VRAM + screenBase * 0x800 + y * 0x40 + x * 2) = unk[0];
     *(u16 *)(BG_VRAM + screenBase * 0x800 + (y + 1) * 0x40 + x * 2) = unk[1];
-    Menu_PrintText(text, x - 15, y);
+    Menu_PrintTextPixelCoords(text, (x - 15) * 8 + 2, y * 8, 0);  // Add 2 pixels
 }
 
 static void CreateCaughtBall(u16 owned, u8 x, u8 y, u16 screenBase)
@@ -2256,7 +2256,7 @@ static u8 CreateMonName(u16 num, u8 b, u8 c)
             text[i] = CHAR_HYPHEN;
         break;
     }
-    Menu_PrintTextPixelCoords(text, (b - 0x11) * 8 + 0xFC, c * 8, 0);
+    Menu_PrintTextPixelCoords(text, (b - 0x11) * 8 + 0xFC + 2, c * 8, 0);  // Add 2 pixels
     return i;
 }
 
@@ -4175,7 +4175,7 @@ static void PrintEntryScreenDexNum(u16 order, u8 b, u8 c)
     str[1] = CHAR_0 + (order % 100) / 10;
     str[2] = CHAR_0 + (order % 100) % 10;
     str[3] = EOS;
-    Menu_PrintText(str, b, c);
+    Menu_PrintTextPixelCoords(str, b * 8 + 2, c * 8, 0);  // Add 2 pixels to x position
 }
 
 static u8 PrintEntryScreenSpeciesName(u16 num, u8 b, u8 c)

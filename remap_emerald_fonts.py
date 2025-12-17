@@ -21,11 +21,11 @@ def remap_emerald_to_ruby(emerald_path, ruby_original_path, ruby_output_path, gl
         ruby = ruby.convert('P', palette=Image.ADAPTIVE, colors=3)
     
     # Set Ruby palette (256 colors for 8-bit depth)
-    ruby_palette = [
-        255, 255, 255,  # Index 0: white (transparent)
-        56, 56, 56,     # Index 1: dark
-        216, 216, 216,  # Index 2: light gray
-    ] + [0] * (256 * 3 - 9)
+    # Ruby font rendering expects colors at indices 0, 14 (shadow), and 15 (foreground)
+    ruby_palette = [255, 255, 255] * 256  # Initialize all to white
+    ruby_palette[0:3] = [255, 255, 255]   # Index 0: white (transparent/background)
+    ruby_palette[14*3:14*3+3] = [216, 216, 216]  # Index 14 (0xE): light gray (shadow)
+    ruby_palette[15*3:15*3+3] = [56, 56, 56]     # Index 15 (0xF): dark (foreground/text)
     ruby.putpalette(ruby_palette)
     
     # Get pixel access
@@ -78,13 +78,14 @@ def remap_emerald_to_ruby(emerald_path, ruby_original_path, ruby_output_path, gl
             for dy in range(copy_height):
                 for dx in range(8):
                     em_val = em_pixels[em_x + dx, em_y + dy]
-                    # Emerald: 0=bg, 1=dark, 2=gray, 3=white -> Ruby: 0=white(transparent), 1=dark, 2=gray
+                    # Emerald: 0=bg, 1=dark, 2=gray, 3=white 
+                    # -> Ruby: 0=white(transparent), 14=gray(shadow), 15=dark(foreground)
                     if em_val == 0 or em_val == 3:
-                        ruby_pixels[rb_x + dx, rb_y + dy] = 0
+                        ruby_pixels[rb_x + dx, rb_y + dy] = 0   # Background
                     elif em_val == 1:
-                        ruby_pixels[rb_x + dx, rb_y + dy] = 1
+                        ruby_pixels[rb_x + dx, rb_y + dy] = 15  # Foreground (dark text)
                     elif em_val == 2:
-                        ruby_pixels[rb_x + dx, rb_y + dy] = 2
+                        ruby_pixels[rb_x + dx, rb_y + dy] = 14  # Shadow (gray)
         else:
             # Keep Ruby's original
             glyphs_kept += 1
