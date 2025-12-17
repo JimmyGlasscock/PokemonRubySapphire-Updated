@@ -45,11 +45,59 @@ MossdeepCity_Gym_EventScript_15A558:: @ 815A558
 	end
 
 MossdeepCity_Gym_EventScript_15A56B:: @ 815A56B
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, MossdeepCity_Gym_EventScript_TateAndLizaRematch
 	trainerbattle_double TRAINER_TATE_AND_LIZA, MossdeepCity_Gym_Text_18CF02, MossdeepCity_Gym_Text_18D077, MossdeepCity_Gym_Text_18D324, MossdeepCity_Gym_EventScript_15A594, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM04, MossdeepCity_Gym_EventScript_15A5C6
 	msgbox MossdeepCity_Gym_Text_18D273, MSGBOX_DEFAULT
 	release
 	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematch:: @ 815A57C
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, MossdeepCity_Gym_EventScript_TateAndLizaRematchPostBattle
+	msgbox MossdeepCity_Gym_Text_TateAndLizaRematchIntro, MSGBOX_DEFAULT
+	msgbox MossdeepCity_Gym_Text_TateAndLizaRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline
+	msgbox MossdeepCity_Gym_Text_TateAndLizaRematchAccept, MSGBOX_DEFAULT
+	switch VAR_STARTER_MON
+	case 0, MossdeepCity_Gym_EventScript_TateAndLizaRematchBattle
+	case 1, MossdeepCity_Gym_EventScript_TateAndLizaRematchBattle
+	case 2, MossdeepCity_Gym_EventScript_TateAndLizaRematchBattle
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchBattle:: @ 815A5A0
+	trainerbattle_no_intro TRAINER_TATE_AND_LIZA_REMATCH, MossdeepCity_Gym_Text_TateAndLizaRematchDefeat
+	setflag FLAG_TEMP_1
+	call MossdeepCity_Gym_EventScript_GiveTwistedSpoon
+	release
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchDecline:: @ 815A5B0
+	msgbox MossdeepCity_Gym_Text_TateAndLizaRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_EventScript_TateAndLizaRematchPostBattle:: @ 815A5B9
+	goto_if_unset FLAG_RECEIVED_TWISTED_SPOON_TATE_AND_LIZA, MossdeepCity_Gym_EventScript_GiveTwistedSpoon
+	msgbox MossdeepCity_Gym_Text_TateAndLizaRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_Gym_EventScript_GiveTwistedSpoon:: @ 815A5C8
+	goto_if_set FLAG_RECEIVED_TWISTED_SPOON_TATE_AND_LIZA, MossdeepCity_Gym_EventScript_AlreadyHaveTwistedSpoon
+	msgbox MossdeepCity_Gym_Text_TateAndLizaGiveTwistedSpoon, MSGBOX_DEFAULT
+	giveitem ITEM_TWISTED_SPOON
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_TWISTED_SPOON_TATE_AND_LIZA
+	msgbox MossdeepCity_Gym_Text_TateAndLizaExplainTwistedSpoon, MSGBOX_DEFAULT
+	return
+
+MossdeepCity_Gym_EventScript_AlreadyHaveTwistedSpoon:: @ 815A5E0
+	msgbox MossdeepCity_Gym_Text_TateAndLizaRematchPostBattle, MSGBOX_DEFAULT
+	return
 
 MossdeepCity_Gym_EventScript_15A594:: @ 815A594
 	message MossdeepCity_Gym_Text_18D0F9

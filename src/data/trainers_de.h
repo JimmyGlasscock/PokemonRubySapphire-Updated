@@ -9798,4 +9798,18 @@ const struct Trainer gTrainers[] = {
         .partySize = 5,
         .party = {.NoItemCustomMoves = gTrainerParty_WinonaRematch }
     },
+
+    [TRAINER_TATE_AND_LIZA_REMATCH] =
+    {
+        .partyFlags = F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_LEADER,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_FEMALE,
+        .trainerPic = TRAINER_PIC_TATE_AND_LIZA,
+        .trainerName = _("BEN&SVENJA"),
+        .items = {ITEM_FULL_RESTORE, ITEM_FULL_RESTORE, ITEM_FULL_RESTORE, ITEM_FULL_RESTORE},
+        .doubleBattle = TRUE,
+        .aiFlags = 0x3F,
+        .partySize = 5,
+        .party = {.NoItemCustomMoves = gTrainerParty_TateAndLizaRematch }
+    },
 };
