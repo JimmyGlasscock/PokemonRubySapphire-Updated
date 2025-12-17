@@ -9812,4 +9812,17 @@ const struct Trainer gTrainers[] = {
         .partySize = 5,
         .party = {.NoItemCustomMoves = gTrainerParty_TateAndLizaRematch }
     },
+    [TRAINER_WALLACE_REMATCH] =
+    {
+        .partyFlags = F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_LEADER,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
+        .trainerPic = TRAINER_PIC_WALLACE,
+        .trainerName = _("WASSILI"),
+        .items = {ITEM_FULL_RESTORE, ITEM_FULL_RESTORE},
+        .doubleBattle = FALSE,
+        .aiFlags = 0x3F,
+        .partySize = 5,
+        .party = {.NoItemCustomMoves = gTrainerParty_WallaceRematch }
+    },
 };

@@ -86,6 +86,7 @@ SootopolisCity_Gym_1F_Movement_15AFFD:: @ 815AFFD
 	step_end
 
 SootopolisCity_Gym_1F_EventScript_15AFFF:: @ 815AFFF
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, SootopolisCity_Gym_1F_EventScript_WallaceRematch
 	trainerbattle_single TRAINER_WALLACE, SootopolisCity_Gym_1F_Text_18F0CA, SootopolisCity_Gym_1F_Text_18F282, SootopolisCity_Gym_1F_EventScript_15B02D, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM03, SootopolisCity_Gym_1F_EventScript_15B056
 	goto_if_unset FLAG_BADGE06_GET, SootopolisCity_Gym_1F_EventScript_15B07A
@@ -153,3 +154,40 @@ SootopolisCity_Gym_1F_EventScript_15B0CD:: @ 815B0CD
 	msgbox SootopolisCity_Gym_1F_Text_18F649, MSGBOX_DEFAULT
 	releaseall
 	end
+
+SootopolisCity_Gym_1F_EventScript_WallaceRematch::
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, SootopolisCity_Gym_1F_EventScript_WallaceRematch_PostBattle
+	msgbox SootopolisCity_Gym_1F_Text_WallaceRematchIntro, MSGBOX_DEFAULT
+	msgbox SootopolisCity_Gym_1F_Text_WallaceRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq SootopolisCity_Gym_1F_EventScript_WallaceRematchDecline
+	msgbox SootopolisCity_Gym_1F_Text_WallaceRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WALLACE_REMATCH, SootopolisCity_Gym_1F_Text_WallaceRematchDefeat
+	msgbox SootopolisCity_Gym_1F_Text_WallaceRematchVictory, MSGBOX_DEFAULT
+	setflag FLAG_TEMP_1
+	call SootopolisCity_Gym_1F_EventScript_GiveMysticWater
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_WallaceRematchDecline::
+	msgbox SootopolisCity_Gym_1F_Text_WallaceRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_WallaceRematch_PostBattle::
+	msgbox SootopolisCity_Gym_1F_Text_WallaceRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+SootopolisCity_Gym_1F_EventScript_GiveMysticWater::
+	goto_if_set FLAG_RECEIVED_MYSTIC_WATER_WALLACE, SootopolisCity_Gym_1F_EventScript_GiveMysticWater_End
+	msgbox SootopolisCity_Gym_1F_Text_WallaceGiveMysticWater, MSGBOX_DEFAULT
+	giveitem ITEM_MYSTIC_WATER
+	compare VAR_RESULT, FALSE
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_MYSTIC_WATER_WALLACE
+	msgbox SootopolisCity_Gym_1F_Text_WallaceExplainMysticWater, MSGBOX_DEFAULT
+SootopolisCity_Gym_1F_EventScript_GiveMysticWater_End::
+	return

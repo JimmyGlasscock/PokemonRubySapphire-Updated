@@ -3757,6 +3757,39 @@ const struct TrainerMonNoItemCustomMoves gTrainerParty_TateAndLizaRematch[] = {
     }
 };
 
+const struct TrainerMonNoItemCustomMoves gTrainerParty_WallaceRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_WALREIN,
+        .moves = MOVE_ICE_BEAM, MOVE_SURF, MOVE_BODY_SLAM, MOVE_SHEER_COLD
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_LUDICOLO,
+        .moves = MOVE_SURF, MOVE_GIGA_DRAIN, MOVE_ICE_BEAM, MOVE_RAIN_DANCE
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_MILOTIC,
+        .moves = MOVE_SURF, MOVE_ICE_BEAM, MOVE_RECOVER, MOVE_MIRROR_COAT
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_CRAWDAUNT,
+        .moves = MOVE_CRABHAMMER, MOVE_SWORDS_DANCE, MOVE_AERIAL_ACE, MOVE_KNOCK_OFF
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_KINGDRA,
+        .moves = MOVE_HYDRO_PUMP, MOVE_DRAGON_DANCE, MOVE_ICE_BEAM, MOVE_DOUBLE_EDGE
+    }
+};
+
 const struct TrainerMonNoItemCustomMoves gTrainerParty_Wattson[] = {
     {
 	.iv = 200,

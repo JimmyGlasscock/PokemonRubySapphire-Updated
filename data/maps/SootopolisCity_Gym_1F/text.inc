@@ -1,3 +1,5 @@
+	.include "data/maps/SootopolisCity_Gym_1F/text_rematch.inc"
+
 SootopolisCity_Gym_1F_Text_18E8A5:: @ 818E8A5
 	.string "Yo! How's it going, CHAMPION-\n"
 	.string "bound {PLAYER}?\p"
