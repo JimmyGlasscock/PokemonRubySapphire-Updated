@@ -16,13 +16,13 @@ graphics/fonts/font0_lat.1bpp: graphics/fonts/font0_lat.png
 graphics/fonts/font1_lat.1bpp: graphics/fonts/font1_lat.png
 	$(RSFONT) $< $@ 256 0
 
-graphics/fonts/font3_lat.4bpp: graphics/fonts/font3_lat.png
+graphics/fonts/font3_lat.4bpp: graphics/fonts/font3_lat_new.png
 	$(RSFONT) $< $@ 254 1
 
 graphics/fonts/font3_lat_rev1.4bpp: graphics/fonts/font3_lat_rev1.png
 	$(RSFONT) $< $@ 254 1
 
-graphics/fonts/font4_lat.4bpp: graphics/fonts/font4_lat.png
+graphics/fonts/font4_lat.4bpp: graphics/fonts/font4_lat_new.png
 	$(RSFONT) $< $@ 220 0
 
 graphics/fonts/font4_lat_rev1.4bpp: graphics/fonts/font4_lat_rev1.png
