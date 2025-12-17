@@ -109,3 +109,5 @@ RustboroCity_Gym_Text_1842E6:: @ 81842E6
 	.string "RUSTBORO CITY POKéMON GYM\p"
 	.string "ROXANNE'S CERTIFIED TRAINERS:\n"
 	.string "{PLAYER}$"
+
+	.include "data/maps/RustboroCity_Gym/text_rematch.inc"

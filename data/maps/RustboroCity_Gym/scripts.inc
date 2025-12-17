@@ -2,9 +2,47 @@ RustboroCity_Gym_MapScripts:: @ 81578D8
 	.byte 0
 
 RustboroCity_Gym_EventScript_1578D9:: @ 81578D9
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, RustboroCity_Gym_EventScript_RoxanneRematch
 	trainerbattle_single TRAINER_ROXANNE, RustboroCity_Gym_Text_183EE5, RustboroCity_Gym_Text_183FC4, RustboroCity_Gym_EventScript_1578FE, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM39, RustboroCity_Gym_EventScript_15793C
 	msgbox RustboroCity_Gym_Text_184252, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematch:: @ 81578E8
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, RustboroCity_Gym_EventScript_RoxanneRematchPostBattle
+	msgbox RustboroCity_Gym_Text_RoxanneRematchIntro, MSGBOX_DEFAULT
+	msgbox RustboroCity_Gym_Text_RoxanneRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq RustboroCity_Gym_EventScript_RoxanneRematchDecline
+	msgbox RustboroCity_Gym_Text_RoxanneRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_ROXANNE_REMATCH, RustboroCity_Gym_Text_RoxanneRematchDefeat
+	setflag FLAG_TEMP_1
+	goto_if_unset FLAG_RECEIVED_HARD_STONE_ROXANNE, RustboroCity_Gym_EventScript_GiveHardStone
+	msgbox RustboroCity_Gym_Text_RoxanneRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchDecline:: @ 8157920
+	msgbox RustboroCity_Gym_Text_RoxanneRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_RoxanneRematchPostBattle:: @ 8157929
+	goto_if_unset FLAG_RECEIVED_HARD_STONE_ROXANNE, RustboroCity_Gym_EventScript_GiveHardStone
+	msgbox RustboroCity_Gym_Text_RoxanneRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_GiveHardStone:: @ 8157938
+	msgbox RustboroCity_Gym_Text_RoxanneGiveHardStone, MSGBOX_DEFAULT
+	giveitem ITEM_HARD_STONE
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_HARD_STONE_ROXANNE
+	msgbox RustboroCity_Gym_Text_RoxanneExplainHardStone, MSGBOX_DEFAULT
 	release
 	end
 

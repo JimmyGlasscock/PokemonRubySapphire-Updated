@@ -3511,6 +3511,39 @@ const struct TrainerMonNoItemCustomMoves gTrainerParty_Roxanne[] = {
     }
 };
 
+const struct TrainerMonNoItemCustomMoves gTrainerParty_RoxanneRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_RHYDON,
+        .moves = MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_MEGAHORN, MOVE_HORN_DRILL
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_CRADILY,
+        .moves = MOVE_GIGA_DRAIN, MOVE_ANCIENT_POWER, MOVE_INGRAIN, MOVE_CONFUSE_RAY
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_RELICANTH,
+        .moves = MOVE_ANCIENT_POWER, MOVE_WATERFALL, MOVE_EARTHQUAKE, MOVE_REST
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_MAGCARGO,
+        .moves = MOVE_FLAMETHROWER, MOVE_ROCK_SLIDE, MOVE_BODY_SLAM, MOVE_EARTHQUAKE
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_AGGRON,
+        .moves = MOVE_EARTHQUAKE, MOVE_IRON_TAIL, MOVE_ROCK_SLIDE, MOVE_DOUBLE_EDGE
+    }
+};
+
 const struct TrainerMonNoItemCustomMoves gTrainerParty_Brawly[] = {
     {
 	.iv = 150,
