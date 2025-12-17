@@ -45,7 +45,7 @@ MossdeepCity_Gym_EventScript_15A558:: @ 815A558
 	end
 
 MossdeepCity_Gym_EventScript_15A56B:: @ 815A56B
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, MossdeepCity_Gym_EventScript_TateAndLizaRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, MossdeepCity_Gym_EventScript_TateAndLizaRematch
 	trainerbattle_double TRAINER_TATE_AND_LIZA, MossdeepCity_Gym_Text_18CF02, MossdeepCity_Gym_Text_18D077, MossdeepCity_Gym_Text_18D324, MossdeepCity_Gym_EventScript_15A594, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM04, MossdeepCity_Gym_EventScript_15A5C6
 	msgbox MossdeepCity_Gym_Text_18D273, MSGBOX_DEFAULT

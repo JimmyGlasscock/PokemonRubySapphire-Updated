@@ -59,7 +59,7 @@ LavaridgeTown_Gym_1F_EventScript_153740:: @ 8153740
 	return
 
 LavaridgeTown_Gym_1F_EventScript_153741:: @ 8153741
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
 	trainerbattle_single TRAINER_FLANNERY, LavaridgeTown_Gym_1F_Text_176801, LavaridgeTown_Gym_1F_Text_176960, LavaridgeTown_Gym_1F_EventScript_153766, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_1537A7
 	msgbox LavaridgeTown_Gym_1F_Text_176C4A, MSGBOX_DEFAULT

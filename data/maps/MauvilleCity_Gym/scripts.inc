@@ -66,7 +66,7 @@ MauvilleCity_Gym_EventScript_1565A7:: @ 81565A7
 	end
 
 MauvilleCity_Gym_EventScript_1565AB:: @ 81565AB
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, MauvilleCity_Gym_EventScript_WattsonRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, MauvilleCity_Gym_EventScript_WattsonRematch
 	trainerbattle_single TRAINER_WATTSON, MauvilleCity_Gym_Text_180C32, MauvilleCity_Gym_Text_180D64, MauvilleCity_Gym_EventScript_1565DB, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM34, MauvilleCity_Gym_EventScript_15661D
 	compare VAR_NEW_MAUVILLE_STATE, 2

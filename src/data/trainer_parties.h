@@ -3496,6 +3496,204 @@ const struct TrainerMonItemCustomMoves gTrainerParty_Drake[] = {
     }
 };
 
+// Elite Four Rematch Teams (post-Hall of Fame)
+const struct TrainerMonItemCustomMoves gTrainerParty_SidneyRematch[] = {
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_MIGHTYENA,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_CRUNCH, MOVE_SHADOW_BALL, MOVE_TAKE_DOWN, MOVE_ROAR
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_SHIFTRY,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_EXTRASENSORY, MOVE_GIGA_DRAIN, MOVE_SWAGGER, MOVE_FAKE_OUT
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_CACTURNE,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_NEEDLE_ARM, MOVE_FAINT_ATTACK, MOVE_LEECH_SEED, MOVE_COTTON_SPORE
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_HOUNDOOM,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_FLAMETHROWER, MOVE_CRUNCH, MOVE_SOLAR_BEAM, MOVE_SUNNY_DAY
+    },
+    {
+	.iv = 255,
+	.level = 69,
+	.species = SPECIES_ABSOL,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = MOVE_SLASH, MOVE_SWORDS_DANCE, MOVE_AERIAL_ACE, MOVE_DOUBLE_TEAM
+    }
+};
+
+const struct TrainerMonItemCustomMoves gTrainerParty_PhoebeRematch[] = {
+    {
+	.iv = 255,
+	.level = 66,
+	.species = SPECIES_DUSCLOPS,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SHADOW_BALL, MOVE_ICE_BEAM, MOVE_CONFUSE_RAY, MOVE_EARTHQUAKE
+    },
+    {
+	.iv = 255,
+	.level = 66,
+	.species = SPECIES_GENGAR,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SHADOW_BALL, MOVE_THUNDERBOLT, MOVE_PSYCHIC, MOVE_SLUDGE_BOMB
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_BANETTE,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SHADOW_BALL, MOVE_WILL_O_WISP, MOVE_SPITE, MOVE_PSYCHIC
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_SHEDINJA,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SHADOW_BALL, MOVE_CONFUSE_RAY, MOVE_SILVER_WIND, MOVE_GRUDGE
+    },
+    {
+	.iv = 255,
+	.level = 69,
+	.species = SPECIES_SABLEYE,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = MOVE_SHADOW_BALL, MOVE_PSYCHIC, MOVE_RECOVER, MOVE_FAINT_ATTACK
+    }
+};
+
+const struct TrainerMonItemCustomMoves gTrainerParty_GlaciaRematch[] = {
+    {
+	.iv = 255,
+	.level = 66,
+	.species = SPECIES_GLALIE,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_ICE_BEAM, MOVE_CRUNCH, MOVE_SHADOW_BALL, MOVE_EXPLOSION
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_LAPRAS,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SURF, MOVE_ICE_BEAM, MOVE_PSYCHIC, MOVE_THUNDERBOLT
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_WALREIN,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SURF, MOVE_BLIZZARD, MOVE_EARTHQUAKE, MOVE_SHEER_COLD
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_CLOYSTER,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_SURF, MOVE_ICE_BEAM, MOVE_TOXIC, MOVE_EXPLOSION
+    },
+    {
+	.iv = 255,
+	.level = 69,
+	.species = SPECIES_DEWGONG,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = MOVE_SURF, MOVE_ICE_BEAM, MOVE_SIGNAL_BEAM, MOVE_REST
+    }
+};
+
+const struct TrainerMonItemCustomMoves gTrainerParty_DrakeRematch[] = {
+    {
+	.iv = 255,
+	.level = 66,
+	.species = SPECIES_ALTARIA,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_DRAGON_CLAW, MOVE_AERIAL_ACE, MOVE_DRAGON_DANCE, MOVE_EARTHQUAKE
+    },
+    {
+	.iv = 255,
+	.level = 68,
+	.species = SPECIES_SALAMENCE,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_DRAGON_CLAW, MOVE_FLAMETHROWER, MOVE_CRUNCH, MOVE_AERIAL_ACE
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_FLYGON,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW, MOVE_FLAMETHROWER, MOVE_CRUNCH
+    },
+    {
+	.iv = 255,
+	.level = 66,
+	.species = SPECIES_DRAGONITE,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_OUTRAGE, MOVE_EARTHQUAKE, MOVE_AERIAL_ACE, MOVE_THUNDERBOLT
+    },
+    {
+	.iv = 255,
+	.level = 69,
+	.species = SPECIES_KINGDRA,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = MOVE_SURF, MOVE_DRAGON_DANCE, MOVE_ICE_BEAM, MOVE_HYDRO_PUMP
+    }
+};
+
+const struct TrainerMonItemCustomMoves gTrainerParty_StevenRematch[] = {
+    {
+	.iv = 255,
+	.level = 77,
+	.species = SPECIES_SKARMORY,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_TOXIC, MOVE_AERIAL_ACE, MOVE_SPIKES, MOVE_STEEL_WING
+    },
+    {
+	.iv = 255,
+	.level = 75,
+	.species = SPECIES_CLAYDOL,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_ANCIENT_POWER, MOVE_EARTHQUAKE
+    },
+    {
+	.iv = 255,
+	.level = 76,
+	.species = SPECIES_AGGRON,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_THUNDER, MOVE_EARTHQUAKE, MOVE_SOLAR_BEAM, MOVE_DRAGON_CLAW
+    },
+    {
+	.iv = 255,
+	.level = 76,
+	.species = SPECIES_CRADILY,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_GIGA_DRAIN, MOVE_ANCIENT_POWER, MOVE_INGRAIN, MOVE_CONFUSE_RAY
+    },
+    {
+	.iv = 255,
+	.level = 76,
+	.species = SPECIES_ARMALDO,
+        .heldItem = ITEM_NONE,
+        .moves = MOVE_WATER_PULSE, MOVE_ANCIENT_POWER, MOVE_AERIAL_ACE, MOVE_SLASH
+    },
+    {
+	.iv = 255,
+	.level = 78,
+	.species = SPECIES_METAGROSS,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves = MOVE_EARTHQUAKE, MOVE_PSYCHIC, MOVE_METEOR_MASH, MOVE_SHADOW_BALL
+    }
+};
+
 const struct TrainerMonNoItemCustomMoves gTrainerParty_Roxanne[] = {
     {
 	.iv = 150,

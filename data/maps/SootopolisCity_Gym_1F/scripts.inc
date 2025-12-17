@@ -86,7 +86,7 @@ SootopolisCity_Gym_1F_Movement_15AFFD:: @ 815AFFD
 	step_end
 
 SootopolisCity_Gym_1F_EventScript_15AFFF:: @ 815AFFF
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, SootopolisCity_Gym_1F_EventScript_WallaceRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, SootopolisCity_Gym_1F_EventScript_WallaceRematch
 	trainerbattle_single TRAINER_WALLACE, SootopolisCity_Gym_1F_Text_18F0CA, SootopolisCity_Gym_1F_Text_18F282, SootopolisCity_Gym_1F_EventScript_15B02D, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM03, SootopolisCity_Gym_1F_EventScript_15B056
 	goto_if_unset FLAG_BADGE06_GET, SootopolisCity_Gym_1F_EventScript_15B07A

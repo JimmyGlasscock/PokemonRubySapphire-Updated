@@ -16,7 +16,7 @@ FortreeCity_Gym_EventScript_157EEC:: @ 8157EEC
 	end
 
 FortreeCity_Gym_EventScript_157EF0:: @ 8157EF0
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, FortreeCity_Gym_EventScript_WinonaRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, FortreeCity_Gym_EventScript_WinonaRematch
 	trainerbattle_single TRAINER_WINONA, FortreeCity_Gym_Text_185CCB, FortreeCity_Gym_Text_185DBA, FortreeCity_Gym_EventScript_157F15, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM40, FortreeCity_Gym_EventScript_157F3E
 	msgbox FortreeCity_Gym_Text_185F98, MSGBOX_DEFAULT

@@ -95,7 +95,7 @@ DewfordTown_Gym_EventScript_153151:: @ 8153151
 	return
 
 DewfordTown_Gym_EventScript_153152:: @ 8153152
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, DewfordTown_Gym_EventScript_BrawlyRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, DewfordTown_Gym_EventScript_BrawlyRematch
 	trainerbattle_single TRAINER_BRAWLY, DewfordTown_Gym_Text_175182, DewfordTown_Gym_Text_175246, DewfordTown_Gym_EventScript_153177, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_1531B5
 	msgbox DewfordTown_Gym_Text_175412, MSGBOX_DEFAULT

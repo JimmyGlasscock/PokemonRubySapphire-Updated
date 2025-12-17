@@ -576,7 +576,7 @@ PetalburgCity_Gym_Movement_154B5F:: @ 8154B5F
 	step_end
 
 PetalburgCity_Gym_EventScript_154B69:: @ 8154B69
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, PetalburgCity_Gym_EventScript_NormanRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, PetalburgCity_Gym_EventScript_NormanRematch
 	msgbox PetalburgCity_Gym_Text_17AB17, MSGBOX_DEFAULT
 	release
 	end

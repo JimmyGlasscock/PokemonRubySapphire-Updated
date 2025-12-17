@@ -1,9 +1,11 @@
 #include "global.h"
 #include "constants/abilities.h"
 #include "constants/battle_move_effects.h"
+#include "constants/flags.h"
 #include "constants/hold_effects.h"
 #include "constants/items.h"
 #include "constants/moves.h"
+#include "constants/opponents.h"
 #include "constants/songs.h"
 #include "constants/species.h"
 #include "gba/flash_internal.h"
@@ -48,6 +50,13 @@
 #include "util.h"
 #include "ewram.h"
 #include "battle_string_ids.h"
+
+// Elite Four Rematch Parties
+extern const struct TrainerMonItemCustomMoves gTrainerParty_SidneyRematch[];
+extern const struct TrainerMonItemCustomMoves gTrainerParty_PhoebeRematch[];
+extern const struct TrainerMonItemCustomMoves gTrainerParty_GlaciaRematch[];
+extern const struct TrainerMonItemCustomMoves gTrainerParty_DrakeRematch[];
+extern const struct TrainerMonItemCustomMoves gTrainerParty_StevenRematch[];
 
 struct UnknownStruct7
 {
@@ -1117,6 +1126,21 @@ u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
+                
+                // Check for Elite Four rematch after Hall of Fame
+                if (FlagGet(FLAG_SYS_GAME_CLEAR))
+                {
+                    if (trainerNum == TRAINER_SIDNEY)
+                        partyData = gTrainerParty_SidneyRematch;
+                    else if (trainerNum == TRAINER_PHOEBE)
+                        partyData = gTrainerParty_PhoebeRematch;
+                    else if (trainerNum == TRAINER_GLACIA)
+                        partyData = gTrainerParty_GlaciaRematch;
+                    else if (trainerNum == TRAINER_DRAKE)
+                        partyData = gTrainerParty_DrakeRematch;
+                    else if (trainerNum == TRAINER_STEVEN)
+                        partyData = gTrainerParty_StevenRematch;
+                }
 
                 for (j = 0; gSpeciesNames[partyData[i].species][j] != 0xFF; j++)
                     nameHash += gSpeciesNames[partyData[i].species][j];

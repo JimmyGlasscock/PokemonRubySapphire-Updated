@@ -2,7 +2,7 @@ RustboroCity_Gym_MapScripts:: @ 81578D8
 	.byte 0
 
 RustboroCity_Gym_EventScript_1578D9:: @ 81578D9
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, RustboroCity_Gym_EventScript_RoxanneRematch
+	goto_if_set FLAG_SYS_GAME_CLEAR, RustboroCity_Gym_EventScript_RoxanneRematch
 	trainerbattle_single TRAINER_ROXANNE, RustboroCity_Gym_Text_183EE5, RustboroCity_Gym_Text_183FC4, RustboroCity_Gym_EventScript_1578FE, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM39, RustboroCity_Gym_EventScript_15793C
 	msgbox RustboroCity_Gym_Text_184252, MSGBOX_DEFAULT
