@@ -123,6 +123,16 @@ void (*gPostMenuFieldCallback)(void);
 
 // const data
 
+// Formatted HM move names with blue color (matching Emerald's style)
+static const u8 sText_HM_Cut[]        = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}CUT");
+static const u8 sText_HM_Fly[]        = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}FLY");
+static const u8 sText_HM_Surf[]       = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}SURF");
+static const u8 sText_HM_Strength[]   = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}STRENGTH");
+static const u8 sText_HM_Flash[]      = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}FLASH");
+static const u8 sText_HM_RockSmash[]  = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}ROCK SMASH");
+static const u8 sText_HM_Waterfall[]  = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}WATERFALL");
+static const u8 sText_HM_Dive[]       = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}DIVE");
+
 static const struct MenuAction2 sPokemonMenuActions[] =
 {
     {OtherText_Summary,             PokemonMenu_Summary},
@@ -135,20 +145,20 @@ static const struct MenuAction2 sPokemonMenuActions[] =
     {OtherText_Mail,                PokemonMenu_Mail},
     {OtherText_Read2,               PokemonMenu_ReadMail},
     {gOtherText_CancelNoTerminator, PokemonMenu_CancelSubmenu},
-    {gMoveNames[MOVE_CUT],          PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_FLASH],        PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_ROCK_SMASH],   PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_STRENGTH],     PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_SURF],         PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_FLY],          PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_DIVE],         PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_WATERFALL],    PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_TELEPORT],     PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_DIG],          PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_SECRET_POWER], PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_MILK_DRINK],   PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_SOFT_BOILED],  PokemonMenu_FieldMove},
-    {gMoveNames[MOVE_SWEET_SCENT],  PokemonMenu_FieldMove},
+    {sText_HM_Cut,                  PokemonMenu_FieldMove},  // HM01
+    {sText_HM_Flash,                PokemonMenu_FieldMove},  // HM05
+    {sText_HM_RockSmash,            PokemonMenu_FieldMove},  // HM06
+    {sText_HM_Strength,             PokemonMenu_FieldMove},  // HM04
+    {sText_HM_Surf,                 PokemonMenu_FieldMove},  // HM03
+    {sText_HM_Fly,                  PokemonMenu_FieldMove},  // HM02
+    {sText_HM_Dive,                 PokemonMenu_FieldMove},  // HM08
+    {sText_HM_Waterfall,            PokemonMenu_FieldMove},  // HM07
+    {gMoveNames[MOVE_TELEPORT],     PokemonMenu_FieldMove},  // Not an HM
+    {gMoveNames[MOVE_DIG],          PokemonMenu_FieldMove},  // Not an HM
+    {gMoveNames[MOVE_SECRET_POWER], PokemonMenu_FieldMove},  // Not an HM
+    {gMoveNames[MOVE_MILK_DRINK],   PokemonMenu_FieldMove},  // Not an HM
+    {gMoveNames[MOVE_SOFT_BOILED],  PokemonMenu_FieldMove},  // Not an HM
+    {gMoveNames[MOVE_SWEET_SCENT],  PokemonMenu_FieldMove},  // Not an HM
 };
 
 static const u16 sPokeMenuFieldMoves[] =
