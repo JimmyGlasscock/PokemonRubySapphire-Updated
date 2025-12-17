@@ -1227,6 +1227,7 @@ static void sub_80A4548(u16 taskId, int topItemOffset, int bottomItemOffset, int
         text = gStringVar1;
         text = sub_80A425C(taskId, text, i);
 
+        // TMs and HMs both don't show quantity (TMs are reusable)
         if (gCurrentBagPocketItemSlots[slot].itemId < ITEM_HM01_CUT)
         {
             const u8 *moveName;
@@ -1234,8 +1235,17 @@ static void sub_80A4548(u16 taskId, int topItemOffset, int bottomItemOffset, int
             gBGTilemapBuffers[2][tilemapOffset + 1] = 0x4F;
             gBGTilemapBuffers[2][tilemapOffset + 32] = 0x69;
             gBGTilemapBuffers[2][tilemapOffset + 33] = 0x4F;
+            text[0] = EXT_CTRL_CODE_BEGIN;
+            text[1] = 0x13;
+            text[2] = 9;  // Position TM number
+            text += 3;
+            text = ConvertIntToDecimalString(text, gCurrentBagPocketItemSlots[slot].itemId - (ITEM_TM01_FOCUS_PUNCH - 1));
+            text[0] = EXT_CTRL_CODE_BEGIN;
+            text[1] = 0x13;
+            text[2] = 0x18;
+            text += 3;
             moveName = gMoveNames[ItemIdToBattleMoveId(gCurrentBagPocketItemSlots[slot].itemId)];
-            sub_80A41E0(text, gCurrentBagPocketItemSlots[slot].itemId - (ITEM_TM01_FOCUS_PUNCH - 1), moveName, gCurrentBagPocketItemSlots[slot].quantity, 2);
+            AlignStringInMenuWindow(text, moveName, 0x78, 0);
         }
         else
         {

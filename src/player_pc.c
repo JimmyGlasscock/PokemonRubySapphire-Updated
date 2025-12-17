@@ -852,11 +852,8 @@ static void ItemStorage_DrawKeyItemEntry(struct ItemSlot *itemSlot, u8 var, int 
 static void ItemStorage_DrawTMHMEntry(struct ItemSlot *itemSlot, u8 var, int var2)
 {
     ItemStorage_DrawItemName(itemSlot, var, var2);
-
-    if(itemSlot->itemId < ITEM_HM01_CUT)
-        ItemStorage_DrawItemQuantity(itemSlot->quantity, STR_CONV_MODE_RIGHT_ALIGN, var, 3, var2);
-    else
-        ItemStorage_DrawItemVoidQuantity(var); // HMs do not have a quantity.
+    // TMs and HMs do not show quantity (TMs are now reusable like HMs)
+    ItemStorage_DrawItemVoidQuantity(var);
 }
 
 static void ItemStorage_DrawItemList(u8 taskId)
