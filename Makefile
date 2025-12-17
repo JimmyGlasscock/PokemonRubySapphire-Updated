@@ -235,7 +235,7 @@ tidy:
 	$(RM) -r build
 
 $(ROM): %.gba: %.elf
-	$(OBJCOPY) -O binary --gap-fill 0xFF --pad-to 0x9000000 $< $@
+	$(OBJCOPY) -O binary --gap-fill 0xFF --pad-to 0x2000000 $< $@
 
 %.elf: $(LD_SCRIPT) $(ALL_OBJECTS)
 	@echo "cd $(BUILD_DIR) && $(LD) -T $(LD_SCRIPT:$(BUILD_DIR)/%=%) -Map ../../$(MAP) -o ../../$@ <objects> <lib>"

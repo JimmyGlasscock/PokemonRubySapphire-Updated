@@ -406,3 +406,34 @@ LilycoveCity_EventScript_14CF6B:: @ 814CF6B
 	setflag FLAG_MET_RIVAL_LILYCOVE
 	release
 	end
+
+LilycoveCity_EventScript_EonTicketOldMan:: @ New
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_EON_TICKET, LilycoveCity_EventScript_EonTicketOldMan_AlreadyGave
+	goto_if_unset FLAG_SYS_GAME_CLEAR, LilycoveCity_EventScript_EonTicketOldMan_NotYet
+	msgbox LilycoveCity_Text_EonTicketOldMan_Congratulations, MSGBOX_DEFAULT
+	checkitemspace ITEM_EON_TICKET, 1
+	compare VAR_RESULT, FALSE
+	goto_if_eq LilycoveCity_EventScript_EonTicketOldMan_BagFull
+	giveitem ITEM_EON_TICKET
+	setflag FLAG_RECEIVED_EON_TICKET
+	setflag FLAG_SYS_HAS_EON_TICKET
+	msgbox LilycoveCity_Text_EonTicketOldMan_Enjoy, MSGBOX_DEFAULT
+	release
+	end
+
+LilycoveCity_EventScript_EonTicketOldMan_NotYet::
+	msgbox LilycoveCity_Text_EonTicketOldMan_NotYet, MSGBOX_DEFAULT
+	release
+	end
+
+LilycoveCity_EventScript_EonTicketOldMan_AlreadyGave::
+	msgbox LilycoveCity_Text_EonTicketOldMan_AlreadyGave, MSGBOX_DEFAULT
+	release
+	end
+
+LilycoveCity_EventScript_EonTicketOldMan_BagFull::
+	msgbox LilycoveCity_Text_EonTicketOldMan_BagFull, MSGBOX_DEFAULT
+	release
+	end

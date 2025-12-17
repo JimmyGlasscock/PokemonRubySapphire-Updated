@@ -299,3 +299,33 @@ LilycoveCity_Text_168FF3:: @ 8168FF3
 LilycoveCity_Text_169072:: @ 8169072
 	.string "MOVE DELETER'S HOUSE\p"
 	.string "“Unwanted POKéMON moves deleted.”$"
+LilycoveCity_Text_EonTicketOldMan_NotYet::
+	.string "Ah, young TRAINER!\p"
+	.string "I've been waiting here for many years,\n"
+	.string "watching the sea and the lighthouse.$"
+
+LilycoveCity_Text_EonTicketOldMan_Congratulations::
+	.string "Ah, young TRAINER!\p"
+	.string "I've been waiting here for many years,\n"
+	.string "watching the sea and the lighthouse.\p"
+	.string "You remind me of myself in my youth.\n"
+	.string "So full of spirit and determination!\p"
+	.string "I want you to have this.\n"
+	.string "It will take you to SOUTHERN ISLAND!\p"
+	.string "Show it to the ferry sailors, and\n"
+	.string "they'll know where to take you!$"
+
+LilycoveCity_Text_EonTicketOldMan_Enjoy::
+	.string "Enjoy your journey, young CHAMPION!\p"
+	.string "May you encounter many wonderful\n"
+	.string "POKéMON on your adventures!$"
+
+LilycoveCity_Text_EonTicketOldMan_AlreadyGave::
+	.string "Have you visited SOUTHERN ISLAND yet?\p"
+	.string "Show your EON TICKET to the ferry\n"
+	.string "sailors if you haven't already!$"
+
+LilycoveCity_Text_EonTicketOldMan_BagFull::
+	.string "Oh my! Your BAG is full!\p"
+	.string "Make some room in your KEY ITEMS\n"
+	.string "POCKET and come back to see me.$"

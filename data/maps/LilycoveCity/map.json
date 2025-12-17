@@ -242,6 +242,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "LilycoveCity_EventScript_14CD46",
       "flag": "FLAG_HIDE_RIVAL_LILYCOVE_MART"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_2",
+      "x": 63,
+      "y": 36,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "LilycoveCity_EventScript_EonTicketOldMan",
+      "flag": "0"
     }
   ],
   "warp_events": [
