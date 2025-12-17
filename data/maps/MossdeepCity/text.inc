@@ -70,6 +70,13 @@ MossdeepCity_Text_1694DA:: @ 81694DA
 MossdeepCity_Text_1695D3:: @ 81695D3
 	.string "It's a white rock.$"
 
+MossdeepCity_Text_WhiteRock_MakeWish::
+	.string "It's a white rock.\p"
+	.string "Make a wish?$"
+
+MossdeepCity_Text_WhiteRock_WishCameTrue::
+	.string "Your wish came true!$"
+
 MossdeepCity_Text_1695E6:: @ 81695E6
 	.string "MOSSDEEP CITY POKéMON GYM\n"
 	.string "LEADERS: LIZA & TATE\p"

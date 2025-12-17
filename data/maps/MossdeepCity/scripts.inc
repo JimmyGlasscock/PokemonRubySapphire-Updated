@@ -35,7 +35,34 @@ MossdeepCity_EventScript_14CFDB:: @ 814CFDB
 	end
 
 MossdeepCity_EventScript_14CFE4:: @ 814CFE4
-	msgbox MossdeepCity_Text_1695D3, MSGBOX_SIGN
+	lock
+	faceplayer
+	goto_if_set FLAG_BATTLED_JIRACHI, MossdeepCity_EventScript_WhiteRock_AlreadyBattled
+	goto_if_unset FLAG_SYS_GAME_CLEAR, MossdeepCity_EventScript_WhiteRock_JustRock
+	msgbox MossdeepCity_Text_WhiteRock_MakeWish, MSGBOX_YESNO
+	compare VAR_RESULT, 0
+	goto_if_eq MossdeepCity_EventScript_WhiteRock_DeclinedWish
+	msgbox MossdeepCity_Text_WhiteRock_WishCameTrue, MSGBOX_DEFAULT
+	setflag FLAG_BATTLED_JIRACHI
+	setwildbattle SPECIES_JIRACHI, 30, ITEM_NONE
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	dowildbattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	release
+	end
+
+MossdeepCity_EventScript_WhiteRock_AlreadyBattled::
+	msgbox MossdeepCity_Text_1695D3, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_EventScript_WhiteRock_JustRock::
+	msgbox MossdeepCity_Text_1695D3, MSGBOX_DEFAULT
+	release
+	end
+
+MossdeepCity_EventScript_WhiteRock_DeclinedWish::
+	release
 	end
 
 MossdeepCity_EventScript_14CFED:: @ 814CFED
