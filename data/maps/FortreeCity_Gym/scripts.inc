@@ -16,11 +16,52 @@ FortreeCity_Gym_EventScript_157EEC:: @ 8157EEC
 	end
 
 FortreeCity_Gym_EventScript_157EF0:: @ 8157EF0
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, FortreeCity_Gym_EventScript_WinonaRematch
 	trainerbattle_single TRAINER_WINONA, FortreeCity_Gym_Text_185CCB, FortreeCity_Gym_Text_185DBA, FortreeCity_Gym_EventScript_157F15, NO_MUSIC
 	goto_if_unset FLAG_RECEIVED_TM40, FortreeCity_Gym_EventScript_157F3E
 	msgbox FortreeCity_Gym_Text_185F98, MSGBOX_DEFAULT
 	release
 	end
+
+FortreeCity_Gym_EventScript_WinonaRematch:: @ 8157F00
+	lock
+	faceplayer
+	goto_if_set FLAG_TEMP_1, FortreeCity_Gym_EventScript_WinonaRematchPostBattle
+	msgbox FortreeCity_Gym_Text_WinonaRematchIntro, MSGBOX_DEFAULT
+	msgbox FortreeCity_Gym_Text_WinonaRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq FortreeCity_Gym_EventScript_WinonaRematchDecline
+	msgbox FortreeCity_Gym_Text_WinonaRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_WINONA_REMATCH, FortreeCity_Gym_Text_WinonaRematchDefeat
+	setflag FLAG_TEMP_1
+	call FortreeCity_Gym_EventScript_GiveSharpBeak
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchDecline:: @ 8157F20
+	msgbox FortreeCity_Gym_Text_WinonaRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaRematchPostBattle:: @ 8157F29
+	goto_if_unset FLAG_RECEIVED_SHARP_BEAK_WINONA, FortreeCity_Gym_EventScript_GiveSharpBeak
+	msgbox FortreeCity_Gym_Text_WinonaRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+FortreeCity_Gym_EventScript_GiveSharpBeak:: @ 8157F38
+	goto_if_set FLAG_RECEIVED_SHARP_BEAK_WINONA, FortreeCity_Gym_EventScript_AlreadyHaveSharpBeak
+	msgbox FortreeCity_Gym_Text_WinonaGiveSharpBeak, MSGBOX_DEFAULT
+	giveitem ITEM_SHARP_BEAK
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_SHARP_BEAK_WINONA
+	msgbox FortreeCity_Gym_Text_WinonaExplainSharpBeak, MSGBOX_DEFAULT
+	return
+
+FortreeCity_Gym_EventScript_AlreadyHaveSharpBeak:: @ 8157F50
+	msgbox FortreeCity_Gym_Text_WinonaRematchPostBattle, MSGBOX_DEFAULT
+	return
 
 FortreeCity_Gym_EventScript_157F15:: @ 8157F15
 	message FortreeCity_Gym_Text_185E48

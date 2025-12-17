@@ -9770,5 +9770,33 @@ const struct Trainer gTrainers[] = {
         .partySize = 5,
         .party = {.NoItemCustomMoves = gTrainerParty_FlanneryRematch }
     },
+
+    [TRAINER_NORMAN_REMATCH] =
+    {
+        .partyFlags = F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_LEADER,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
+        .trainerPic = TRAINER_PIC_NORMAN,
+        .trainerName = _("NORMAN"),
+        .items = {ITEM_FULL_RESTORE, ITEM_FULL_RESTORE, ITEM_NONE, ITEM_NONE},
+        .doubleBattle = FALSE,
+        .aiFlags = 0x3F,
+        .partySize = 5,
+        .party = {.NoItemCustomMoves = gTrainerParty_NormanRematch }
+    },
+
+    [TRAINER_WINONA_REMATCH] =
+    {
+        .partyFlags = F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_LEADER,
+        .encounterMusic_gender = F_TRAINER_FEMALE | TRAINER_ENCOUNTER_MUSIC_FEMALE,
+        .trainerPic = TRAINER_PIC_WINONA,
+        .trainerName = _("WINONA"),
+        .items = {ITEM_FULL_RESTORE, ITEM_FULL_RESTORE, ITEM_NONE, ITEM_NONE},
+        .doubleBattle = FALSE,
+        .aiFlags = 0x3F,
+        .partySize = 5,
+        .party = {.NoItemCustomMoves = gTrainerParty_WinonaRematch }
+    },
 };
 

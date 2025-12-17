@@ -576,9 +576,48 @@ PetalburgCity_Gym_Movement_154B5F:: @ 8154B5F
 	step_end
 
 PetalburgCity_Gym_EventScript_154B69:: @ 8154B69
+	goto_if_set FLAG_ENTERED_ELITE_FOUR, PetalburgCity_Gym_EventScript_NormanRematch
 	msgbox PetalburgCity_Gym_Text_17AB17, MSGBOX_DEFAULT
 	release
 	end
+
+PetalburgCity_Gym_EventScript_NormanRematch:: @ 8154B74
+	goto_if_set FLAG_TEMP_1, PetalburgCity_Gym_EventScript_NormanRematchPostBattle
+	msgbox PetalburgCity_Gym_Text_NormanRematchIntro, MSGBOX_DEFAULT
+	msgbox PetalburgCity_Gym_Text_NormanRematchAsk, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq PetalburgCity_Gym_EventScript_NormanRematchDecline
+	msgbox PetalburgCity_Gym_Text_NormanRematchAccept, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_NORMAN_REMATCH, PetalburgCity_Gym_Text_NormanRematchDefeat
+	setflag FLAG_TEMP_1
+	call PetalburgCity_Gym_EventScript_GiveSilkScarf
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchDecline:: @ 8154B90
+	msgbox PetalburgCity_Gym_Text_NormanRematchDecline, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanRematchPostBattle:: @ 8154B99
+	goto_if_unset FLAG_RECEIVED_SILK_SCARF_NORMAN, PetalburgCity_Gym_EventScript_GiveSilkScarf
+	msgbox PetalburgCity_Gym_Text_NormanRematchPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
+PetalburgCity_Gym_EventScript_GiveSilkScarf:: @ 8154BA8
+	goto_if_set FLAG_RECEIVED_SILK_SCARF_NORMAN, PetalburgCity_Gym_EventScript_AlreadyHaveSilkScarf
+	msgbox PetalburgCity_Gym_Text_NormanGiveSilkScarf, MSGBOX_DEFAULT
+	giveitem ITEM_SILK_SCARF
+	compare VAR_RESULT, 0
+	goto_if_eq Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_SILK_SCARF_NORMAN
+	msgbox PetalburgCity_Gym_Text_NormanExplainSilkScarf, MSGBOX_DEFAULT
+	return
+
+PetalburgCity_Gym_EventScript_AlreadyHaveSilkScarf:: @ 8154BC0
+	msgbox PetalburgCity_Gym_Text_NormanRematchPostBattle, MSGBOX_DEFAULT
+	return
 
 PetalburgCity_Gym_EventScript_154B73:: @ 8154B73
 	lockall

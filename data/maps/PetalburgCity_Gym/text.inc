@@ -409,3 +409,5 @@ PetalburgCity_Gym_Text_17BAC0:: @ 817BAC0
 	.string "PETALBURG CITY POKéMON GYM\p"
 	.string "NORMAN'S CERTIFIED TRAINERS:\n"
 	.string "{PLAYER}$"
+
+	.include "data/maps/PetalburgCity_Gym/text_rematch.inc"

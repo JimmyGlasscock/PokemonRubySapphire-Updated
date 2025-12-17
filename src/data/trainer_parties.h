@@ -3658,6 +3658,72 @@ const struct TrainerMonNoItemCustomMoves gTrainerParty_FlanneryRematch[] = {
     }
 };
 
+const struct TrainerMonNoItemCustomMoves gTrainerParty_NormanRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_LINOONE,
+        .moves = MOVE_BELLY_DRUM, MOVE_EXTREME_SPEED, MOVE_SHADOW_BALL, MOVE_SURF
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_EXPLOUD,
+        .moves = MOVE_HYPER_VOICE, MOVE_EARTHQUAKE, MOVE_SHADOW_BALL, MOVE_FLAMETHROWER
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_SLAKING,
+        .moves = MOVE_HYPER_BEAM, MOVE_EARTHQUAKE, MOVE_SHADOW_BALL, MOVE_AERIAL_ACE
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_SNORLAX,
+        .moves = MOVE_HYPER_BEAM, MOVE_EARTHQUAKE, MOVE_SHADOW_BALL, MOVE_BRICK_BREAK
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_BLISSEY,
+        .moves = MOVE_SOFT_BOILED, MOVE_THUNDER_WAVE, MOVE_SEISMIC_TOSS, MOVE_ICE_BEAM
+    }
+};
+
+const struct TrainerMonNoItemCustomMoves gTrainerParty_WinonaRematch[] = {
+    {
+	.iv = 255,
+	.level = 62,
+	.species = SPECIES_SWELLOW,
+        .moves = MOVE_AERIAL_ACE, MOVE_ENDEAVOR, MOVE_QUICK_ATTACK, MOVE_FACADE
+    },
+    {
+	.iv = 255,
+	.level = 63,
+	.species = SPECIES_PELIPPER,
+        .moves = MOVE_SURF, MOVE_ICE_BEAM, MOVE_AERIAL_ACE, MOVE_PROTECT
+    },
+    {
+	.iv = 255,
+	.level = 64,
+	.species = SPECIES_SKARMORY,
+        .moves = MOVE_DRILL_PECK, MOVE_STEEL_WING, MOVE_TOXIC, MOVE_SPIKES
+    },
+    {
+	.iv = 255,
+	.level = 65,
+	.species = SPECIES_ALTARIA,
+        .moves = MOVE_DRAGON_DANCE, MOVE_AERIAL_ACE, MOVE_EARTHQUAKE, MOVE_DRAGON_CLAW
+    },
+    {
+	.iv = 255,
+	.level = 67,
+	.species = SPECIES_TROPIUS,
+        .moves = MOVE_AERIAL_ACE, MOVE_EARTHQUAKE, MOVE_SOLAR_BEAM, MOVE_SYNTHESIS
+    }
+};
+
 const struct TrainerMonNoItemCustomMoves gTrainerParty_Wattson[] = {
     {
 	.iv = 200,

@@ -114,3 +114,5 @@ FortreeCity_Gym_Text_185FEE:: @ 8185FEE
 	.string "FORTREE CITY POKéMON GYM\p"
 	.string "WINONA'S CERTIFIED TRAINERS:\n"
 	.string "{PLAYER}$"
+
+	.include "data/maps/FortreeCity_Gym/text_rematch.inc"
