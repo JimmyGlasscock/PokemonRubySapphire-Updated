@@ -1121,13 +1121,12 @@ static void Task_AnimateAfterDelay(u8 taskId)
     }
 }
 
-static void __attribute__((unused)) Task_PokemonSummaryAnimateAfterDelay(u8 taskId)
+static void Task_PokemonSummaryAnimateAfterDelay(u8 taskId)
 {
     if (--gTasks[taskId].sAnimDelay == 0)
     {
         StartMonSummaryAnimation(READ_PTR_FROM_TASK(taskId, 0), gTasks[taskId].sAnimId);
-        // SummaryScreen_SetAnimDelayTaskId will be added in a later step
-        // SummaryScreen_SetAnimDelayTaskId(0xFF);
+        SummaryScreen_SetAnimDelayTaskId(0xFF);
         DestroyTask(taskId);
     }
 }
@@ -1184,6 +1183,27 @@ void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, 
             LaunchAnimationTaskForFrontSprite(sprite, sMonFrontAnimIdsTable[species - 1]);
         }
         sprite->callback = SpriteCallbackDummy_2;
+    }
+}
+
+void PokemonSummaryDoMonAnimation(struct Sprite *sprite, u16 species, bool8 oneFrame)
+{
+    if (!oneFrame && HasTwoFramesAnimation(species))
+        StartSpriteAnim(sprite, 1);
+    if (sMonAnimationDelayTable[species - 1] != 0)
+    {
+        // Animation has delay, start delay task
+        u8 taskId = CreateTask(Task_PokemonSummaryAnimateAfterDelay, 0);
+        STORE_PTR_IN_TASK(sprite, taskId, 0);
+        gTasks[taskId].sAnimId = sMonFrontAnimIdsTable[species - 1];
+        gTasks[taskId].sAnimDelay = sMonAnimationDelayTable[species - 1];
+        SummaryScreen_SetAnimDelayTaskId(taskId);
+        SetSpriteCB_MonAnimDummy(sprite);
+    }
+    else
+    {
+        // No delay, start animation
+        StartMonSummaryAnimation(sprite, sMonFrontAnimIdsTable[species - 1]);
     }
 }
 

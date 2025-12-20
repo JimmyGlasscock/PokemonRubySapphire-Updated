@@ -3715,6 +3715,8 @@ _080A1804: .4byte gUnknown_08E94550\n\
 }
 #endif // NONMATCHING
 
+static void SpriteCB_Pokemon(struct Sprite *sprite);
+
 u8 SummaryScreen_CreatePokemonSprite(struct Pokemon *mon)
 {
     u16 species;
@@ -3726,7 +3728,8 @@ u8 SummaryScreen_CreatePokemonSprite(struct Pokemon *mon)
     FreeSpriteOamMatrix(&gSprites[spriteId]);
 
     gSprites[spriteId].data[0] = species;
-    gSprites[spriteId].callback = SummaryScreen_SpritePlayCry;
+    gSprites[spriteId].data[2] = 0;
+    gSprites[spriteId].callback = SpriteCB_Pokemon;
 
     if (!IsPokeSpriteNotFlipped(species))
         gSprites[spriteId].hFlip = TRUE;
@@ -3734,6 +3737,17 @@ u8 SummaryScreen_CreatePokemonSprite(struct Pokemon *mon)
         gSprites[spriteId].hFlip = FALSE;
 
     return spriteId;
+}
+
+static void SpriteCB_Pokemon(struct Sprite *sprite)
+{
+    if (!gPaletteFade.active && sprite->data[2] != 1)
+    {
+        sprite->data[1] = IsPokeSpriteNotFlipped(sprite->data[0]);
+        if (!GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG))
+            PlayCry1(sprite->data[0], 0);
+        PokemonSummaryDoMonAnimation(sprite, sprite->data[0], GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG));
+    }
 }
 
 static void SummaryScreen_SpritePlayCry(struct Sprite *sprite)
@@ -3745,6 +3759,13 @@ static void SummaryScreen_SpritePlayCry(struct Sprite *sprite)
         if (!GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG))
             PlayCry1(sprite->data[0], 0);
     }
+}
+
+static u8 sAnimDelayTaskId = 0xFF;
+
+void SummaryScreen_SetAnimDelayTaskId(u8 taskId)
+{
+    sAnimDelayTaskId = taskId;
 }
 
 static void sub_80A18C4(void)

@@ -2,6 +2,7 @@
 #include "gba/m4a_internal.h"
 #include "battle.h"
 #include "battle_anim_special.h"
+#include "constants/battle.h"
 #include "decompress.h"
 #include "graphics.h"
 #include "m4a.h"
@@ -311,6 +312,7 @@ static void sub_8046984(struct Sprite *);
 static void sub_8046C78(struct Sprite *);
 static void sub_8046E7C(struct Sprite *);
 static void sub_8046E9C(struct Sprite *);
+void SpriteCB_OpponentMonFromBall(struct Sprite *sprite);
 static void sub_8046FBC(struct Sprite *);
 static void SendOutPlayerMonAnimation_Step0(struct Sprite *);
 static void SendOutPlayerMonAnimation_Step1(struct Sprite *);
@@ -780,6 +782,12 @@ static void sub_8046E9C(struct Sprite *sprite)
     {
         StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[r4]], 0);
         r7 = TRUE;
+        // Set callback for Pokémon sprite animation
+        if (GetBattlerSide(r4) != B_SIDE_PLAYER)
+        {
+            // Opponent Pokémon - set callback to trigger front sprite animation
+            gSprites[gBattlerSpriteIds[r4]].callback = SpriteCB_OpponentMonFromBall;
+        }
     }
     else
     {

@@ -3188,12 +3188,24 @@ void SpriteCallbackDummy_2(struct Sprite *sprite)
 
 }
 
+void SpriteCB_OpponentMonFromBall(struct Sprite *sprite)
+{
+    if (sprite->affineAnimEnded)
+    {
+        if (!(gHitMarker & HITMARKER_NO_ANIMATIONS) || gBattleTypeFlags & BATTLE_TYPE_LINK)
+        {
+            if (HasTwoFramesAnimation(sprite->data[2]))
+                StartSpriteAnim(sprite, 1);
+        }
+        BattleAnimateFrontSprite(sprite, sprite->data[2], TRUE, 1);
+    }
+}
+
 void nullsub_37(struct Sprite *sprite)
 {
     if (!gPaletteFade.active)
     {
-        if (HasTwoFramesAnimation(sprite->data[2]))
-            StartSpriteAnim(sprite, 1);
+        BattleAnimateFrontSprite(sprite, sprite->data[2], FALSE, 0);
     }
 }
 
