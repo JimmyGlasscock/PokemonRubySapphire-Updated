@@ -28,10 +28,5 @@ static const union AnimCmd *const sAnims_Mudkip[] =
 };
 
 // Master animation table for all Pokemon
-const union AnimCmd *const *const gMonFrontAnimsPtrTable[NUM_SPECIES] =
-{
-    [SPECIES_NONE]   = sAnims_Mudkip,  // Placeholder
-    [SPECIES_BULBASAUR ... SPECIES_MUDKIP - 1] = sAnims_Mudkip, // Placeholder for other Pokemon
-    [SPECIES_MUDKIP] = sAnims_Mudkip,
-    [SPECIES_MUDKIP + 1 ... SPECIES_EGG - 1] = sAnims_Mudkip, // Placeholder for other Pokemon
-};
+// Note: This table is defined in pokemon_animation.c to avoid multiple definitions
+extern const union AnimCmd *const *const gMonFrontAnimsPtrTable[NUM_SPECIES];

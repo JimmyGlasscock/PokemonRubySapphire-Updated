@@ -1,4 +1,5 @@
 . = ALIGN(4); src/main.o(ewram_data);
+. = ALIGN(4); src/malloc.o(ewram_data);
 . = ALIGN(4); src/sprite.o(ewram_data);
 . = ALIGN(4); src/text.o(ewram_data);
 . = ALIGN(4); src/string_util.o(ewram_data);

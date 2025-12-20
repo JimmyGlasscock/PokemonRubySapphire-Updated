@@ -3,7 +3,7 @@
 #include "data.h"
 #include "data2.h"
 #include "graphics.h"
-#include "still_front_pics_macros.h"
+// #include "still_front_pics_macros.h"  // File doesn't exist and isn't used
 #include "constants/species.h"
 #include "constants/items.h"
 #include "constants/moves.h"
@@ -72,12 +72,6 @@ static const union AnimCmd *const sAnims_MonPic[] =
     sAnim_MonPic_0,
     sAnim_MonPic_1,
     sAnim_MonPic_2,
-};
-// General frame animation for static sprites
-static const union AnimCmd sAnim_GeneralFrame0[] =
-{
-    ANIMCMD_FRAME(0, 0),
-    ANIMCMD_END,
 };
 
 // Macro for defining sprite sheet entries

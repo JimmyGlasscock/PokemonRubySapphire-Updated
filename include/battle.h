@@ -3,6 +3,7 @@
 
 #include "sprite.h"
 #include "constants/battle.h"
+#include "constants/pokemon.h"
 #include "battle_setup.h"
 #include "main.h"
 
@@ -489,6 +490,21 @@ struct Struct20238C8
     u8 unk0_7:1;
 };
 
+struct MonSpritesGfx
+{
+    void *firstDecompressed; // ptr to the decompressed sprite of the first Pokémon
+    union {
+        void *ptr[MAX_BATTLERS_COUNT];
+        u8 *byte[MAX_BATTLERS_COUNT];
+    } sprites;
+    struct SpriteTemplate templates[MAX_BATTLERS_COUNT];
+    struct SpriteFrameImage frameImages[MAX_BATTLERS_COUNT][MAX_MON_PIC_FRAMES];
+    u8 unusedArr[0x80];
+    u8 *barFontGfx;
+    void *unusedPtr;
+    u16 *buffer;
+};
+
 #define GET_MOVE_TYPE(move, typeArg)                        \
 {                                                           \
     if (gBattleStruct->dynamicMoveType)                     \
@@ -527,6 +543,11 @@ extern struct SideTimer gSideTimers[2];
 extern struct WishFutureKnock gWishFutureKnock;
 extern struct AI_ThinkingStruct gAIThinkingSpace;
 extern struct Struct20238C8 gUnknown_020238C8;
+extern struct MonSpritesGfx *gMonSpritesGfxPtr;
+extern struct MonSpritesGfx *gMonSpritesGfxPtr;
+
+void AllocateMonSpritesGfx(void);
+void FreeMonSpritesGfx(void);
 
 // used in many battle files, it seems as though Hisashi Sogabe wrote
 // some sort of macro to replace the use of actually calling memset.
@@ -714,5 +735,7 @@ void sub_80324E0(u8 a);
 void SetBankFuncToLinkOpponentBufferRunCommand(void);
 
 void GameClear(void);
+
+extern u16 gBattlerPartyIndexes[];
 
 #endif // GUARD_BATTLE_H

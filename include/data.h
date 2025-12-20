@@ -29,7 +29,7 @@ extern const union AnimCmd *const *const gMonFrontAnimsPtrTable[];
 
 // Base stats and evolution data
 extern const struct BaseStats gBaseStats[];
-extern const struct Evolution gEvolutionTable[][5];
+extern struct Evolution gEvolutionTable[][5];
 
 // Battler affine animation constants
 enum {

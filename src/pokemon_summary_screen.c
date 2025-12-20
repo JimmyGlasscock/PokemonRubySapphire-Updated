@@ -113,7 +113,6 @@ static void sub_80A046C(u16);
 static void sub_80A20A8(u8);
 static void SummaryScreen_GetPokemon(struct Pokemon *);
 static void sub_80A1BC0(struct Sprite *sprite);
-static void SummaryScreen_SpritePlayCry(struct Sprite *);
 static void sub_80A0428(struct Pokemon *, u8 *);
 static void sub_80A18E4(u8);
 static u8 *SummaryScreen_SetTextColor(u8 *, u8);
@@ -3747,17 +3746,6 @@ static void SpriteCB_Pokemon(struct Sprite *sprite)
         if (!GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG))
             PlayCry1(sprite->data[0], 0);
         PokemonSummaryDoMonAnimation(sprite, sprite->data[0], GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG));
-    }
-}
-
-static void SummaryScreen_SpritePlayCry(struct Sprite *sprite)
-{
-    if (!gPaletteFade.active)
-    {
-        sprite->callback = SpriteCallbackDummy;
-
-        if (!GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG))
-            PlayCry1(sprite->data[0], 0);
     }
 }
 

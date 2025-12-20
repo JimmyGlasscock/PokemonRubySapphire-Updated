@@ -51,6 +51,9 @@
 #include "ewram.h"
 #include "battle_string_ids.h"
 
+// Forward declarations
+void AllocateMonSpritesGfx(void);
+
 // Elite Four Rematch Parties
 extern const struct TrainerMonItemCustomMoves gTrainerParty_SidneyRematch[];
 extern const struct TrainerMonItemCustomMoves gTrainerParty_PhoebeRematch[];
