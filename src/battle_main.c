@@ -127,6 +127,7 @@ MainCallback gPreBattleCallback1;
 u8 gUnknown_03004344;
 u8 gUnknown_03004348;
 extern void (*gBattleMainFunc)(void);
+extern void sub_8043DFC(u8 a);  // Equivalent to SetHealthboxSpriteVisible
 u8 gLeveledUpInBattle;
 void (*gBattlerControllerFuncs[MAX_BATTLERS_COUNT])(void);
 u8 gHealthboxSpriteIds[MAX_BATTLERS_COUNT];
@@ -178,6 +179,8 @@ extern u8 gUnknown_081FA71B[];
 extern u8 gUnknown_081FA71F[];
 struct BattleResults gBattleResults;
 
+EWRAM_DATA struct MonSpritesGfx *gMonSpritesGfxPtr = NULL;
+
 void BattleMainCB1(void);
 static void BattlePrepIntroSlide(void);
 void CheckFocusPunch_ClearVarsBeforeTurnStarts(void);
@@ -220,6 +223,7 @@ struct Window gUnknown_03004250;
 
 void CB2_InitBattle(void)
 {
+    AllocateMonSpritesGfx();
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
     {
         HandleLinkBattleSetup();
@@ -1192,6 +1196,72 @@ void sub_800FCFC(void)
 
 void nullsub_36(struct Sprite *sprite)
 {
+}
+
+static void SpriteCB_Idle(struct Sprite *sprite);
+static void SpriteCB_BattleSpriteSlideLeft(struct Sprite *sprite);
+static void SpriteCB_MoveWildMonToRight(struct Sprite *sprite);
+static void SpriteCB_WildMonShowHealthbox(struct Sprite *sprite);
+static void SpriteCB_WildMonAnimate(struct Sprite *sprite);
+
+static void SpriteCB_Idle(struct Sprite *sprite)
+{
+}
+
+static void SpriteCB_BattleSpriteSlideLeft(struct Sprite *sprite)
+{
+    if (!(gIntroSlideFlags & 1))
+    {
+        sprite->x2 -= 2;
+        if (sprite->x2 == 0)
+        {
+            sprite->callback = SpriteCB_Idle;
+            sprite->data[1] = 0;
+        }
+    }
+}
+
+void SpriteCB_BattleSpriteStartSlideLeft(struct Sprite *sprite)
+{
+    sprite->callback = SpriteCB_BattleSpriteSlideLeft;
+}
+
+static void SpriteCB_MoveWildMonToRight(struct Sprite *sprite)
+{
+    if ((gIntroSlideFlags & 1) == 0)
+    {
+        sprite->x2 += 2;
+        if (sprite->x2 == 0)
+        {
+            sprite->callback = SpriteCB_WildMonShowHealthbox;
+        }
+    }
+}
+
+static void SpriteCB_WildMonShowHealthbox(struct Sprite *sprite)
+{
+    if (sprite->animEnded)
+    {
+        // Note: StartHealthboxSlideIn doesn't exist in Ruby/Sapphire, 
+        // but sub_8043DFC is equivalent to SetHealthboxSpriteVisible
+        // For full Emerald compatibility, StartHealthboxSlideIn would need to be ported
+        sub_8043DFC(gHealthboxSpriteIds[sprite->data[0]]);
+        sprite->callback = SpriteCB_WildMonAnimate;
+        StartSpriteAnimIfDifferent(sprite, 0);
+        BeginNormalPaletteFade(0x20000, 0, 10, 0, RGB(8, 8, 8));
+    }
+}
+
+static void SpriteCB_WildMonAnimate(struct Sprite *sprite)
+{
+    // Animation callback for wild mon - simplified version
+}
+
+void SpriteCB_WildMon(struct Sprite *sprite)
+{
+    sprite->callback = SpriteCB_MoveWildMonToRight;
+    StartSpriteAnimIfDifferent(sprite, 0);
+    BeginNormalPaletteFade(0x20000, 0, 10, 10, RGB(8, 8, 8));
 }
 
 void sub_800FDB0(struct Sprite *sprite)
@@ -3113,8 +3183,18 @@ void sub_80102AC(struct Sprite *sprite)
     }
 }
 
+void SpriteCallbackDummy_2(struct Sprite *sprite)
+{
+
+}
+
 void nullsub_37(struct Sprite *sprite)
 {
+    if (!gPaletteFade.active)
+    {
+        if (HasTwoFramesAnimation(sprite->data[2]))
+            StartSpriteAnim(sprite, 1);
+    }
 }
 
 void unref_sub_801030C(struct Sprite *sprite)

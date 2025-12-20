@@ -6,19 +6,8 @@
 
 bool8 HasTwoFramesAnimation(u16 species)
 {
-    const union AnimCmd *const *anims;
-    u32 count;
-    
-    if (species >= NUM_SPECIES)
-        return FALSE;
-    
-    anims = gMonFrontAnimsPtrTable[species];
-    count = 0;
-    
-    // Count non-NULL pointers
-    while (anims[count] != NULL)
-        count++;
-    
-    // If there are 3 pointers (Frame 0, Frame 1, Frame 2), it's a two-frame animation
-    return (count == 3);
+    return (species != SPECIES_CASTFORM
+         && species != SPECIES_DEOXYS
+         && species != SPECIES_SPINDA
+         && species != SPECIES_UNOWN);
 }

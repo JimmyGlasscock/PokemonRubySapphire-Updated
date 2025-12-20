@@ -149,4 +149,6 @@
 #define PLAYER_HAS_ONE_MON             1
 #define PLAYER_HAS_ONE_USABLE_MON      2
 
+#define SKIP_FRONT_ANIM (1 << 7)
+
 #endif // GUARD_CONSTANTS_POKEMON_H

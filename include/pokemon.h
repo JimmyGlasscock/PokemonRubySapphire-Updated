@@ -524,6 +524,9 @@ void BoxMonRestorePP(struct BoxPokemon *);
 
 bool8 HealStatusConditions(struct Pokemon *mon, u32 unused, u32 healMask, u8 battleId);
 u8 GetItemEffectParamOffset(u16 itemId, u8 effectByte, u8 effectBit);
+bool8 HasTwoFramesAnimation(u16 species);
+void BattleAnimateFrontSprite(struct Sprite *sprite, u16 species, bool8 noCry, u8 panMode);
+void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, u8 panModeAnimFlag);
 
 #if DEBUG && !(ENGLISH && REVISION == 0)
 void Nakamura_NakaGenderTest_RecalcStats(struct Pokemon *);
