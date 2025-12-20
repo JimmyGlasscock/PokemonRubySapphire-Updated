@@ -528,6 +528,7 @@ bool8 HasTwoFramesAnimation(u16 species);
 void BattleAnimateFrontSprite(struct Sprite *sprite, u16 species, bool8 noCry, u8 panMode);
 void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, u8 panModeAnimFlag);
 void SpriteCB_OpponentMonFromBall(struct Sprite *sprite);
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
 void PokemonSummaryDoMonAnimation(struct Sprite *sprite, u16 species, bool8 oneFrame);
 void SummaryScreen_SetAnimDelayTaskId(u8 taskId);
 

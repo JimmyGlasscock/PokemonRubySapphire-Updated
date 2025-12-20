@@ -3201,6 +3201,16 @@ void SpriteCB_OpponentMonFromBall(struct Sprite *sprite)
     }
 }
 
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite)
+{
+    if (sprite->affineAnimEnded)
+    {
+        // Player Pokémon back sprites don't use the 2-frame animation system
+        // They use their own animation system if needed
+        sprite->callback = SpriteCallbackDummy_2;
+    }
+}
+
 void nullsub_37(struct Sprite *sprite)
 {
     if (!gPaletteFade.active)

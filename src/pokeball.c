@@ -4,6 +4,11 @@
 #include "battle_anim_special.h"
 #include "constants/battle.h"
 #include "decompress.h"
+
+// Battler affine animation constants (from data.h enum)
+#define BATTLER_AFFINE_NORMAL  0
+#define BATTLER_AFFINE_EMERGE  1
+#define BATTLER_AFFINE_RETURN  2
 #include "graphics.h"
 #include "m4a.h"
 #include "main.h"
@@ -313,6 +318,7 @@ static void sub_8046C78(struct Sprite *);
 static void sub_8046E7C(struct Sprite *);
 static void sub_8046E9C(struct Sprite *);
 void SpriteCB_OpponentMonFromBall(struct Sprite *sprite);
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
 static void sub_8046FBC(struct Sprite *);
 static void SendOutPlayerMonAnimation_Step0(struct Sprite *);
 static void SendOutPlayerMonAnimation_Step1(struct Sprite *);
@@ -754,9 +760,12 @@ static void sub_8046C78(struct Sprite *sprite)
         gTasks[taskId].data[1] = cryPanning;
         gTasks[taskId].data[2] = cryBehavior;
         gTasks[taskId].data[15] = 0;
+        
+        // Store species in sprite data for animation callbacks
+        gSprites[gBattlerSpriteIds[sprite->data[6]]].data[2] = species;
     }
 
-    StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[sprite->data[6]]], 1);
+    StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[sprite->data[6]]], BATTLER_AFFINE_EMERGE);
     AnimateSprite(&gSprites[gBattlerSpriteIds[sprite->data[6]]]);
     gSprites[gBattlerSpriteIds[sprite->data[6]]].data[1] = 0x1000;
 }
@@ -780,13 +789,18 @@ static void sub_8046E9C(struct Sprite *sprite)
         sprite->invisible = TRUE;
     if (gSprites[gBattlerSpriteIds[r4]].affineAnimEnded)
     {
-        StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[r4]], 0);
+        StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[r4]], BATTLER_AFFINE_NORMAL);
         r7 = TRUE;
         // Set callback for Pokémon sprite animation
         if (GetBattlerSide(r4) != B_SIDE_PLAYER)
         {
             // Opponent Pokémon - set callback to trigger front sprite animation
             gSprites[gBattlerSpriteIds[r4]].callback = SpriteCB_OpponentMonFromBall;
+        }
+        else
+        {
+            // Player Pokémon - set callback to trigger back sprite animation
+            gSprites[gBattlerSpriteIds[r4]].callback = SpriteCB_PlayerMonFromBall;
         }
     }
     else
