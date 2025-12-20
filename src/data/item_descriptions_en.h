@@ -384,6 +384,11 @@ static const u8 gItemDescription_LeafStone[] = _(
     "species of POKéMON\n"
     "evolve.");
 
+static const u8 gItemDescription_TradeStone[] = _(
+    "Evolves POKéMON\n"
+    "that usually\n"
+    "evolve by trade.");
+
 static const u8 gItemDescription_TinyMushroom[] = _(
     "A plain, ordinary\n"
     "mushroom.\n"
