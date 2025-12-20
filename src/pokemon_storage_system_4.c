@@ -1936,13 +1936,10 @@ u8 sub_809C464(void)
         }
         if (JOY_NEW(B_BUTTON))
             return 16;
-        if (gSaveBlock2.optionsButtonMode == OPTIONS_BUTTON_MODE_LR)
-        {
-            if (JOY_HELD(L_BUTTON))
-                return 10;
-            if (JOY_HELD(R_BUTTON))
-                return 9;
-        }
+        if (JOY_HELD(L_BUTTON))
+            return 10;
+        if (JOY_HELD(R_BUTTON))
+            return 9;
         if (JOY_NEW(SELECT_BUTTON))
         {
             sub_809CD88();
@@ -2060,6 +2057,10 @@ u8 sub_809C664(void)
             break;
         }
 
+        if (JOY_HELD(L_BUTTON))
+            return 10;
+        if (JOY_HELD(R_BUTTON))
+            return 9;
         if (JOY_NEW(SELECT_BUTTON))
         {
             sub_809CD88();
@@ -2107,14 +2108,10 @@ u8 sub_809C85C(void)
             return 10;
         if (gMain.heldKeys & DPAD_RIGHT)
             return 9;
-
-        if (gSaveBlock2.optionsButtonMode == OPTIONS_BUTTON_MODE_LR)
-        {
-            if (gMain.heldKeys & L_BUTTON)
-                return 10;
-            if (gMain.heldKeys & R_BUTTON)
-                return 9;
-        }
+        if (gMain.heldKeys & L_BUTTON)
+            return 10;
+        if (gMain.heldKeys & R_BUTTON)
+            return 9;
 
         if (JOY_NEW(A_BUTTON))
         {
@@ -2202,6 +2199,11 @@ u8 sub_809C944(void)
             }
             break;
         }
+
+        if (JOY_HELD(L_BUTTON))
+            return 10;
+        if (JOY_HELD(R_BUTTON))
+            return 9;
 
         if (JOY_NEW(A_BUTTON))
             return (cursorPosition == 0) ? 5 : 4;
