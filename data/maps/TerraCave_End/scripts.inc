@@ -57,8 +57,7 @@ TerraCave_End_EventScript_Groudon_End::
 
 TerraCave_End_EventScript_DefeatedGroudon::
 	setflag FLAG_DEFEATED_GROUDON
-	// End abnormal weather immediately, but keep cave tiles until map exit
-	setvar VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_NONE
+	// Weather and cave cleanup will happen when player exits Terra Cave entrance
 	removeobject VAR_LAST_TALKED
 	return
 

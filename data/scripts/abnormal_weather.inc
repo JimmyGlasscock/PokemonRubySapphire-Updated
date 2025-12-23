@@ -202,13 +202,13 @@ AbnormalWeather_EventScript_CleanupMapTiles::
 	return
 
 AbnormalWeather_EventScript_CleanupRoute115West::
-	setmetatile 21, 6, METATILE_General_RockWall_RockBase, TRUE
-	setmetatile 21, 7, METATILE_General_RockWall_RockBase, TRUE
+	setmetatile 21, 6, 0x265, TRUE
+	setmetatile 21, 7, 0x264, FALSE
 	return
 
 AbnormalWeather_EventScript_CleanupRoute115East::
-	setmetatile 36, 10, METATILE_General_RockWall_RockBase, TRUE
-	setmetatile 36, 11, METATILE_General_RockWall_RockBase, TRUE
+	setmetatile 36, 10, 0x265, TRUE
+	setmetatile 36, 11, 0x264, FALSE
 	return
 
 AbnormalWeather_EventScript_CleanupRoute116North::
