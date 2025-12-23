@@ -2271,12 +2271,14 @@ void CreateAbnormalWeatherEvent(void)
 }
 
 // Saves the map name for the current abnormal weather location in gStringVar1, then
-// returns FALSE for Groudon (always Groudon now, only Route 115).
+// returns FALSE for Groudon, TRUE for Kyogre.
 bool32 GetAbnormalWeatherMapNameAndType(void)
 {
     static const u16 sAbnormalWeatherMapSecIds[] = {
+        MAPSEC_ROUTE_115,  // Terra Cave locations
         MAPSEC_ROUTE_115,
-        MAPSEC_ROUTE_115
+        MAPSEC_ROUTE_125,  // Marine Cave locations
+        MAPSEC_ROUTE_125
     };
 
     u16 abnormalWeather = VarGet(VAR_ABNORMAL_WEATHER_LOCATION);
@@ -2289,5 +2291,13 @@ bool32 GetAbnormalWeatherMapNameAndType(void)
 
     GetMapSectionName(gStringVar1, sAbnormalWeatherMapSecIds[abnormalWeather - 1], 0);
 
-    return FALSE;  // Always Groudon/Terra Cave (Route 115 only)
+#ifdef RUBY
+    // Ruby: Return TRUE for Kyogre/Marine Cave (Route 125)
+    if (abnormalWeather >= MARINE_CAVE_LOCATIONS_START)
+        return TRUE;
+    return FALSE;
+#else
+    // Sapphire: Return FALSE for Groudon/Terra Cave (Route 115)
+    return FALSE;
+#endif
 }

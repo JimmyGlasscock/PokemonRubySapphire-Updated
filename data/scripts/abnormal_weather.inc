@@ -162,9 +162,10 @@ AbnormalWeather_StartGroudonWeather::
 
 AbnormalWeather_EventScript_EndEventAndCleanup_1::
 	lockall
-	// Check if Groudon was defeated - if so, show sun ended message
-	checkflag FLAG_DEFEATED_GROUDON
-	goto_if_eq AbnormalWeather_EventScript_ShowSunEndedMessage
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_WEST
+	goto_if_eq AbnormalWeather_EventScript_ShowRainEndedMessage
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_EAST
+	goto_if_eq AbnormalWeather_EventScript_ShowRainEndedMessage
 	goto AbnormalWeather_EventScript_ShowSunEndedMessage
 	end
 
@@ -196,6 +197,8 @@ AbnormalWeather_EventScript_CleanupMapTiles::
 	switch VAR_ABNORMAL_WEATHER_LOCATION
 	case ABNORMAL_WEATHER_ROUTE_115_WEST, AbnormalWeather_EventScript_CleanupRoute115West
 	case ABNORMAL_WEATHER_ROUTE_115_EAST, AbnormalWeather_EventScript_CleanupRoute115East
+	case ABNORMAL_WEATHER_ROUTE_125_WEST, AbnormalWeather_EventScript_CleanupRoute125West
+	case ABNORMAL_WEATHER_ROUTE_125_EAST, AbnormalWeather_EventScript_CleanupRoute125East
 	return
 
 AbnormalWeather_EventScript_CleanupRoute115West::
@@ -346,5 +349,19 @@ AbnormalWeather_EventScript_CleanupRoute129East::
 	setmetatile 44, 21, METATILE_General_CalmWater, FALSE
 	setmetatile 42, 22, METATILE_General_CalmWater, FALSE
 	setmetatile 43, 22, METATILE_General_CalmWater, FALSE
+	return
+
+AbnormalWeather_Underwater_SetupEscapeWarp::
+	switch VAR_ABNORMAL_WEATHER_LOCATION
+	case ABNORMAL_WEATHER_ROUTE_125_WEST, AbnormalWeather_Underwater_SetupEscapeWarpRoute125West
+	case ABNORMAL_WEATHER_ROUTE_125_EAST, AbnormalWeather_Underwater_SetupEscapeWarpRoute125East
+	return
+
+AbnormalWeather_Underwater_SetupEscapeWarpRoute125West::
+	setescapewarp MAP_ROUTE125, 255, 9, 17
+	return
+
+AbnormalWeather_Underwater_SetupEscapeWarpRoute125East::
+	setescapewarp MAP_ROUTE125, 255, 54, 19
 	return
 

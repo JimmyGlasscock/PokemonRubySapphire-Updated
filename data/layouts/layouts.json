@@ -2862,6 +2862,16 @@
       "blockdata_filepath": "data/layouts/MarineCave_Entrance/map.bin"
     },
     {
+      "id": "LAYOUT_UNDERWATER_ROUTE125",
+      "name": "Underwater_Route125_Layout",
+      "width": 80,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Underwater",
+      "border_filepath": "data/layouts/Underwater_Route125/border.bin",
+      "blockdata_filepath": "data/layouts/Underwater_Route125/map.bin"
+    },
+    {
       "id": "LAYOUT_MARINE_CAVE_END",
       "name": "MarineCave_End_Layout",
       "width": 27,

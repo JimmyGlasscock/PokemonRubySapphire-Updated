@@ -891,6 +891,7 @@
 #define FLAG_SYS_RESET_RTC_ENABLE (SYSTEM_FLAGS + 0x62)
 
 #define FLAG_LANDMARK_BERRY_MASTERS_HOUSE (SYSTEM_FLAGS + 0x63)
+#define FLAG_ARRIVED_AT_MARINE_CAVE_EMERGE_SPOT (SYSTEM_FLAGS + 0x64)
 
 
 // Daily Flags. These 64 flags are cleared once per day.

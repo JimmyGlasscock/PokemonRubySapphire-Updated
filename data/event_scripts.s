@@ -105,6 +105,7 @@ gStdScripts_End::
 	.include "data/maps/Route123/scripts.inc"
 	.include "data/maps/Route124/scripts.inc"
 	.include "data/maps/Route125/scripts.inc"
+	.include "data/maps/Underwater_Route125/scripts.inc"
 	.include "data/maps/Route126/scripts.inc"
 	.include "data/maps/Route127/scripts.inc"
 	.include "data/maps/Route128/scripts.inc"
