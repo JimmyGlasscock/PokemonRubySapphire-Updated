@@ -57,8 +57,8 @@ MarineCave_End_EventScript_Kyogre_End::
 
 MarineCave_End_EventScript_DefeatedKyogre::
 	setflag FLAG_DEFEATED_KYOGRE
-	goto Common_EventScript_RemoveStaticPokemon
-	end
+	removeobject VAR_LAST_TALKED
+	return
 
 MarineCave_End_EventScript_RanFromKyogre::
 	setvar VAR_0x8004, SPECIES_KYOGRE
