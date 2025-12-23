@@ -90,6 +90,8 @@
 #define MAPSEC_SECRET_BASE           0x56
 #define MAPSEC_DYNAMIC               0x57
 #define MAPSEC_TERRA_CAVE            0x58
-#define MAPSEC_NONE                  0x59
+#define MAPSEC_MARINE_CAVE            0x59
+#define MAPSEC_UNDERWATER_MARINE_CAVE 0x5A
+#define MAPSEC_NONE                  0x5B
 
 #endif // GUARD_REGIONMAPSEC_H

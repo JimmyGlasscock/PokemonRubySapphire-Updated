@@ -95,10 +95,10 @@ LittlerootTown_Text_16AEAC:: @ 816AEAC
 
 LittlerootTown_Text_TestTerraCave:: @ 816E000
 	.string "I'm a test NPC.\n"
-	.string "Would you like to warp to TERRA CAVE?$"
+	.string "Would you like to warp to MARINE CAVE?$"
 
 LittlerootTown_Text_TestTerraCave_No:: @ 816E030
 	.string "Okay, maybe later!$"
 
 LittlerootTown_Text_TestTerraCave_Warping:: @ 816E045
-	.string "Warping to TERRA CAVE...$"
+	.string "Warping to MARINE CAVE...$"

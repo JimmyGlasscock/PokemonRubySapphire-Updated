@@ -697,6 +697,22 @@
             "height": 1
         },
         {
+            "map_section": "MAPSEC_MARINE_CAVE",
+            "name": "MARINE CAVE",
+            "x": 24,
+            "y": 10,
+            "width": 1,
+            "height": 1
+        },
+        {
+            "map_section": "MAPSEC_UNDERWATER_MARINE_CAVE",
+            "name": "UNDERWATER",
+            "x": 24,
+            "y": 10,
+            "width": 1,
+            "height": 1
+        },
+        {
             "map_section": "MAPSEC_SECRET_BASE",
             "name": "SECRET BASE",
             "x": 0,
