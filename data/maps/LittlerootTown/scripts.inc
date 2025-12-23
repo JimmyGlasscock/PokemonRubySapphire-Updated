@@ -875,21 +875,3 @@ LittlerootTown_EventScript_14DD38:: @ 814DD38
 	closemessage
 	delay 30
 	return
-
-LittlerootTown_EventScript_TestTerraCave:: @ 814E000
-	lock
-	faceplayer
-	msgbox LittlerootTown_Text_TestTerraCave, MSGBOX_YESNO
-	compare VAR_RESULT, YES
-	goto_if_eq LittlerootTown_EventScript_TestTerraCave_Warp
-	msgbox LittlerootTown_Text_TestTerraCave_No, MSGBOX_DEFAULT
-	release
-	end
-
-LittlerootTown_EventScript_TestTerraCave_Warp::
-	msgbox LittlerootTown_Text_TestTerraCave_Warping, MSGBOX_DEFAULT
-	closemessage
-	warpsilent MAP_TERRA_CAVE_ENTRANCE, 0, 8, 18
-	waitstate
-	release
-	end

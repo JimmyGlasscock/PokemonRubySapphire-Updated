@@ -93,12 +93,3 @@ LittlerootTown_Text_16AEA1:: @ 816AEA1
 LittlerootTown_Text_16AEAC:: @ 816AEAC
 	.string "PROF. BIRCH'S HOUSE$"
 
-LittlerootTown_Text_TestTerraCave:: @ 816E000
-	.string "I'm a test NPC.\n"
-	.string "Would you like to warp to TERRA CAVE?$"
-
-LittlerootTown_Text_TestTerraCave_No:: @ 816E030
-	.string "Okay, maybe later!$"
-
-LittlerootTown_Text_TestTerraCave_Warping:: @ 816E045
-	.string "Warping to TERRA CAVE...$"
