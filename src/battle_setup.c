@@ -50,6 +50,7 @@ EWRAM_DATA static u8 *sTrainerBattleScriptRetAddr = NULL;
 EWRAM_DATA static u8 *sTrainerBattleEndScript = NULL;
 
 extern u16 gBattleTypeFlags;
+extern s8 gBattleTerrain;
 extern u16 gSpecialVar_LastTalked;
 extern u8 gBattleOutcome;
 
@@ -604,6 +605,17 @@ void ScrSpecial_StartGroudonKyogreBattle(void)
         CreateBattleStartTask(B_TRANSITION_SHARDS, MUS_VS_KYOGRE_GROUDON); // GROUDON
     else
         CreateBattleStartTask(B_TRANSITION_RIPPLE, MUS_VS_KYOGRE_GROUDON); // KYOGRE
+    IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
+    IncrementGameStat(GAME_STAT_WILD_BATTLES);
+}
+
+void ScrSpecial_StartTerraCaveGroudonBattle(void)
+{
+    ScriptContext2_Enable();
+    gMain.savedCallback = CB2_EndScriptedWildBattle;
+    gBattleTypeFlags = BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_KYOGRE_GROUDON;
+    gBattleTerrain = BATTLE_TERRAIN_CAVE; // Always use cave terrain for Terra Cave Groudon
+    CreateBattleStartTask(B_TRANSITION_SHARDS, MUS_VS_KYOGRE_GROUDON);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
 }

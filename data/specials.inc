@@ -320,6 +320,7 @@ gSpecials::
 	def_special SetSootopolisGymCrackedIceMetatiles
 	def_special ShakeCamera
 	def_special ScrSpecial_StartGroudonKyogreBattle
+	def_special ScrSpecial_StartTerraCaveGroudonBattle
 	def_special ScrSpecial_StartRayquazaBattle
 	def_special ScrSpecial_StartRegiBattle
 	def_special SetUpTrainerMovement

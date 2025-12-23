@@ -383,6 +383,8 @@
     "AbandonedShip_HiddenFloorRooms",
     "IslandCave",
     "AncientTomb",
+    "TerraCave_Entrance",
+    "TerraCave_End",
     "Underwater_Route134",
     "Underwater_SealedChamber",
     "SealedChamber_OuterRoom",

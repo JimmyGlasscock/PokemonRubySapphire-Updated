@@ -435,7 +435,10 @@ gStdScripts_End::
 	.include "data/maps/Route119_WeatherInstitute_2F/scripts.inc"
 	.include "data/maps/Route119_House/scripts.inc"
 	.include "data/maps/Route124_DivingTreasureHuntersHouse/scripts.inc"
+	.include "data/maps/TerraCave_Entrance/scripts.inc"
+	.include "data/maps/TerraCave_End/scripts.inc"
 
+	.include "data/maps/TerraCave_End/text.inc"
 	.include "data/maps/PetalburgCity/text.inc"
 	.include "data/maps/SlateportCity/text.inc"
 	.include "data/maps/MauvilleCity/text.inc"
@@ -964,6 +967,25 @@ Common_EventScript_FerryDepartIsland:: @ 81A047C
 
 	.include "data/scripts/cave_of_origin.inc"
 	.include "data/scripts/static_pokemon.inc"
+
+Common_EventScript_RemoveStaticPokemon:: @ 81A0668
+	fadescreen FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+Common_EventScript_LegendaryFlewAway:: @ 81A0673
+	fadescreen FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreen FADE_FROM_BLACK
+	bufferspeciesname 0, VAR_0x8004
+	msgbox gText_LegendaryFlewAway, MSGBOX_DEFAULT
+	release
+	end
+
+gText_LegendaryFlewAway:: @ 81A0688
+	.string "The {STR_VAR_1} flew away!$"
 
 Common_EventScript_NameReceivedPartyMon:: @ 81A0678
 	fadescreen FADE_TO_BLACK

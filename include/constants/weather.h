@@ -8,6 +8,7 @@
 #define WEATHER_SNOW           4
 #define WEATHER_RAIN_MED       5
 #define WEATHER_FOG_1          6
+#define WEATHER_FOG_HORIZONTAL 6
 #define WEATHER_ASH            7
 #define WEATHER_SANDSTORM      8
 #define WEATHER_FOG_2          9
