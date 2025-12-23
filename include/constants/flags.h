@@ -912,6 +912,7 @@
 // Daily flags end at 0x8FF
 
 #define FLAG_ARRIVED_AT_TERRA_CAVE_ENTRANCE   (SYSTEM_FLAGS + 0xD3)
+#define FLAG_EXITED_TERRA_CAVE               (SYSTEM_FLAGS + 0xD4)
 
 // SPECIAL FLAGS
 

@@ -438,6 +438,7 @@ gStdScripts_End::
 	.include "data/maps/Route124_DivingTreasureHuntersHouse/scripts.inc"
 	.include "data/maps/TerraCave_Entrance/scripts.inc"
 	.include "data/maps/TerraCave_End/scripts.inc"
+	.include "data/maps/TerraCave_Entrance/text.inc"
 	.include "data/maps/MarineCave_Entrance/scripts.inc"
 	.include "data/maps/MarineCave_End/scripts.inc"
 	.include "data/maps/Underwater_MarineCave/scripts.inc"
