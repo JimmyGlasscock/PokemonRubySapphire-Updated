@@ -282,9 +282,13 @@ void CB2_InitBattleInternal(void)
 
 #if DEBUG
     if (!(gUnknown_02023A14_50 & 8))
-        gBattleTerrain = BattleSetup_GetTerrain();
+    {
+        if (!(gBattleTypeFlags & BATTLE_TYPE_KYOGRE_GROUDON))
+            gBattleTerrain = BattleSetup_GetTerrain();
+    }
 #else
-    gBattleTerrain = BattleSetup_GetTerrain();
+    if (!(gBattleTypeFlags & BATTLE_TYPE_KYOGRE_GROUDON))
+        gBattleTerrain = BattleSetup_GetTerrain();
 #endif
 
     Text_InitWindowWithTemplate(&gWindowTemplate_Contest_MoveDescription, &gWindowTemplate_81E6C58);

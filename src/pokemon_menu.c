@@ -133,6 +133,14 @@ static const u8 sText_HM_RockSmash[]  = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LI
 static const u8 sText_HM_Waterfall[]  = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}WATERFALL");
 static const u8 sText_HM_Dive[]       = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}DIVE");
 
+// Formatted non-HM field move names with blue color
+static const u8 sText_Field_Teleport[]    = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}TELEPORT");
+static const u8 sText_Field_Dig[]         = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}DIG");
+static const u8 sText_Field_SecretPower[] = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}SECRET POWER");
+static const u8 sText_Field_MilkDrink[]   = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}MILK DRINK");
+static const u8 sText_Field_SoftBoiled[]  = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}SOFTBOILED");
+static const u8 sText_Field_SweetScent[]  = _("{COLOR_HIGHLIGHT_SHADOW BLUE WHITE LIGHT_BLUE}SWEET SCENT");
+
 static const struct MenuAction2 sPokemonMenuActions[] =
 {
     {OtherText_Summary,             PokemonMenu_Summary},
@@ -153,12 +161,12 @@ static const struct MenuAction2 sPokemonMenuActions[] =
     {sText_HM_Fly,                  PokemonMenu_FieldMove},  // HM02
     {sText_HM_Dive,                 PokemonMenu_FieldMove},  // HM08
     {sText_HM_Waterfall,            PokemonMenu_FieldMove},  // HM07
-    {gMoveNames[MOVE_TELEPORT],     PokemonMenu_FieldMove},  // Not an HM
-    {gMoveNames[MOVE_DIG],          PokemonMenu_FieldMove},  // Not an HM
-    {gMoveNames[MOVE_SECRET_POWER], PokemonMenu_FieldMove},  // Not an HM
-    {gMoveNames[MOVE_MILK_DRINK],   PokemonMenu_FieldMove},  // Not an HM
-    {gMoveNames[MOVE_SOFT_BOILED],  PokemonMenu_FieldMove},  // Not an HM
-    {gMoveNames[MOVE_SWEET_SCENT],  PokemonMenu_FieldMove},  // Not an HM
+    {sText_Field_Teleport,          PokemonMenu_FieldMove},  // Not an HM
+    {sText_Field_Dig,               PokemonMenu_FieldMove},  // Not an HM
+    {sText_Field_SecretPower,       PokemonMenu_FieldMove},  // Not an HM
+    {sText_Field_MilkDrink,         PokemonMenu_FieldMove},  // Not an HM
+    {sText_Field_SoftBoiled,        PokemonMenu_FieldMove},  // Not an HM
+    {sText_Field_SweetScent,        PokemonMenu_FieldMove},  // Not an HM
 };
 
 static const u16 sPokeMenuFieldMoves[] =

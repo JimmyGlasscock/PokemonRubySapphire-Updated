@@ -2822,6 +2822,66 @@
       "blockdata_filepath": "data/layouts/AncientTomb/map.bin"
     },
     {
+      "id": "LAYOUT_TERRA_CAVE_ENTRANCE",
+      "name": "TerraCave_Entrance_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/TerraCave_Entrance/border.bin",
+      "blockdata_filepath": "data/layouts/TerraCave_Entrance/map.bin"
+    },
+    {
+      "id": "LAYOUT_TERRA_CAVE_END",
+      "name": "TerraCave_End_Layout",
+      "width": 27,
+      "height": 30,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/TerraCave_End/border.bin",
+      "blockdata_filepath": "data/layouts/TerraCave_End/map.bin"
+    },
+    {
+      "id": "LAYOUT_UNDERWATER_MARINE_CAVE",
+      "name": "Underwater_MarineCave_Layout",
+      "width": 20,
+      "height": 10,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Underwater",
+      "border_filepath": "data/layouts/Underwater_MarineCave/border.bin",
+      "blockdata_filepath": "data/layouts/Underwater_MarineCave/map.bin"
+    },
+    {
+      "id": "LAYOUT_MARINE_CAVE_ENTRANCE",
+      "name": "MarineCave_Entrance_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/MarineCave_Entrance/border.bin",
+      "blockdata_filepath": "data/layouts/MarineCave_Entrance/map.bin"
+    },
+    {
+      "id": "LAYOUT_UNDERWATER_ROUTE125",
+      "name": "Underwater_Route125_Layout",
+      "width": 80,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Underwater",
+      "border_filepath": "data/layouts/Underwater_Route125/border.bin",
+      "blockdata_filepath": "data/layouts/Underwater_Route125/map.bin"
+    },
+    {
+      "id": "LAYOUT_MARINE_CAVE_END",
+      "name": "MarineCave_End_Layout",
+      "width": 27,
+      "height": 30,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/MarineCave_End/border.bin",
+      "blockdata_filepath": "data/layouts/MarineCave_End/map.bin"
+    },
+    {
       "id": "LAYOUT_UNDERWATER_ROUTE134",
       "name": "Underwater_Route134_Layout",
       "width": 18,

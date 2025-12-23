@@ -1,10 +1,80 @@
 Route125_MapScripts:: @ 8151F1E
-	map_script MAP_SCRIPT_ON_TRANSITION, Route125_MapScript1_151F24
+	map_script MAP_SCRIPT_ON_TRANSITION, Route125_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, Route125_OnResume
+	map_script MAP_SCRIPT_ON_LOAD, Route125_OnLoad
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, Route125_OnFrame
 	.byte 0
 
-Route125_MapScript1_151F24:: @ 8151F24
+Route125_OnTransition::
+.ifdef RUBY
+	checkflag FLAG_DEFEATED_KYOGRE
+	goto_if_eq Route125_OnTransition_EndWeather
+	compare VAR_SHOULD_END_ABNORMAL_WEATHER, 1
+	call_if_eq AbnormalWeather_EventScript_HideMapNamePopup
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_WEST
+	call_if_eq AbnormalWeather_StartKyogreWeather
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_EAST
+	call_if_eq AbnormalWeather_StartKyogreWeather
+	end
+.else
 	call_if_set FLAG_SYS_WEATHER_CTRL, Common_EventScript_SetLegendaryWeather
 	end
+.endif
+
+Route125_OnTransition_EndWeather::
+	// Kyogre defeated - end weather and clean up tiles
+	setvar VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_NONE
+	setvar VAR_SHOULD_END_ABNORMAL_WEATHER, 0
+	setweather WEATHER_SUNNY
+	doweather
+	// Clean up both possible rough water locations
+	call AbnormalWeather_EventScript_CleanupRoute125West
+	call AbnormalWeather_EventScript_CleanupRoute125East
+	special DrawWholeMapView
+	end
+
+Route125_OnResume::
+.ifdef RUBY
+	// Set dive warp dynamically based on abnormal weather location
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_WEST
+	goto_if_eq Route125_OnResume_SetWestDiveWarp
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_EAST
+	goto_if_eq Route125_OnResume_SetEastDiveWarp
+.endif
+	// Default dive warp (normal underwater route)
+	setdivewarp MAP_UNDERWATER_ROUTE125, 255, 8, 6
+	end
+
+Route125_OnResume_SetWestDiveWarp::
+	setdivewarp MAP_UNDERWATER_ROUTE125, 255, 9, 17
+	end
+
+Route125_OnResume_SetEastDiveWarp::
+	setdivewarp MAP_UNDERWATER_ROUTE125, 255, 54, 19
+	end
+
+Route125_OnLoad::
+.ifdef RUBY
+	// Only place tiles if abnormal weather is active and Kyogre not defeated
+	checkflag FLAG_DEFEATED_KYOGRE
+	goto_if_eq Route125_OnLoad_End
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_WEST
+	call_if_eq AbnormalWeather_EventScript_PlaceTilesRoute125West
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_125_EAST
+	call_if_eq AbnormalWeather_EventScript_PlaceTilesRoute125East
+	end
+.endif
+
+Route125_OnLoad_End::
+	end
+
+Route125_OnFrame::
+.ifdef RUBY
+	map_script_2 VAR_SHOULD_END_ABNORMAL_WEATHER, 1, AbnormalWeather_EventScript_EndEventAndCleanup_1
+	.2byte 0
+.else
+	.2byte 0
+.endif
 
 Route125_EventScript_151F2E:: @ 8151F2E
 	trainerbattle_single TRAINER_CODY, Route125_Text_1C0FCF, Route125_Text_1C1002

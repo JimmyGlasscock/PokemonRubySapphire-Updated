@@ -320,6 +320,8 @@ gSpecials::
 	def_special SetSootopolisGymCrackedIceMetatiles
 	def_special ShakeCamera
 	def_special ScrSpecial_StartGroudonKyogreBattle
+	def_special ScrSpecial_StartTerraCaveGroudonBattle
+	def_special ScrSpecial_StartMarineCaveKyogreBattle
 	def_special ScrSpecial_StartRayquazaBattle
 	def_special ScrSpecial_StartRegiBattle
 	def_special SetUpTrainerMovement
@@ -350,6 +352,8 @@ gSpecials::
 	def_special GetNameOfEnigmaBerryInPlayerParty
 	def_special ScriptRandom
 	def_special sub_80835D8
+	def_special CreateAbnormalWeatherEvent
+	def_special GetAbnormalWeatherMapNameAndType
 .ifdef GERMAN
 	def_special nullsub_814B200
 .endif

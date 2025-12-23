@@ -113,7 +113,7 @@ ASM_SOURCES  := $(wildcard src/*.s src/*/*.s asm/*.s data/*.s sound/*.s sound/*/
 C_OBJECTS    := $(addprefix $(BUILD_DIR)/, $(C_SOURCES:%.c=%.o))
 ASM_OBJECTS  := $(addprefix $(BUILD_DIR)/, $(ASM_SOURCES:%.s=%.o))
 ALL_OBJECTS  := $(C_OBJECTS) $(ASM_OBJECTS)
-OBJS_REL     := $(ALL_OBJECTS:$(BUILD_DIR)/%=%)
+OBJS_REL     := $(filter-out src/field_specials.o, $(ALL_OBJECTS:$(BUILD_DIR)/%=%))
 
 SUBDIRS        := $(sort $(dir $(ALL_OBJECTS)))
 DATA_SRC_SUBDIR = src/data

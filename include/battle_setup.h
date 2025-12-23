@@ -69,6 +69,8 @@ void CB2_EndTrainerBattle(void);
 void do_choose_name_or_words_screen(void);
 u8 *BattleSetup_GetScriptAddrAfterBattle(void);
 u8 *BattleSetup_GetTrainerPostBattleScript(void);
+void ScrSpecial_StartTerraCaveGroudonBattle(void);
+void ScrSpecial_StartMarineCaveKyogreBattle(void);
 //void ScrSpecial_ShowTrainerNonBattlingSpeech(void);
 //void PlayTrainerEncounterMusic(void);
 //u8 *SanitizeString(u8 *str);

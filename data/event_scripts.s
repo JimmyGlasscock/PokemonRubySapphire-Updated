@@ -105,6 +105,7 @@ gStdScripts_End::
 	.include "data/maps/Route123/scripts.inc"
 	.include "data/maps/Route124/scripts.inc"
 	.include "data/maps/Route125/scripts.inc"
+	.include "data/maps/Underwater_Route125/scripts.inc"
 	.include "data/maps/Route126/scripts.inc"
 	.include "data/maps/Route127/scripts.inc"
 	.include "data/maps/Route128/scripts.inc"
@@ -435,7 +436,14 @@ gStdScripts_End::
 	.include "data/maps/Route119_WeatherInstitute_2F/scripts.inc"
 	.include "data/maps/Route119_House/scripts.inc"
 	.include "data/maps/Route124_DivingTreasureHuntersHouse/scripts.inc"
+	.include "data/maps/TerraCave_Entrance/scripts.inc"
+	.include "data/maps/TerraCave_End/scripts.inc"
+	.include "data/maps/MarineCave_Entrance/scripts.inc"
+	.include "data/maps/MarineCave_End/scripts.inc"
+	.include "data/maps/Underwater_MarineCave/scripts.inc"
 
+	.include "data/maps/TerraCave_End/text.inc"
+	.include "data/maps/MarineCave_End/text.inc"
 	.include "data/maps/PetalburgCity/text.inc"
 	.include "data/maps/SlateportCity/text.inc"
 	.include "data/maps/MauvilleCity/text.inc"
@@ -805,6 +813,7 @@ EventScript_SetBrineyLocation_Route109:: @ 819FD55
 	.include "data/scripts/obtain_item.inc"
 	.include "data/scripts/record_mix.inc"
 	.include "data/scripts/pc.inc"
+	.include "data/scripts/abnormal_weather.inc"
 
 Common_EventScript_PokemartSign:: @ 81A00E1
 	msgbox Text_PokemartSign, MSGBOX_SIGN
@@ -964,6 +973,25 @@ Common_EventScript_FerryDepartIsland:: @ 81A047C
 
 	.include "data/scripts/cave_of_origin.inc"
 	.include "data/scripts/static_pokemon.inc"
+
+Common_EventScript_RemoveStaticPokemon:: @ 81A0668
+	fadescreen FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+Common_EventScript_LegendaryFlewAway:: @ 81A0673
+	fadescreen FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreen FADE_FROM_BLACK
+	bufferspeciesname 0, VAR_0x8004
+	msgbox gText_LegendaryFlewAway, MSGBOX_DEFAULT
+	release
+	end
+
+gText_LegendaryFlewAway:: @ 81A0688
+	.string "The {STR_VAR_1} flew away!$"
 
 Common_EventScript_NameReceivedPartyMon:: @ 81A0678
 	fadescreen FADE_TO_BLACK
@@ -1690,3 +1718,4 @@ Text_1C6C62: @ 81C6C62
 
 	.include "data/text/save.inc"
 	.include "data/text/birch_speech.inc"
+	.include "data/text/abnormal_weather.inc"

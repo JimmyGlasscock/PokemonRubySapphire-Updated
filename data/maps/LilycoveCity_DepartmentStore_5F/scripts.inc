@@ -25,6 +25,7 @@ LilycoveCity_DepartmentStore_5F_Items1:: @ 815A078
 	.2byte ITEM_THUNDER_STONE
 	.2byte ITEM_WATER_STONE
 	.2byte ITEM_LEAF_STONE
+	.2byte ITEM_TRADE_STONE
 	.2byte ITEM_NONE
 	release
 	end

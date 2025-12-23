@@ -69,3 +69,25 @@ Route119_WeatherInstitute_2F_Text_19F2FE:: @ 819F2FE
 	.string "I've been researching rain for many\n"
 	.string "years, but it's ridiculous to think that\l"
 	.string "humans can freely change the weather.$"
+
+Route119_WeatherInstitute_2F_Text_GroudonWeather:: @ 819F2FE
+	.string "I track weather patterns over\n"
+	.string "the HOENN region.\p"
+	.string "Presently, a drought has been recorded\n"
+	.string "in {STR_VAR_1}.\p"
+	.string "Could that mean, somewhere near\n"
+	.string "{STR_VAR_1}…$"
+
+Route119_WeatherInstitute_2F_Text_KyogreWeather:: @ 819F2FE
+	.string "I track weather patterns over\n"
+	.string "the HOENN region.\p"
+	.string "Presently, heavy rainfall has been\n"
+	.string "recorded over {STR_VAR_1}.\p"
+	.string "Could that mean, somewhere near\n"
+	.string "{STR_VAR_1}…$"
+
+Route119_WeatherInstitute_2F_Text_NoAbnormalWeather:: @ 819F2FE
+	.string "Abnormal weather conditions are\n"
+	.string "no longer being reported.\p"
+	.string "The occasional rainfall is a blessing,\n"
+	.string "really.$"

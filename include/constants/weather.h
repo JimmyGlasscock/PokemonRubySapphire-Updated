@@ -8,6 +8,7 @@
 #define WEATHER_SNOW           4
 #define WEATHER_RAIN_MED       5
 #define WEATHER_FOG_1          6
+#define WEATHER_FOG_HORIZONTAL 6
 #define WEATHER_ASH            7
 #define WEATHER_SANDSTORM      8
 #define WEATHER_FOG_2          9
@@ -16,6 +17,7 @@
 #define WEATHER_DROUGHT        12
 #define WEATHER_RAIN_HEAVY     13
 #define WEATHER_BUBBLES        14
+#define WEATHER_UNDERWATER_BUBBLES 14
 #define WEATHER_ROUTE119_CYCLE 20
 #define WEATHER_ROUTE123_CYCLE 21
 
@@ -35,5 +37,22 @@
 #define COORD_EVENT_WEATHER_DROUGHT        11
 #define COORD_EVENT_WEATHER_ROUTE119_CYCLE 20
 #define COORD_EVENT_WEATHER_ROUTE123_CYCLE 21
+
+// These are the "abnormal weather events" that are used
+// to find Groudon.
+
+// Groudon/Terra Cave locations (only Route 115)
+#define TERRA_CAVE_LOCATIONS_START          1
+#define ABNORMAL_WEATHER_ROUTE_115_WEST     (TERRA_CAVE_LOCATIONS_START + 0)
+#define ABNORMAL_WEATHER_ROUTE_115_EAST     (TERRA_CAVE_LOCATIONS_START + 1)
+#define TERRA_CAVE_LOCATIONS                2
+
+// Kyogre/Marine Cave locations (only Route 125 for Ruby)
+#define MARINE_CAVE_LOCATIONS_START         3
+#define ABNORMAL_WEATHER_ROUTE_125_WEST     (MARINE_CAVE_LOCATIONS_START + 0)
+#define ABNORMAL_WEATHER_ROUTE_125_EAST     (MARINE_CAVE_LOCATIONS_START + 1)
+#define MARINE_CAVE_LOCATIONS                2
+
+#define ABNORMAL_WEATHER_NONE               0
 
 #endif  // GUARD_CONSTANTS_WEATHER_H
