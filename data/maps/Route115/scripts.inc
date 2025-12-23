@@ -5,18 +5,39 @@ Route115_MapScripts:: @ 815092D
 	.byte 0
 
 Route115_OnTransition::
-	// Initialize VAR_TEMP_0 - set to 0 if conditions are met, 1 otherwise
-	// This allows the exit trigger to fire when stepping on the trigger tiles
+	// Check if we should trigger the exit event
+	checkflag FLAG_DEFEATED_GROUDON
+	goto_if_ne Route115_OnTransition_CheckExit
+	checkflag FLAG_EXITED_TERRA_CAVE
+	goto_if_eq Route115_OnTransition_CheckExit
+	// Get player position and check if at exit coordinates
+	special StorePlayerCoordsInVars
+	// Check if at west exit (21, 7)
+	compare VAR_0x8004, 21
+	goto_if_ne Route115_OnTransition_CheckEastExit
+	compare VAR_0x8005, 7
+	goto_if_eq Route115_OnTransition_TriggerExit
+Route115_OnTransition_CheckEastExit::
+	// Check if at east exit (36, 11)
+	compare VAR_0x8004, 36
+	goto_if_ne Route115_OnTransition_CheckExit
+	compare VAR_0x8005, 11
+	goto_if_ne Route115_OnTransition_CheckExit
+Route115_OnTransition_TriggerExit::
+	// Player is at exit and conditions are met - set variable to trigger event on next frame
+	setvar VAR_TEMP_1, 1
+	end
+
+Route115_OnTransition_CheckExit::
+	// Initialize VAR_TEMP_0 for coord events
+	setvar VAR_TEMP_0, 0
 	checkflag FLAG_DEFEATED_GROUDON
 	goto_if_ne Route115_OnTransition_SetTemp1
 	checkflag FLAG_EXITED_TERRA_CAVE
 	goto_if_eq Route115_OnTransition_SetTemp1
-	// Conditions met - allow trigger to fire
-	setvar VAR_TEMP_0, 0
 	goto Route115_OnTransition_CheckWeather
 
 Route115_OnTransition_SetTemp1::
-	// Conditions not met - prevent trigger from firing
 	setvar VAR_TEMP_0, 1
 	goto Route115_OnTransition_CheckWeather
 
@@ -30,7 +51,6 @@ Route115_OnTransition_CheckWeather::
 	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_115_EAST
 	call_if_eq AbnormalWeather_StartGroudonWeather
 	end
-
 
 Route115_OnTransition_EndWeather::
 	// Groudon defeated - end weather and clean up tiles
@@ -59,6 +79,7 @@ Route115_OnLoad_End::
 
 Route115_OnFrame::
 	map_script_2 VAR_SHOULD_END_ABNORMAL_WEATHER, 1, AbnormalWeather_EventScript_EndEventAndCleanup_1
+	map_script_2 VAR_TEMP_1, 1, Route115_EventScript_TerraCaveExitTrigger
 	.2byte 0
 
 Route115_EventScript_15092E:: @ 815092E
@@ -128,6 +149,8 @@ Route115_EventScript_150A1A:: @ 8150A1A
 	end
 
 Route115_EventScript_TerraCaveExitTrigger::
+	// Clear the trigger variable first
+	setvar VAR_TEMP_1, 0
 	// Only trigger if Groudon is defeated and we haven't exited yet
 	checkflag FLAG_DEFEATED_GROUDON
 	goto_if_ne Route115_EventScript_TerraCaveExitTrigger_End
@@ -136,21 +159,19 @@ Route115_EventScript_TerraCaveExitTrigger::
 	lockall
 	msgbox TerraCave_Entrance_Text_SunshineSubsided, MSGBOX_DEFAULT
 	closemessage
-	fadescreen FADE_TO_BLACK
 	// End abnormal weather and set flag
 	setvar VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_NONE
 	setvar VAR_SHOULD_END_ABNORMAL_WEATHER, 0
 	setflag FLAG_EXITED_TERRA_CAVE
-	// Prevent trigger from firing again
-	setvar VAR_TEMP_0, 1
 	// Clean up both possible cave entrance locations
 	call AbnormalWeather_EventScript_CleanupRoute115West
 	call AbnormalWeather_EventScript_CleanupRoute115East
 	// Get player position and warp to same map to reload it (this will clear the sunshine effect)
+	// The warp command will automatically handle the fade to black transition
 	special StorePlayerCoordsInVars
-	// Warp to same map to reload it - this will run OnTransition which sets weather properly
 	warp MAP_ROUTE115, 255, VAR_0x8004, VAR_0x8005
 	waitstate
+	releaseall
 	end
 
 Route115_EventScript_TerraCaveExitTrigger_End::
