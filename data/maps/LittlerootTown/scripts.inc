@@ -889,7 +889,7 @@ LittlerootTown_EventScript_TestTerraCave:: @ 814E000
 LittlerootTown_EventScript_TestTerraCave_Warp::
 	msgbox LittlerootTown_Text_TestTerraCave_Warping, MSGBOX_DEFAULT
 	closemessage
-	warpsilent MAP_MARINE_CAVE_ENTRANCE, 0, 10, 18
+	warpsilent MAP_TERRA_CAVE_ENTRANCE, 0, 8, 18
 	waitstate
 	release
 	end

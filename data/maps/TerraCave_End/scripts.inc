@@ -44,6 +44,8 @@ TerraCave_End_EventScript_Groudon::
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, 1
 	call_if_eq TerraCave_End_EventScript_DefeatedGroudon
+	compare VAR_RESULT, 7
+	call_if_eq TerraCave_End_EventScript_DefeatedGroudon
 	compare VAR_RESULT, 2
 	call_if_eq TerraCave_End_EventScript_RanFromGroudon
 	releaseall

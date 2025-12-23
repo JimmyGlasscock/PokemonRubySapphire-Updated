@@ -44,6 +44,8 @@ MarineCave_End_EventScript_Kyogre::
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, 1
 	call_if_eq MarineCave_End_EventScript_DefeatedKyogre
+	compare VAR_RESULT, 7
+	call_if_eq MarineCave_End_EventScript_DefeatedKyogre
 	compare VAR_RESULT, 2
 	call_if_eq MarineCave_End_EventScript_RanFromKyogre
 	releaseall
