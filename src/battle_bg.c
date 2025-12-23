@@ -888,7 +888,13 @@ int LoadChosenBattleElement(u8 caseId)
         {
             if (gBattleTypeFlags & BATTLE_TYPE_KYOGRE_GROUDON)
             {
-                if (gBattleTerrain == BATTLE_TERRAIN_CAVE)
+                if (gBattleTerrain == BATTLE_TERRAIN_WATER)
+                {
+                    // Force water terrain (e.g., Marine Cave Kyogre)
+                    LoadCompressedPalette(gBattleTerrainPalette_Water, 0x20, 0x60);
+                    break;
+                }
+                else if (gBattleTerrain == BATTLE_TERRAIN_CAVE)
                 {
                     // Force cave terrain (e.g., Terra Cave Groudon)
                     LoadCompressedPalette(gBattleTerrainPalette_Groudon, 0x20, 0x60);
@@ -901,7 +907,7 @@ int LoadChosenBattleElement(u8 caseId)
                 }
                 else
                 {
-                    LoadCompressedPalette(gBattleTerrainPalette_Kyogre, 0x20, 0x60);
+                    LoadCompressedPalette(gBattleTerrainPalette_Water, 0x20, 0x60);
                     break;
                 }
             }
