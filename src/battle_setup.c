@@ -620,6 +620,17 @@ void ScrSpecial_StartTerraCaveGroudonBattle(void)
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
 }
 
+void ScrSpecial_StartMarineCaveKyogreBattle(void)
+{
+    ScriptContext2_Enable();
+    gMain.savedCallback = CB2_EndScriptedWildBattle;
+    gBattleTypeFlags = BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_KYOGRE_GROUDON;
+    gBattleTerrain = BATTLE_TERRAIN_WATER; // Always use water terrain for Marine Cave Kyogre
+    CreateBattleStartTask(B_TRANSITION_RIPPLE, MUS_VS_KYOGRE_GROUDON);
+    IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
+    IncrementGameStat(GAME_STAT_WILD_BATTLES);
+}
+
 void ScrSpecial_StartRegiBattle(void)
 {
     ScriptContext2_Enable();

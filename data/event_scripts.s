@@ -442,6 +442,7 @@ gStdScripts_End::
 	.include "data/maps/Underwater_MarineCave/scripts.inc"
 
 	.include "data/maps/TerraCave_End/text.inc"
+	.include "data/maps/MarineCave_End/text.inc"
 	.include "data/maps/PetalburgCity/text.inc"
 	.include "data/maps/SlateportCity/text.inc"
 	.include "data/maps/MauvilleCity/text.inc"
