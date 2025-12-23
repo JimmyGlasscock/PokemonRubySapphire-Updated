@@ -8,6 +8,7 @@ Route119_WeatherInstitute_2F_MapScript1_163CC8:: @ 8163CC8
 	call_if_eq Route119_WeatherInstitute_2F_EventScript_163CE4
 	compare VAR_WEATHER_INSTITUTE_STATE, 1
 	call_if_eq Route119_WeatherInstitute_2F_EventScript_163CF0
+	call_if_set FLAG_SYS_GAME_CLEAR, Route119_WeatherInstitute_2F_EventScript_SetScientistPosGameClear
 	end
 
 Route119_WeatherInstitute_2F_EventScript_163CE4:: @ 8163CE4
@@ -18,6 +19,11 @@ Route119_WeatherInstitute_2F_EventScript_163CE4:: @ 8163CE4
 Route119_WeatherInstitute_2F_EventScript_163CF0:: @ 8163CF0
 	setobjectxyperm 5, 4, 6
 	setobjectmovementtype 5, 10
+	return
+
+Route119_WeatherInstitute_2F_EventScript_SetScientistPosGameClear::
+	setobjectxyperm 5, 2, 2
+	setobjectmovementtype 5, 8
 	return
 
 Route119_WeatherInstitute_2F_EventScript_163CFC:: @ 8163CFC
@@ -87,6 +93,47 @@ Route119_WeatherInstitute_2F_Movement_163DC8:: @ 8163DC8
 Route119_WeatherInstitute_2F_EventScript_163DCC:: @ 8163DCC
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_CASTFORM, Route119_WeatherInstitute_2F_EventScript_163DBE
+	goto_if_set FLAG_RECEIVED_CASTFORM, Route119_WeatherInstitute_2F_EventScript_ScientistMentionWeather
 	goto Route119_WeatherInstitute_2F_EventScript_163D7A
+	end
+
+Route119_WeatherInstitute_2F_EventScript_ScientistMentionWeather::
+	goto_if_set FLAG_SYS_GAME_CLEAR, Route119_WeatherInstitute_2F_EventScript_TryStartAbnormalWeather
+	msgbox Route119_WeatherInstitute_2F_Text_19F2FE, MSGBOX_DEFAULT
+	release
+	end
+
+Route119_WeatherInstitute_2F_EventScript_TryStartAbnormalWeather::
+	setvar VAR_0x8004, 0
+	call_if_set FLAG_DEFEATED_KYOGRE, Route119_WeatherInstitute_2F_EventScript_LegendaryDefeated
+	call_if_set FLAG_DEFEATED_GROUDON, Route119_WeatherInstitute_2F_EventScript_LegendaryDefeated
+	compare VAR_0x8004, 1
+	goto_if_eq Route119_WeatherInstitute_2F_EventScript_NoAbnormalWeather
+	call_if_unset FLAG_TEMP_2, Route119_WeatherInstitute_2F_EventScript_CreateAbnormalWeather
+	specialvar VAR_RESULT, GetAbnormalWeatherMapNameAndType
+	compare VAR_RESULT, 2
+	goto_if_eq Route119_WeatherInstitute_2F_EventScript_NoAbnormalWeather
+	compare VAR_RESULT, 1
+	goto_if_eq Route119_WeatherInstitute_2F_EventScript_KyogreWeather
+	msgbox Route119_WeatherInstitute_2F_Text_GroudonWeather, MSGBOX_DEFAULT
+	release
+	end
+
+Route119_WeatherInstitute_2F_EventScript_KyogreWeather::
+	msgbox Route119_WeatherInstitute_2F_Text_KyogreWeather, MSGBOX_DEFAULT
+	release
+	end
+
+Route119_WeatherInstitute_2F_EventScript_CreateAbnormalWeather::
+	special CreateAbnormalWeatherEvent
+	setflag FLAG_TEMP_2
+	return
+
+Route119_WeatherInstitute_2F_EventScript_LegendaryDefeated::
+	addvar VAR_0x8004, 1
+	return
+
+Route119_WeatherInstitute_2F_EventScript_NoAbnormalWeather::
+	msgbox Route119_WeatherInstitute_2F_Text_NoAbnormalWeather, MSGBOX_DEFAULT
+	release
 	end

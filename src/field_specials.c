@@ -38,6 +38,8 @@
 #include "constants/moves.h"
 #include "constants/species.h"
 #include "constants/weather.h"
+#include "constants/region_map_sections.h"
+#include "region_map.h"
 
 #if ENGLISH
 #define CHAR_DECIMAL_SEPARATOR CHAR_PERIOD
@@ -2214,4 +2216,78 @@ void sub_810FF48(void)
 u8 sub_810FF60(void)
 {
     return sub_810FB10(gSpecialVar_0x8004);
+}
+
+void CreateAbnormalWeatherEvent(void)
+{
+    u16 randomValue = Random();
+    VarSet(VAR_ABNORMAL_WEATHER_STEP_COUNTER, 0);
+
+#ifdef SAPPHIRE
+    // Sapphire: Only Terra Cave (Groudon) is accessible
+    if (FlagGet(FLAG_DEFEATED_GROUDON) == TRUE)
+    {
+        // Groudon already defeated, no more abnormal weather
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_NONE);
+    }
+    else
+    {
+        randomValue = Random();
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, (randomValue % TERRA_CAVE_LOCATIONS) + TERRA_CAVE_LOCATIONS_START);
+    }
+#elif defined(RUBY)
+    // Ruby: Only Marine Cave (Kyogre) is accessible
+    if (FlagGet(FLAG_DEFEATED_KYOGRE) == TRUE)
+    {
+        // Kyogre already defeated, no more abnormal weather
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_NONE);
+    }
+    else
+    {
+        randomValue = Random();
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, (randomValue % MARINE_CAVE_LOCATIONS) + MARINE_CAVE_LOCATIONS_START);
+    }
+#else
+    // Fallback (shouldn't happen, but keep original logic)
+    if (FlagGet(FLAG_DEFEATED_KYOGRE) == TRUE)
+    {
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, (randomValue % TERRA_CAVE_LOCATIONS) + TERRA_CAVE_LOCATIONS_START);
+    }
+    else if (FlagGet(FLAG_DEFEATED_GROUDON) == TRUE)
+    {
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, (randomValue % MARINE_CAVE_LOCATIONS) + MARINE_CAVE_LOCATIONS_START);
+    }
+    else if ((randomValue & 1) == 0)
+    {
+        randomValue = Random();
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, (randomValue % TERRA_CAVE_LOCATIONS) + TERRA_CAVE_LOCATIONS_START);
+    }
+    else
+    {
+        randomValue = Random();
+        VarSet(VAR_ABNORMAL_WEATHER_LOCATION, (randomValue % MARINE_CAVE_LOCATIONS) + MARINE_CAVE_LOCATIONS_START);
+    }
+#endif
+}
+
+// Saves the map name for the current abnormal weather location in gStringVar1, then
+// returns FALSE for Groudon (always Groudon now, only Route 115).
+bool32 GetAbnormalWeatherMapNameAndType(void)
+{
+    static const u16 sAbnormalWeatherMapSecIds[] = {
+        MAPSEC_ROUTE_115,
+        MAPSEC_ROUTE_115
+    };
+
+    u16 abnormalWeather = VarGet(VAR_ABNORMAL_WEATHER_LOCATION);
+
+    if (abnormalWeather == ABNORMAL_WEATHER_NONE)
+    {
+        // Return 2 to indicate no abnormal weather (distinct from FALSE/0 and TRUE/1)
+        return 2;
+    }
+
+    GetMapSectionName(gStringVar1, sAbnormalWeatherMapSecIds[abnormalWeather - 1], 0);
+
+    return FALSE;  // Always Groudon/Terra Cave (Route 115 only)
 }

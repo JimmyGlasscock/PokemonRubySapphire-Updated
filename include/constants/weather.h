@@ -38,4 +38,15 @@
 #define COORD_EVENT_WEATHER_ROUTE119_CYCLE 20
 #define COORD_EVENT_WEATHER_ROUTE123_CYCLE 21
 
+// These are the "abnormal weather events" that are used
+// to find Groudon.
+
+// Groudon/Terra Cave locations (only Route 115)
+#define TERRA_CAVE_LOCATIONS_START          1
+#define ABNORMAL_WEATHER_ROUTE_115_WEST     (TERRA_CAVE_LOCATIONS_START + 0)
+#define ABNORMAL_WEATHER_ROUTE_115_EAST     (TERRA_CAVE_LOCATIONS_START + 1)
+#define TERRA_CAVE_LOCATIONS                2
+
+#define ABNORMAL_WEATHER_NONE               0
+
 #endif  // GUARD_CONSTANTS_WEATHER_H

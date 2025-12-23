@@ -812,6 +812,7 @@ EventScript_SetBrineyLocation_Route109:: @ 819FD55
 	.include "data/scripts/obtain_item.inc"
 	.include "data/scripts/record_mix.inc"
 	.include "data/scripts/pc.inc"
+	.include "data/scripts/abnormal_weather.inc"
 
 Common_EventScript_PokemartSign:: @ 81A00E1
 	msgbox Text_PokemartSign, MSGBOX_SIGN
@@ -1716,3 +1717,4 @@ Text_1C6C62: @ 81C6C62
 
 	.include "data/text/save.inc"
 	.include "data/text/birch_speech.inc"
+	.include "data/text/abnormal_weather.inc"

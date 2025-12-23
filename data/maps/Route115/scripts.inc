@@ -1,5 +1,48 @@
 Route115_MapScripts:: @ 815092D
+	map_script MAP_SCRIPT_ON_TRANSITION, Route115_OnTransition
+	map_script MAP_SCRIPT_ON_LOAD, Route115_OnLoad
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, Route115_OnFrame
 	.byte 0
+
+Route115_OnTransition::
+	checkflag FLAG_DEFEATED_GROUDON
+	goto_if_eq Route115_OnTransition_EndWeather
+	compare VAR_SHOULD_END_ABNORMAL_WEATHER, 1
+	call_if_eq AbnormalWeather_EventScript_HideMapNamePopup
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_115_WEST
+	call_if_eq AbnormalWeather_StartGroudonWeather
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_115_EAST
+	call_if_eq AbnormalWeather_StartGroudonWeather
+	end
+
+Route115_OnTransition_EndWeather::
+	// Groudon defeated - end weather and clean up tiles
+	setvar VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_NONE
+	setvar VAR_SHOULD_END_ABNORMAL_WEATHER, 0
+	setweather WEATHER_SUNNY
+	doweather
+	// Clean up both possible cave entrance locations
+	call AbnormalWeather_EventScript_CleanupRoute115West
+	call AbnormalWeather_EventScript_CleanupRoute115East
+	special DrawWholeMapView
+	end
+
+Route115_OnLoad::
+	// Only place tiles if abnormal weather is active and Groudon not defeated
+	checkflag FLAG_DEFEATED_GROUDON
+	goto_if_eq Route115_OnLoad_End
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_115_WEST
+	call_if_eq AbnormalWeather_EventScript_PlaceTilesRoute115West
+	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_115_EAST
+	call_if_eq AbnormalWeather_EventScript_PlaceTilesRoute115East
+	end
+
+Route115_OnLoad_End::
+	end
+
+Route115_OnFrame::
+	map_script_2 VAR_SHOULD_END_ABNORMAL_WEATHER, 1, AbnormalWeather_EventScript_EndEventAndCleanup_1
+	.2byte 0
 
 Route115_EventScript_15092E:: @ 815092E
 	msgbox Route115_Text_170273, MSGBOX_NPC
