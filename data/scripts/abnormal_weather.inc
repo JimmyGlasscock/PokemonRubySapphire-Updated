@@ -1,11 +1,11 @@
 AbnormalWeather_EventScript_PlaceTilesRoute115West::
-	setmetatile 21, 6, METATILE_General_CaveEntrance_Top, TRUE
-	setmetatile 21, 7, METATILE_General_CaveEntrance_Bottom, FALSE
+	setmetatile 21, 6, 0x259, TRUE
+	setmetatile 21, 7, 0x261, FALSE
 	return
 
 AbnormalWeather_EventScript_PlaceTilesRoute115East::
-	setmetatile 36, 10, METATILE_General_CaveEntrance_Top, TRUE
-	setmetatile 36, 11, METATILE_General_CaveEntrance_Bottom, FALSE
+	setmetatile 36, 10, 0x259, TRUE
+	setmetatile 36, 11, 0x261, FALSE
 	return
 
 AbnormalWeather_EventScript_PlaceTilesRoute116North::
