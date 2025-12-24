@@ -164,8 +164,9 @@ void GetMonSpriteTemplate_803C56C(u16 species, u8 a2)
 {
     gCreatingSpriteTemplate = gSpriteTemplate_8208288[a2];
     gCreatingSpriteTemplate.paletteTag = species;
-    // Use proper animation table for summary screen (a2 == 1 means summary screen)
-    if (a2 == 1)
+    // Use proper animation table for summary screen (a2 == 1) and battle opponents (a2 == 1 or 3)
+    // Positions 1 and 3 are for front sprites (opponents), positions 0 and 2 are for back sprites (player)
+    if (a2 == 1 || a2 == 3)
         gCreatingSpriteTemplate.anims = gMonFrontAnimsPtrTable[species];
     else
         gCreatingSpriteTemplate.anims = (const union AnimCmd *const *)gSpriteAnimTable_81E7C64;  //Why do I have to cast this?

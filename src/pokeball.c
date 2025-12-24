@@ -28,6 +28,7 @@ extern u8 gDoingBattleAnim;
 extern u8 gHealthboxSpriteIds[];
 
 void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
+void BattleAnimateFrontSprite(struct Sprite *sprite, u16 species, bool8 noCry, u8 panMode);
 
 #define GFX_TAG_POKEBALL    55000
 #define GFX_TAG_GREATBALL   55001
@@ -771,7 +772,8 @@ static void sub_8046C78(struct Sprite *sprite)
         }
         else
         {
-            // For opponent's Pokemon, animate front sprite
+            // For opponent's Pokemon, trigger front sprite animation when ball opens
+            // Similar to how summary screen works
             BattleAnimateFrontSprite(&gSprites[gBattlerSpriteIds[battler]], species, FALSE, 1);
         }
     }
