@@ -127,6 +127,12 @@ void sub_80312F0(struct Sprite *sprite)
             sprite->callback = SpriteCallbackDummy;
         }
     }
+    // Also check for completion even if affineAnimEnded is false (in case it was reset)
+    // This handles the case where the back sprite animation completes after the affine animation was reset
+    else if (gSprites[spriteId].animEnded && !gSprites[spriteId].invisible && gSprites[spriteId].callback == sub_80105DC)
+    {
+        sprite->callback = SpriteCallbackDummy;
+    }
 }
 
 void unref_sub_8031364(struct Sprite *sprite, bool8 stupid)

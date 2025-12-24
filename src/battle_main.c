@@ -5722,5 +5722,9 @@ void HandleAction_ActionFinished(void)
 void SpriteCB_PlayerMonFromBall(struct Sprite *sprite)
 {
     if (sprite->affineAnimEnded)
+    {
         BattleAnimateBackSprite(sprite, sprite->data[2]);
+        // Don't set animEnded here - let the animation task complete first
+        // The animation task will set animEnded when it finishes
+    }
 }

@@ -208,6 +208,7 @@ static void Anim_ShakeGlowBlue(struct Sprite *sprite);
 static void Anim_ShakeGlowBlue_Slow(struct Sprite *sprite);
 
 static void WaitAnimEnd(struct Sprite *sprite);
+void sub_80105DC(struct Sprite *sprite);
 
 static struct PokemonAnimData sAnims[MAX_BATTLERS_COUNT];
 static u8 sAnimIdx;
@@ -938,6 +939,15 @@ static void Task_HandleMonAnimation(u8 taskId)
         sprite->data[1] = 0;
         sprite->x2 = 0;
         sprite->y2 = 0;
+
+        // If this is a back sprite animation from a pokeball (battler ID is valid),
+        // set callback to sub_80105DC and animEnded to TRUE
+        // so sub_80312F0 can detect completion and set the invisible sprite callback to SpriteCallbackDummy
+        if (gTasks[taskId].tBattlerId < 4)
+        {
+            sprite->callback = sub_80105DC;
+            sprite->animEnded = TRUE;
+        }
 
         DestroyTask(taskId);
     }

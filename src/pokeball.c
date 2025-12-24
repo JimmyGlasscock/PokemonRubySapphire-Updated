@@ -797,10 +797,11 @@ static void sub_8046E9C(struct Sprite *sprite)
         sprite->invisible = TRUE;
     if (monSprite->affineAnimEnded)
     {
-        // If the callback is SpriteCB_PlayerMonFromBall, trigger back sprite animation
-        if (monSprite->callback == SpriteCB_PlayerMonFromBall && GetBattlerSide(r4) == B_SIDE_PLAYER)
+        // Call the callback before resetting the affine animation
+        // This allows SpriteCB_PlayerMonFromBall to trigger the back sprite animation
+        if (monSprite->callback == SpriteCB_PlayerMonFromBall)
         {
-            BattleAnimateBackSprite(monSprite, monSprite->data[2]);
+            monSprite->callback(monSprite);
         }
         StartSpriteAffineAnim(monSprite, 0);
         r7 = TRUE;
