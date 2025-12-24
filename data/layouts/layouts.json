@@ -2172,6 +2172,16 @@
       "blockdata_filepath": "data/layouts/SecretBase_BrownCave4/map.bin"
     },
     {
+      "id": "LAYOUT_SECRET_BASE_BROWN_CAVE5",
+      "name": "SecretBase_BrownCave5_Layout",
+      "width": 26,
+      "height": 22,
+      "primary_tileset": "gTileset_SecretBase",
+      "secondary_tileset": "gTileset_SecretBaseBrownCave",
+      "border_filepath": "data/layouts/SecretBase_BrownCave5/border.bin",
+      "blockdata_filepath": "data/layouts/SecretBase_BrownCave5/map.bin"
+    },
+    {
       "id": "LAYOUT_SECRET_BASE_BLUE_CAVE4",
       "name": "SecretBase_BlueCave4_Layout",
       "width": 9,
