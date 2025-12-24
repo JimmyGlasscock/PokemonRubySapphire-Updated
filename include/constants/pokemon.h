@@ -149,4 +149,11 @@
 #define PLAYER_HAS_ONE_MON             1
 #define PLAYER_HAS_ONE_USABLE_MON      2
 
+#define SKIP_FRONT_ANIM (1 << 7)
+
+#define MON_PIC_WIDTH 64
+#define MON_PIC_HEIGHT 64
+#define MON_PIC_SIZE (MON_PIC_WIDTH * MON_PIC_HEIGHT / 2)
+#define MAX_MON_PIC_FRAMES 4
+
 #endif // GUARD_CONSTANTS_POKEMON_H

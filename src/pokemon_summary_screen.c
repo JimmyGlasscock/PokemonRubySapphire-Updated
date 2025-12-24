@@ -113,7 +113,6 @@ static void sub_80A046C(u16);
 static void sub_80A20A8(u8);
 static void SummaryScreen_GetPokemon(struct Pokemon *);
 static void sub_80A1BC0(struct Sprite *sprite);
-static void SummaryScreen_SpritePlayCry(struct Sprite *);
 static void sub_80A0428(struct Pokemon *, u8 *);
 static void sub_80A18E4(u8);
 static u8 *SummaryScreen_SetTextColor(u8 *, u8);
@@ -3715,6 +3714,8 @@ _080A1804: .4byte gUnknown_08E94550\n\
 }
 #endif // NONMATCHING
 
+static void SpriteCB_Pokemon(struct Sprite *sprite);
+
 u8 SummaryScreen_CreatePokemonSprite(struct Pokemon *mon)
 {
     u16 species;
@@ -3726,7 +3727,8 @@ u8 SummaryScreen_CreatePokemonSprite(struct Pokemon *mon)
     FreeSpriteOamMatrix(&gSprites[spriteId]);
 
     gSprites[spriteId].data[0] = species;
-    gSprites[spriteId].callback = SummaryScreen_SpritePlayCry;
+    gSprites[spriteId].data[2] = 0;
+    gSprites[spriteId].callback = SpriteCB_Pokemon;
 
     if (!IsPokeSpriteNotFlipped(species))
         gSprites[spriteId].hFlip = TRUE;
@@ -3736,15 +3738,22 @@ u8 SummaryScreen_CreatePokemonSprite(struct Pokemon *mon)
     return spriteId;
 }
 
-static void SummaryScreen_SpritePlayCry(struct Sprite *sprite)
+static void SpriteCB_Pokemon(struct Sprite *sprite)
 {
-    if (!gPaletteFade.active)
+    if (!gPaletteFade.active && sprite->data[2] != 1)
     {
-        sprite->callback = SpriteCallbackDummy;
-
+        sprite->data[1] = IsPokeSpriteNotFlipped(sprite->data[0]);
         if (!GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG))
             PlayCry1(sprite->data[0], 0);
+        PokemonSummaryDoMonAnimation(sprite, sprite->data[0], GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG));
     }
+}
+
+static u8 sAnimDelayTaskId = 0xFF;
+
+void SummaryScreen_SetAnimDelayTaskId(u8 taskId)
+{
+    sAnimDelayTaskId = taskId;
 }
 
 static void sub_80A18C4(void)

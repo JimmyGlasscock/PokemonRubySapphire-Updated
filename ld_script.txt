@@ -10,8 +10,7 @@ SECTIONS {
     ALIGN(4)
     {
         INCLUDE "sym_ewram.ld"
-
-        . = 0x40000;
+        src/battle_main.o(ewram_data);
     }
 
     . = 0x3000000;
@@ -59,6 +58,7 @@ SECTIONS {
         src/battle_ai_switch_items.o(.text);
         src/battle_controller_link_opponent.o(.text);
         src/pokemon_1.o(.text);
+        src/pokemon_animation.o(.text);
         src/calculate_base_damage.o(.text);
         src/pokemon_2.o(.text);
         src/pokemon_item_effect.o(.text);
@@ -67,6 +67,7 @@ SECTIONS {
         src/trig.o(.text);
         src/random.o(.text);
         src/util.o(.text);
+        src/malloc.o(.text);
         src/blend_palette.o(.text);
         src/daycare.o(.text);
         src/egg_hatch.o(.text);
@@ -491,16 +492,19 @@ SECTIONS {
         src/battle_util.o(.rodata);
         src/pokemon_1.o(.rodata);
         src/pokemon_1.o(.data); /* gEvolutionTable needs to be non-const to match */
+        src/pokemon_animation.o(.data);
         src/calculate_base_damage.o(.rodata);
         src/pokemon_2.o(.rodata);
         src/pokemon_item_effect.o(.rodata);
         src/pokemon_3.o(.rodata);
+        src/pokemon_animation.o(.rodata);
         . = ALIGN(4);
         src/trig.o(.rodata);
         src/util.o(.rodata);
         src/daycare.o(.rodata);
         src/egg_hatch.o(.rodata);
         src/battle_gfx_sfx_util.o(.rodata);
+        src/data.o(.rodata);
         src/battle_interface.o(.rodata);
         src/pokeball.o(.rodata);
         src/trade.o(.rodata);
@@ -568,6 +572,7 @@ SECTIONS {
         data/pokemon_storage_system.o(.rodata);
         src/pokemon_icon.o(.rodata);
         src/pokemon_summary_screen.o(.rodata);
+        src/pokemon_summary_screen.o(.data);
         src/fldeff_cut.o(.rodata);
         src/debug/kagaya_debug_menu.o(.rodata);
         src/item_menu.o(.rodata);
