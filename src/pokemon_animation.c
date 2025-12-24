@@ -963,8 +963,29 @@ void LaunchAnimationTaskForFrontSprite(struct Sprite *sprite, u8 frontAnimId)
 
 void StartMonSummaryAnimation(struct Sprite *sprite, u8 frontAnimId)
 {
+    u32 i;
     // sDontFlip is expected to still be FALSE here, not explicitly cleared
     sIsSummaryAnim = TRUE;
+    
+    // Preserve species in data[7] for frame toggling check
+    sprite->data[7] = sprite->data[0];
+    // Initialize sprite data for animation
+    // Animation functions will set data[0] themselves, so we clear it
+    sprite->data[0] = 0;
+    sprite->data[1] = 0;
+    // data[2] must start at 0 for animation functions
+    sprite->data[2] = 0;
+    // Clear remaining data fields (except data[7] which has species)
+    for (i = 3; i < 7; i++)
+        sprite->data[i] = 0;
+    
+    // Reset position offsets
+    sprite->x2 = 0;
+    sprite->y2 = 0;
+    
+    // Ensure sprite is visible
+    sprite->invisible = FALSE;
+    
     sprite->callback = sMonAnimFunctions[frontAnimId];
 }
 
@@ -1051,6 +1072,9 @@ static void TryFlipX(struct Sprite *sprite)
     if (!sprite->sDontFlip)
         sprite->x2 *= -1;
 }
+
+// Frame toggling is handled by the animation commands in gMonFrontAnimsPtrTable
+// No manual toggling needed - the animation system handles it automatically
 
 static bool32 InitAnimData(u8 id)
 {

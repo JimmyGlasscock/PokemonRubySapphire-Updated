@@ -17,6 +17,7 @@
 #include "trainer.h"
 #include "util.h"
 #include "ewram.h"
+#include "data/pokemon_graphics/front_pic_anims.h"
 
 extern u8 gPlayerPartyCount;
 extern u8 gEnemyPartyCount;
@@ -163,7 +164,11 @@ void GetMonSpriteTemplate_803C56C(u16 species, u8 a2)
 {
     gCreatingSpriteTemplate = gSpriteTemplate_8208288[a2];
     gCreatingSpriteTemplate.paletteTag = species;
-    gCreatingSpriteTemplate.anims = (const union AnimCmd *const *)gSpriteAnimTable_81E7C64;  //Why do I have to cast this?
+    // Use proper animation table for summary screen (a2 == 1 means summary screen)
+    if (a2 == 1)
+        gCreatingSpriteTemplate.anims = gMonFrontAnimsPtrTable[species];
+    else
+        gCreatingSpriteTemplate.anims = (const union AnimCmd *const *)gSpriteAnimTable_81E7C64;  //Why do I have to cast this?
 }
 
 void GetMonSpriteTemplate_803C5A0(u16 species, u8 a2)

@@ -2492,7 +2492,7 @@ static const u8 sMonAnimationDelayTable[NUM_SPECIES - 1] =
 #define sAnimId    data[2]
 #define sAnimDelay data[3]
 
-static void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, u8 panModeAnimFlag);
+void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, u8 panModeAnimFlag);
 
 static void Task_AnimateAfterDelay(u8 taskId)
 {
