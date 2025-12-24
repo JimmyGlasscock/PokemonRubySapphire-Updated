@@ -66,6 +66,7 @@ u8 GetMonStatusAndPokerus();
 u8 *PokemonSummaryScreen_CopyPokemonLevel(u8 *dest, u8 level);
 u8 PokemonSummaryScreen_CheckOT(struct Pokemon *pokemon);
 bool8 CheckPartyPokerus(struct Pokemon *, u8);
+void SummaryScreen_SetAnimDelayTaskId(u8 taskId);
 
 
 #endif // GUARD_POKEMON_SUMMARY_SCREEN_H

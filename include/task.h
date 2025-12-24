@@ -2,6 +2,7 @@
 #define GUARD_TASK_H
 
 #define NUM_TASKS 16
+#define TASK_NONE 0xFF
 
 // general task defines
 #define TASK gTasks[taskId]

@@ -527,6 +527,9 @@ extern struct SideTimer gSideTimers[2];
 extern struct WishFutureKnock gWishFutureKnock;
 extern struct AI_ThinkingStruct gAIThinkingSpace;
 extern struct Struct20238C8 gUnknown_020238C8;
+extern u32 gHitMarker;
+extern u16 gBattlerPartyIndexes[];
+extern u8 gBattlerPositions[];
 
 // used in many battle files, it seems as though Hisashi Sogabe wrote
 // some sort of macro to replace the use of actually calling memset.

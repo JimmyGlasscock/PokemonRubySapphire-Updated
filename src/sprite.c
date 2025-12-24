@@ -799,6 +799,10 @@ void SpriteCallbackDummy(struct Sprite *sprite)
 {
 }
 
+void SpriteCallbackDummy_2(struct Sprite *sprite)
+{
+}
+
 void ProcessSpriteCopyRequests(void)
 {
     if (sShouldProcessSpriteCopyRequests)

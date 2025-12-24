@@ -20,6 +20,7 @@
 #include "pokeball.h"
 #include "pokemon.h"
 #include "pokemon_summary_screen.h"
+#include "pokemon_animation.h"
 #include "region_map.h"
 #include "scanline_effect.h"
 #include "sound.h"
@@ -153,6 +154,7 @@ extern const u8 gUnknown_08E73E88[];
 
 EWRAM_DATA u8 gUnknown_020384F0 = 0;
 EWRAM_DATA struct Sprite *gUnknown_020384F4 = NULL;
+static EWRAM_DATA u8 sAnimDelayTaskId = TASK_NONE;
 
 #if ENGLISH
 #include "data/text/move_descriptions_en.h"
@@ -3740,12 +3742,33 @@ static void SummaryScreen_SpritePlayCry(struct Sprite *sprite)
 {
     if (!gPaletteFade.active)
     {
-        sprite->callback = SpriteCallbackDummy;
-
+        u16 species = sprite->data[0];
         if (!GetMonData(&pssData.loadedMon, MON_DATA_IS_EGG))
-            PlayCry1(sprite->data[0], 0);
+        {
+            PlayCry1(species, 0);
+            PokemonSummaryDoMonAnimation(sprite, species, FALSE);
+        }
+        else
+        {
+            sprite->callback = SpriteCallbackDummy;
+        }
     }
 }
+
+void SummaryScreen_SetAnimDelayTaskId(u8 taskId)
+{
+    sAnimDelayTaskId = taskId;
+}
+
+// Unused function - kept for potential future use
+// static void SummaryScreen_DestroyAnimDelayTask(void)
+// {
+//     if (sAnimDelayTaskId != TASK_NONE)
+//     {
+//         DestroyTask(sAnimDelayTaskId);
+//         sAnimDelayTaskId = TASK_NONE;
+//     }
+// }
 
 static void sub_80A18C4(void)
 {

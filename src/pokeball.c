@@ -8,6 +8,7 @@
 #include "main.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "pokemon_animation.h"
 #include "rom_8077ABC.h"
 #include "constants/songs.h"
 #include "sound.h"
@@ -25,6 +26,8 @@ extern u16 gBattlerPartyIndexes[];
 extern u8 gBattlerSpriteIds[];
 extern u8 gDoingBattleAnim;
 extern u8 gHealthboxSpriteIds[];
+
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
 
 #define GFX_TAG_POKEBALL    55000
 #define GFX_TAG_GREATBALL   55001
@@ -700,6 +703,7 @@ static void sub_8046C78(struct Sprite *sprite)
 {
     int ballIndex;
     u8 battler = sprite->data[6];
+    u16 species = 0;
 
     StartSpriteAnim(sprite, 1);
     ballIndex = ball_number_to_ball_processing_index(GetBattlerBall(battler));
@@ -709,7 +713,6 @@ static void sub_8046C78(struct Sprite *sprite)
     if (gMain.inBattle)
     {
         struct Pokemon *mon;
-        u16 species;
         s8 cryPanning;
         u16 cryBehavior;
         u8 taskId;
@@ -752,11 +755,26 @@ static void sub_8046C78(struct Sprite *sprite)
         gTasks[taskId].data[1] = cryPanning;
         gTasks[taskId].data[2] = cryBehavior;
         gTasks[taskId].data[15] = 0;
-    }
 
-    StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[sprite->data[6]]], 1);
-    AnimateSprite(&gSprites[gBattlerSpriteIds[sprite->data[6]]]);
-    gSprites[gBattlerSpriteIds[sprite->data[6]]].data[1] = 0x1000;
+        gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
+        if (GetBattlerSide(battler) == B_SIDE_PLAYER)
+        {
+            // For player's Pokemon, set up back sprite animation callback
+            // Start the emerge animation (affine anim 1)
+            StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[battler]], 1);
+            // Set callback to animate back sprite when emerge animation ends
+            gSprites[gBattlerSpriteIds[battler]].callback = SpriteCB_PlayerMonFromBall;
+            // Store species in data[2] for the callback
+            gSprites[gBattlerSpriteIds[battler]].data[2] = species;
+            AnimateSprite(&gSprites[gBattlerSpriteIds[battler]]);
+            gSprites[gBattlerSpriteIds[battler]].data[1] = 0x1000;
+        }
+        else
+        {
+            // For opponent's Pokemon, animate front sprite
+            BattleAnimateFrontSprite(&gSprites[gBattlerSpriteIds[battler]], species, FALSE, 1);
+        }
+    }
 }
 
 static void sub_8046E7C(struct Sprite *sprite)
@@ -772,26 +790,32 @@ static void sub_8046E9C(struct Sprite *sprite)
 {
     bool8 r7 = FALSE;
     u8 r4 = sprite->data[6];
+    struct Sprite *monSprite = &gSprites[gBattlerSpriteIds[r4]];
 
-    gSprites[gBattlerSpriteIds[r4]].invisible = FALSE;
+    monSprite->invisible = FALSE;
     if (sprite->animEnded)
         sprite->invisible = TRUE;
-    if (gSprites[gBattlerSpriteIds[r4]].affineAnimEnded)
+    if (monSprite->affineAnimEnded)
     {
-        StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[r4]], 0);
+        // If the callback is SpriteCB_PlayerMonFromBall, trigger back sprite animation
+        if (monSprite->callback == SpriteCB_PlayerMonFromBall && GetBattlerSide(r4) == B_SIDE_PLAYER)
+        {
+            BattleAnimateBackSprite(monSprite, monSprite->data[2]);
+        }
+        StartSpriteAffineAnim(monSprite, 0);
         r7 = TRUE;
     }
     else
     {
-        gSprites[gBattlerSpriteIds[r4]].data[1] -= 288;
-        gSprites[gBattlerSpriteIds[r4]].y2 = gSprites[gBattlerSpriteIds[r4]].data[1] >> 8;
+        monSprite->data[1] -= 288;
+        monSprite->y2 = monSprite->data[1] >> 8;
     }
     if (sprite->animEnded && r7)
     {
         s32 i;
         u32 r3;
 
-        gSprites[gBattlerSpriteIds[r4]].y2 = 0;
+        monSprite->y2 = 0;
         gDoingBattleAnim = 0;
         ewram17810[r4].unk0_3 = 0;
         FreeSpriteOamMatrix(sprite);

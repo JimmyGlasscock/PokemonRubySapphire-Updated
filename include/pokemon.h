@@ -517,6 +517,10 @@ u8 GetLevelUpMovesBySpecies(u16, u16 *);
 u8 TryIncrementMonLevel(struct Pokemon *);
 bool8 IsShiny(struct Pokemon *mon);
 void RandomlyGivePartyPokerus(struct Pokemon *party);
+void BattleAnimateFrontSprite(struct Sprite *sprite, u16 species, bool8 noCry, u8 panMode);
+void PokemonSummaryDoMonAnimation(struct Sprite *sprite, u16 species, bool8 oneFrame);
+void BattleAnimateBackSprite(struct Sprite *sprite, u16 species);
+bool8 HasTwoFramesAnimation(u16 species);
 void PartySpreadPokerus(struct Pokemon *party);
 
 struct Sprite *sub_80F7920(u16, u16, const u16 *);

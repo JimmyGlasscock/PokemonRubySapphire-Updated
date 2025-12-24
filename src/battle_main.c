@@ -33,6 +33,7 @@
 #include "pokeblock.h"
 #include "pokedex.h"
 #include "pokemon.h"
+#include "pokemon_animation.h"
 #include "random.h"
 #include "roamer.h"
 #include "rom_8077ABC.h"
@@ -5716,4 +5717,10 @@ void HandleAction_ActionFinished(void)
     gBattleCommunication[4] = 0;
     gBattleStruct->multihitMoveEffect = 0;
     B_BATTLESCRIPTS_STACK->size = 0;
+}
+
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite)
+{
+    if (sprite->affineAnimEnded)
+        BattleAnimateBackSprite(sprite, sprite->data[2]);
 }
