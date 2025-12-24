@@ -1836,6 +1836,7 @@ static u8 SummaryScreen_LoadPokemonSprite(struct Pokemon *mon, u8 *state)
         species = GetMonData(mon, MON_DATA_SPECIES2);
         personality = GetMonData(mon, MON_DATA_PERSONALITY);
 
+        // Load frame 0 (front.png) into gMonSpriteGfx_Sprite_ptr[1]
         HandleLoadSpecialPokePic(
             &gMonFrontPicTable[species],
             gMonFrontPicCoords[species].coords,
@@ -1844,6 +1845,29 @@ static u8 SummaryScreen_LoadPokemonSprite(struct Pokemon *mon, u8 *state)
             gMonSpriteGfx_Sprite_ptr[1],
             species,
             personality);
+        
+        // Also load frame 1 (anim_front) if Pokemon has two-frame animation
+        // The sprite image table gSpriteImageTable_81E7A30 points to:
+        // - Frame 0: gSharedMem + 0xA000 (which is gMonSpriteGfx_Sprite_ptr[1])
+        // - Frame 1: gSharedMem + 0xA800 (which is gMonSpriteGfx_Sprite_ptr[1] + 0x800)
+        // Following Emerald's approach: load both frames into consecutive memory locations
+        if (HasTwoFramesAnimation(species))
+        {
+            // Load anim_front graphics into frame 1 slot (0x800 bytes after frame 0)
+            // anim_front.png contains both frames stacked vertically, so we need to
+            // decompress it and extract only the bottom frame (second 0x800 bytes)
+            // Decompress to temporary buffer first
+            LZ77UnCompWram(gMonFrontAnimPicTable[species].data, (void *)EWRAM);
+            // Copy only the bottom frame (second 0x800 bytes) to the destination
+            CpuCopy32((void *)EWRAM + 0x800, (u8 *)gMonSpriteGfx_Sprite_ptr[1] + 0x800, 0x800);
+        }
+        else
+        {
+            // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+            // This ensures the sprite image table always has valid data for both frames
+            CpuCopy32(gMonSpriteGfx_Sprite_ptr[1], (u8 *)gMonSpriteGfx_Sprite_ptr[1] + 0x800, 0x800);
+        }
+        
         *state += 1;
         return 0xFF;
     case 1:

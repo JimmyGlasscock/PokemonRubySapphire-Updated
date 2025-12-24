@@ -198,6 +198,9 @@ gSpriteAnimTable_81E7C64:: @ 81E7C64
 @ 81E8354
 	.include "data/graphics/pokemon/front_pic_table.inc"
 
+@ 81E9114 (placeholder - actual address will be calculated)
+	.include "data/graphics/pokemon/front_anim_pic_table.inc"
+
 @ 81E9114
 	.include "data/graphics/pokemon/back_pic_coords.inc"
 

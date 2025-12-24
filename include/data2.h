@@ -28,6 +28,7 @@ extern const union AnimCmd *const gSpriteAnimTable_81E7C64[];
 extern const struct MonCoords gMonFrontPicCoords[];
 extern const struct MonCoords gMonBackPicCoords[];
 extern const struct CompressedSpriteSheet gMonFrontPicTable[];
+extern const struct CompressedSpriteSheet gMonFrontAnimPicTable[];
 extern const struct CompressedSpriteSheet gMonBackPicTable[];
 extern const struct CompressedSpritePalette gMonPaletteTable[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTable[];
