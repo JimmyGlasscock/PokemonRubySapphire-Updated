@@ -42,6 +42,12 @@ Route115_OnTransition_SetTemp1::
 	goto Route115_OnTransition_CheckWeather
 
 Route115_OnTransition_CheckWeather::
+	// If both flags are set, behave like neither flag is set (normal behavior)
+	checkflag FLAG_DEFEATED_GROUDON
+	goto_if_ne Route115_OnTransition_CheckWeather_Normal
+	checkflag FLAG_EXITED_TERRA_CAVE
+	goto_if_eq Route115_OnTransition_CheckWeather_End
+Route115_OnTransition_CheckWeather_Normal::
 	checkflag FLAG_EXITED_TERRA_CAVE
 	goto_if_eq Route115_OnTransition_EndWeather
 	compare VAR_SHOULD_END_ABNORMAL_WEATHER, 1
@@ -50,6 +56,7 @@ Route115_OnTransition_CheckWeather::
 	call_if_eq AbnormalWeather_StartGroudonWeather
 	compare VAR_ABNORMAL_WEATHER_LOCATION, ABNORMAL_WEATHER_ROUTE_115_EAST
 	call_if_eq AbnormalWeather_StartGroudonWeather
+Route115_OnTransition_CheckWeather_End::
 	end
 
 Route115_OnTransition_EndWeather::
