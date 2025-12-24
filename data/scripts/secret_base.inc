@@ -293,6 +293,7 @@ SecretBase_BrownCave1_EventScript_1A2FC0:: @ 81A2FC0
 SecretBase_BrownCave2_EventScript_1A2FC0:: @ 81A2FC0
 SecretBase_BrownCave3_EventScript_1A2FC0:: @ 81A2FC0
 SecretBase_BrownCave4_EventScript_1A2FC0:: @ 81A2FC0
+SecretBase_BrownCave5_EventScript_1A2FC0:: @ 81A2FC0
 SecretBase_RedCave1_EventScript_1A2FC0:: @ 81A2FC0
 SecretBase_RedCave2_EventScript_1A2FC0:: @ 81A2FC0
 SecretBase_RedCave3_EventScript_1A2FC0:: @ 81A2FC0
