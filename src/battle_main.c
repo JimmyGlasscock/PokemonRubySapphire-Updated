@@ -3108,19 +3108,6 @@ void sub_8010278(struct Sprite *sprite)
 
 void sub_80102AC(struct Sprite *sprite)
 {
-    // Wait for palette fade to complete (colors fade to normal)
-    if (gPaletteFade.active)
-        return;
-    
-    // After palette fade completes, animate front sprite as name and HP bar slide in
-    // sprite->data[0] is the battler ID, sprite->data[2] is the species
-    if (sprite->data[3] == 0)
-    {
-        BattleAnimateFrontSprite(sprite, sprite->data[2], FALSE, 1);
-        sprite->data[3] = 1; // Mark that animation has been started
-    }
-    
-    // Wait for animation to complete, then slide in HP bar and name
     if (sprite->animEnded)
     {
         sub_804777C(sprite->data[0]);
