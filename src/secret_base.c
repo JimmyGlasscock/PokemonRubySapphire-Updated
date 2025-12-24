@@ -96,7 +96,8 @@ const u8 gUnknown_083D1374[] = {
     MAP_NUM(SECRET_BASE_SHRUB1),        0,  3,  3,
     MAP_NUM(SECRET_BASE_SHRUB2),        0,  1,  2,
     MAP_NUM(SECRET_BASE_SHRUB3),        0,  7,  8,
-    MAP_NUM(SECRET_BASE_SHRUB4),        0,  9,  6
+    MAP_NUM(SECRET_BASE_SHRUB4),        0,  9,  6,
+    MAP_NUM(SECRET_BASE_BROWN_CAVE5),   0,  1,  2
 };
 
 const struct MenuAction2 gUnknown_083D13D4[] = {
