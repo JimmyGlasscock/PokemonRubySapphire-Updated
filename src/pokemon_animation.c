@@ -948,6 +948,14 @@ static void Task_HandleMonAnimation(u8 taskId)
             sprite->callback = sub_80105DC;
             sprite->animEnded = TRUE;
         }
+        // If data[7] is set to 1, this means we're waiting for the animation to complete
+        // (used for wild battle Pokemon animations)
+        // The waiting callback will handle the completion
+        else if (sprite->data[7] == 1)
+        {
+            // Keep callback as SpriteCallbackDummy so the waiting callback can detect completion
+            // The waiting callback will check for this condition
+        }
 
         DestroyTask(taskId);
     }

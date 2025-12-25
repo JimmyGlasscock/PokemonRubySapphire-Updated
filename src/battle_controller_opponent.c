@@ -407,7 +407,22 @@ void sub_80330C8(void)
     if (r4 != -1)
         sub_80440EC(gHealthboxSpriteIds[gActiveBattler], r4, 0);
     else
-        OpponentBufferExecCompleted();
+    {
+        // For wild battles, wait for Pokemon animation to complete before continuing
+        if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+        {
+            if (gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
+            {
+                // Animation is complete, continue with battle
+                OpponentBufferExecCompleted();
+            }
+            // If animation is not complete, wait (this function will be called again next frame)
+        }
+        else
+        {
+            OpponentBufferExecCompleted();
+        }
+    }
 }
 
 void sub_803311C(void)
