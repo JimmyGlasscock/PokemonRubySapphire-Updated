@@ -772,9 +772,11 @@ static void sub_8046C78(struct Sprite *sprite)
         }
         else
         {
-            // For opponent's Pokemon, trigger front sprite animation when ball opens
-            // This happens before the HP bar slides out
-            BattleAnimateFrontSprite(&gSprites[gBattlerSpriteIds[battler]], species, FALSE, 1);
+            // For opponent's Pokemon, store species in sprite data so we can start animation
+            // after pokeball animation completes (to avoid interference)
+            // Store species in data[2] for use when pokeball animation ends
+            gSprites[gBattlerSpriteIds[battler]].data[2] = species;
+            // Keep callback as SpriteCallbackDummy - animation will start after pokeball completes
         }
     }
 }
@@ -797,28 +799,57 @@ static void sub_8046E9C(struct Sprite *sprite)
     monSprite->invisible = FALSE;
     if (sprite->animEnded)
         sprite->invisible = TRUE;
-    if (monSprite->affineAnimEnded)
+    
+    // For opponent Pokemon, they don't use the emerge animation (affine anim 1)
+    // So we check if they're using it (player Pokemon) or not (opponent Pokemon)
+    if (GetBattlerSide(r4) == B_SIDE_PLAYER)
     {
-        // Call the callback before resetting the affine animation
-        // This allows SpriteCB_PlayerMonFromBall to trigger the back sprite animation
-        if (monSprite->callback == SpriteCB_PlayerMonFromBall)
+        // Player Pokemon: wait for emerge animation to complete
+        if (monSprite->affineAnimEnded)
         {
-            monSprite->callback(monSprite);
+            // Call the callback before resetting the affine animation
+            // This allows SpriteCB_PlayerMonFromBall to trigger the back sprite animation
+            if (monSprite->callback == SpriteCB_PlayerMonFromBall)
+            {
+                monSprite->callback(monSprite);
+            }
+            StartSpriteAffineAnim(monSprite, 0);
+            r7 = TRUE;
         }
-        StartSpriteAffineAnim(monSprite, 0);
-        r7 = TRUE;
+        else
+        {
+            // Move sprite up during emerge animation
+            monSprite->data[1] -= 288;
+            monSprite->y2 = monSprite->data[1] >> 8;
+        }
     }
     else
     {
-        monSprite->data[1] -= 288;
-        monSprite->y2 = monSprite->data[1] >> 8;
+        // Opponent Pokemon: no emerge animation, just wait for pokeball animation to end
+        // Don't modify y2 or data[1] - keep sprite still until pokeball animation completes
+        r7 = TRUE;
     }
+    
     if (sprite->animEnded && r7)
     {
         s32 i;
         u32 r3;
 
-        monSprite->y2 = 0;
+        // For opponent Pokemon, start the front sprite animation now that pokeball animation is done
+        // This prevents interference between pokeball animation and Pokemon animation
+        if (GetBattlerSide(r4) == B_SIDE_OPPONENT)
+        {
+            u16 species = monSprite->data[2];
+            // Start Pokemon animation after pokeball animation completes
+            // Use noCry = TRUE since cry was already played during pokeball opening
+            BattleAnimateFrontSprite(monSprite, species, TRUE, 1);
+        }
+        else
+        {
+            // Player Pokemon: reset y2 after emerge animation
+            monSprite->y2 = 0;
+        }
+        
         gDoingBattleAnim = 0;
         ewram17810[r4].unk0_3 = 0;
         FreeSpriteOamMatrix(sprite);

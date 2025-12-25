@@ -3088,6 +3088,18 @@ void debug_sub_80132C8(u8 a, void *b, u32 c)
 
 void oac_poke_opponent(struct Sprite *sprite)
 {
+    // For trainer battles, the pokeball animation handles everything
+    // The sprite is created with this callback, but sub_803495C immediately sets it to SpriteCallbackDummy
+    // We need to do nothing here for trainer battles to avoid interfering with the pokeball animation
+    if (GetBattlerSide(sprite->data[0]) == B_SIDE_OPPONENT && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+    {
+        // For trainer battles, the sprite callback will be set to SpriteCallbackDummy by sub_803495C
+        // Don't do anything here - just set callback to dummy and return
+        // This prevents the slide-in animation from starting
+        sprite->callback = SpriteCallbackDummy;
+        return;
+    }
+    // For wild battles, use the slide-in animation
     sprite->callback = sub_8010278;
     StartSpriteAnimIfDifferent(sprite, 0);
     BeginNormalPaletteFade(0x00020000, 0, 10, 10, RGB(15, 15, 15));
@@ -3123,25 +3135,25 @@ void Task_WaitForWildPokemonAnimation(u8 taskId)
 
 void sub_80102AC(struct Sprite *sprite)
 {
+    // This function should only be called for wild battles
+    // For trainer battles, the pokeball animation handles everything
+    if (GetBattlerSide(sprite->data[0]) == B_SIDE_OPPONENT && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+    {
+        // Trainer battle: don't interfere, let pokeball animation handle it
+        return;
+    }
+    
     if (sprite->animEnded)
     {
         // For wild battles, trigger Pokemon animation as HP bar slide starts
         // Use noCry = TRUE since the cry was already played in sub_8010278
-        if (GetBattlerSide(sprite->data[0]) == B_SIDE_OPPONENT && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
-        {
-            u8 taskId;
-            // Start Pokemon animation at the same time as HP bar slide
-            BattleAnimateFrontSprite(sprite, sprite->data[2], TRUE, 1);
-            // Create a task to wait for the animation to complete
-            // This will prevent the battle from continuing until the animation is done
-            taskId = CreateTask(Task_WaitForWildPokemonAnimation, 0);
-            gTasks[taskId].data[0] = sprite->data[0];
-        }
-        else
-        {
-            // For trainer battles, reset to animation 0 after pokeball animation
-            StartSpriteAnimIfDifferent(sprite, 0);
-        }
+        u8 taskId;
+        // Start Pokemon animation at the same time as HP bar slide
+        BattleAnimateFrontSprite(sprite, sprite->data[2], TRUE, 1);
+        // Create a task to wait for the animation to complete
+        // This will prevent the battle from continuing until the animation is done
+        taskId = CreateTask(Task_WaitForWildPokemonAnimation, 0);
+        gTasks[taskId].data[0] = sprite->data[0];
         // Start HP bar slide (animation happens simultaneously for wild battles)
         sub_804777C(sprite->data[0]);
         sub_8043DFC(gHealthboxSpriteIds[sprite->data[0]]);

@@ -409,8 +409,12 @@ void sub_80330C8(void)
     else
     {
         // For wild battles, wait for Pokemon animation to complete before continuing
+        // In trainer battles, the animation is handled by the pokeball opening sequence
+        // and doesn't need to be waited for here
         if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         {
+            // Check if the Pokemon animation is complete (callback should be SpriteCallbackDummy)
+            // If it's still SpriteCallbackDummy_2, the animation is still running
             if (gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
             {
                 // Animation is complete, continue with battle
@@ -420,6 +424,7 @@ void sub_80330C8(void)
         }
         else
         {
+            // Trainer battles: proceed normally without waiting for animation
             OpponentBufferExecCompleted();
         }
     }
