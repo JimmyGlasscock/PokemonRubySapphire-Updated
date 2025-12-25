@@ -773,7 +773,7 @@ static void sub_8046C78(struct Sprite *sprite)
         else
         {
             // For opponent's Pokemon, trigger front sprite animation when ball opens
-            // Similar to how summary screen works
+            // This happens before the HP bar slides out
             BattleAnimateFrontSprite(&gSprites[gBattlerSpriteIds[battler]], species, FALSE, 1);
         }
     }

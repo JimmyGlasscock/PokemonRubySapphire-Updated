@@ -333,6 +333,12 @@ void BattleLoadOpponentMonSprite(struct Pokemon *pkmn, u8 b)
         // Copy only the bottom frame (second 0x800 bytes) to the destination
         CpuCopy32((u8 *)eBattleInterfaceGfxBuffer + 0x800, (u8 *)gMonSpriteGfx_Sprite_ptr[var] + 0x800, 0x800);
     }
+    else
+    {
+        // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+        // This ensures the sprite image table always has valid data for both frames
+        CpuCopy32(gMonSpriteGfx_Sprite_ptr[var], (u8 *)gMonSpriteGfx_Sprite_ptr[var] + 0x800, 0x800);
+    }
     
     paletteOffset = 0x100 + b * 16;
     if (gBattleSpriteInfo[b].transformedSpecies == 0)

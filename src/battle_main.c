@@ -3110,6 +3110,12 @@ void sub_80102AC(struct Sprite *sprite)
 {
     if (sprite->animEnded)
     {
+        // Trigger Pokemon animation for wild battles before HP bar slide starts
+        // Use noCry = TRUE since the cry was already played in sub_8010278
+        if (GetBattlerSide(sprite->data[0]) == B_SIDE_OPPONENT && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+        {
+            BattleAnimateFrontSprite(sprite, sprite->data[2], TRUE, 1);
+        }
         sub_804777C(sprite->data[0]);
         sub_8043DFC(gHealthboxSpriteIds[sprite->data[0]]);
         sprite->callback = nullsub_37;
