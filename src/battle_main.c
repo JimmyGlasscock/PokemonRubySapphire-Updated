@@ -3115,11 +3115,16 @@ void sub_80102AC(struct Sprite *sprite)
         if (GetBattlerSide(sprite->data[0]) == B_SIDE_OPPONENT && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         {
             BattleAnimateFrontSprite(sprite, sprite->data[2], TRUE, 1);
+            // Don't reset animation to 0 for wild battles - let the two-frame animation continue
+        }
+        else
+        {
+            // For trainer battles, reset to animation 0 after pokeball animation
+            StartSpriteAnimIfDifferent(sprite, 0);
         }
         sub_804777C(sprite->data[0]);
         sub_8043DFC(gHealthboxSpriteIds[sprite->data[0]]);
         sprite->callback = nullsub_37;
-        StartSpriteAnimIfDifferent(sprite, 0);
         BeginNormalPaletteFade(0x00020000, 0, 10, 0, RGB(15, 15, 15));
     }
 }

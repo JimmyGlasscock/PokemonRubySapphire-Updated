@@ -2548,9 +2548,11 @@ void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, 
         if (!noCry)
         {
             PlayCry1(species, pan);
-            if (HasTwoFramesAnimation(species))
-                StartSpriteAnim(sprite, 1);
         }
+        // For two-frame animation Pokemon, switch to animation 1 (the toggling animation)
+        // This must happen before launching the animation task so the sprite uses the correct animation
+        if (HasTwoFramesAnimation(species))
+            StartSpriteAnim(sprite, 1);
         if (sMonAnimationDelayTable[species - 1] != 0)
         {
             // Animation has delay, start delay task
