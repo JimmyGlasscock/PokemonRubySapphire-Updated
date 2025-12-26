@@ -27,7 +27,6 @@ extern u8 gBattlerSpriteIds[];
 extern u8 gDoingBattleAnim;
 extern u8 gHealthboxSpriteIds[];
 
-void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
 void BattleAnimateFrontSprite(struct Sprite *sprite, u16 species, bool8 noCry, u8 panMode);
 
 #define GFX_TAG_POKEBALL    55000
@@ -760,23 +759,20 @@ static void sub_8046C78(struct Sprite *sprite)
         gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
         if (GetBattlerSide(battler) == B_SIDE_PLAYER)
         {
-            // For player's Pokemon, set up back sprite animation callback
-            // Start the emerge animation (affine anim 1)
+            // For player's Pokemon, start the emerge animation (affine anim 1)
             StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[battler]], 1);
-            // Set callback to animate back sprite when emerge animation ends
-            gSprites[gBattlerSpriteIds[battler]].callback = SpriteCB_PlayerMonFromBall;
-            // Store species in data[2] for the callback
-            gSprites[gBattlerSpriteIds[battler]].data[2] = species;
             AnimateSprite(&gSprites[gBattlerSpriteIds[battler]]);
             gSprites[gBattlerSpriteIds[battler]].data[1] = 0x1000;
         }
         else
         {
-            // For opponent's Pokemon, store species in sprite data so we can start animation
-            // after pokeball animation completes (to avoid interference)
+            // For opponent's Pokemon, start the emerge animation (affine anim 1)
+            // This makes the silhouette grow from small to normal size
+            StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[battler]], 1);
+            AnimateSprite(&gSprites[gBattlerSpriteIds[battler]]);
             // Store species in data[2] for use when pokeball animation ends
             gSprites[gBattlerSpriteIds[battler]].data[2] = species;
-            // Keep callback as SpriteCallbackDummy - animation will start after pokeball completes
+            // Keep callback as SpriteCallbackDummy - Pokemon animation will start after pokeball completes
         }
     }
 }
@@ -807,12 +803,6 @@ static void sub_8046E9C(struct Sprite *sprite)
         // Player Pokemon: wait for emerge animation to complete
         if (monSprite->affineAnimEnded)
         {
-            // Call the callback before resetting the affine animation
-            // This allows SpriteCB_PlayerMonFromBall to trigger the back sprite animation
-            if (monSprite->callback == SpriteCB_PlayerMonFromBall)
-            {
-                monSprite->callback(monSprite);
-            }
             StartSpriteAffineAnim(monSprite, 0);
             r7 = TRUE;
         }
@@ -825,9 +815,19 @@ static void sub_8046E9C(struct Sprite *sprite)
     }
     else
     {
-        // Opponent Pokemon: no emerge animation, just wait for pokeball animation to end
-        // Don't modify y2 or data[1] - keep sprite still until pokeball animation completes
-        r7 = TRUE;
+        // Opponent Pokemon: wait for emerge animation (affine anim 1) to complete
+        // This makes the silhouette grow from small to normal size
+        if (monSprite->affineAnimEnded)
+        {
+            // Emerge animation complete, reset to normal affine animation
+            StartSpriteAffineAnim(monSprite, 0);
+            r7 = TRUE;
+        }
+        else
+        {
+            // Emerge animation still running, keep waiting
+            r7 = FALSE;
+        }
     }
     
     if (sprite->animEnded && r7)
