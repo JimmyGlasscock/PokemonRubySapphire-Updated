@@ -8,5 +8,6 @@ void sub_804777C(u8);
 void LoadBallGraphics(u8);
 void FreeBallGraphics(u8);
 u8 sub_8047580(u8, u8, u8, u8, u8, u8, u8, u32);
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
 
 #endif // GUARD_POKEBALL_H

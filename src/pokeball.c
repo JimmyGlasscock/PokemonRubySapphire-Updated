@@ -319,6 +319,7 @@ static void SendOutPlayerMonAnimation_Step0(struct Sprite *);
 static void SendOutPlayerMonAnimation_Step1(struct Sprite *);
 static void SendOutMonAnimation_Delay(struct Sprite *);
 static void SendOutOpponentMonAnimation_Step0(struct Sprite *);
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite);
 static void sub_80473D0(struct Sprite *);
 static void sub_804748C(struct Sprite *);
 static void sub_8047638(struct Sprite *);
@@ -763,6 +764,10 @@ static void sub_8046C78(struct Sprite *sprite)
             StartSpriteAffineAnim(&gSprites[gBattlerSpriteIds[battler]], 1);
             AnimateSprite(&gSprites[gBattlerSpriteIds[battler]]);
             gSprites[gBattlerSpriteIds[battler]].data[1] = 0x1000;
+            // Store species in data[2] for use when emerge animation ends
+            gSprites[gBattlerSpriteIds[battler]].data[2] = species;
+            // Set callback to handle backsprite animation after emerge animation completes
+            gSprites[gBattlerSpriteIds[battler]].callback = SpriteCB_PlayerMonFromBall;
         }
         else
         {
@@ -801,9 +806,9 @@ static void sub_8046E9C(struct Sprite *sprite)
     if (GetBattlerSide(r4) == B_SIDE_PLAYER)
     {
         // Player Pokemon: wait for emerge animation to complete
+        // The callback (SpriteCB_PlayerMonFromBall) will handle resetting affine animation and starting backsprite animation
         if (monSprite->affineAnimEnded)
         {
-            StartSpriteAffineAnim(monSprite, 0);
             r7 = TRUE;
         }
         else
@@ -844,11 +849,8 @@ static void sub_8046E9C(struct Sprite *sprite)
             // Use noCry = TRUE since cry was already played during pokeball opening
             BattleAnimateFrontSprite(monSprite, species, TRUE, 1);
         }
-        else
-        {
-            // Player Pokemon: reset y2 after emerge animation
-            monSprite->y2 = 0;
-        }
+        // Player Pokemon: callback (SpriteCB_PlayerMonFromBall) will handle backsprite animation
+        // Don't reset y2 here, let the callback handle it
         
         gDoingBattleAnim = 0;
         ewram17810[r4].unk0_3 = 0;
@@ -888,6 +890,17 @@ static void sub_8046FBC(struct Sprite *sprite)
         DestroySpriteAndFreeResources(sprite);
         if (gMain.inBattle)
             ewram17810[r7].unk0_3 = 0;
+    }
+}
+
+void SpriteCB_PlayerMonFromBall(struct Sprite *sprite)
+{
+    if (sprite->affineAnimEnded)
+    {
+        u16 species = sprite->data[2];
+        sprite->y2 = 0;
+        StartSpriteAffineAnim(sprite, 0);
+        BattleAnimateBackSprite(sprite, species);
     }
 }
 

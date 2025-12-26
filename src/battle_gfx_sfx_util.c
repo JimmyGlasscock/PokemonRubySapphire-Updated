@@ -22,6 +22,7 @@
 #include "gba/m4a_internal.h"
 #include "ewram.h"
 #include "graphics.h"
+#include "pokeball.h"
 
 extern u8 gBattleBufferA[][0x200];
 extern u8 gActiveBattler;
@@ -122,9 +123,13 @@ void sub_80312F0(struct Sprite *sprite)
             gSprites[spriteId].animPaused = FALSE;
         else if (gSprites[spriteId].animEnded)
         {
-            gSprites[spriteId].callback = sub_80105DC;
-            StartSpriteAffineAnim(&gSprites[spriteId], 0);
-            sprite->callback = SpriteCallbackDummy;
+            // Don't overwrite SpriteCB_PlayerMonFromBall callback - it handles backsprite animation
+            if (gSprites[spriteId].callback != SpriteCB_PlayerMonFromBall)
+            {
+                gSprites[spriteId].callback = sub_80105DC;
+                StartSpriteAffineAnim(&gSprites[spriteId], 0);
+                sprite->callback = SpriteCallbackDummy;
+            }
         }
     }
     // Also check for completion even if affineAnimEnded is false (in case it was reset)
