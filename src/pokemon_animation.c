@@ -923,6 +923,7 @@ static void Task_HandleMonAnimation(u8 taskId)
         gTasks[taskId].tSpeciesId = sprite->data[2];
         sprite->sDontFlip = TRUE;
         sprite->data[0] = 0;
+        sprite->animEnded = FALSE;
 
         for (i = 2; i < ARRAY_COUNT(sprite->data); i++)
             sprite->data[i] = 0;
@@ -3961,8 +3962,10 @@ static void Anim_VerticalShakeHorizontalSlide_Slow(struct Sprite *sprite)
     TryFlipX(sprite);
     if (sprite->data[2] > 2048)
     {
-        sprite->callback = WaitAnimEnd;
+        ResetSpriteAfterAnim(sprite);
         sprite->data[6] = 0;
+        sprite->animEnded = TRUE;
+        sprite->callback = WaitAnimEnd;
     }
     else
     {
@@ -4318,8 +4321,10 @@ static void Anim_VerticalShakeHorizontalSlide(struct Sprite *sprite)
     TryFlipX(sprite);
     if (sprite->data[2] > 2048)
     {
-        sprite->callback = WaitAnimEnd;
+        ResetSpriteAfterAnim(sprite);
         sprite->data[6] = 0;
+        sprite->animEnded = TRUE;
+        sprite->callback = WaitAnimEnd;
     }
     else
     {
@@ -4352,8 +4357,10 @@ static void Anim_VerticalShakeHorizontalSlide_Fast(struct Sprite *sprite)
     TryFlipX(sprite);
     if (sprite->data[2] > 2048)
     {
-        sprite->callback = WaitAnimEnd;
+        ResetSpriteAfterAnim(sprite);
         sprite->data[6] = 0;
+        sprite->animEnded = TRUE;
+        sprite->callback = WaitAnimEnd;
     }
     else
     {
@@ -5591,8 +5598,14 @@ static void Anim_ShakeGlowBlue_Slow(struct Sprite *sprite)
 
 static void WaitAnimEnd(struct Sprite *sprite)
 {
-    // For custom Pokemon animations, animEnded may not be set by the sprite system
-    // So we set it ourselves and then check it
-    sprite->animEnded = TRUE;
-    sprite->callback = SpriteCallbackDummy;
+    // For callback-based animations (ConcaveArc, VerticalShakeBack, TriangleDown),
+    // animEnded is set manually before WaitAnimEnd is called.
+    // For sprite-based animations, animEnded is set by AnimCmd_end when the animation ends.
+    // WaitAnimEnd is called every frame until animEnded becomes TRUE, then sets callback to SpriteCallbackDummy.
+    if (sprite->animEnded)
+    {
+        sprite->callback = SpriteCallbackDummy;
+    }
+    // If animEnded is not TRUE yet, WaitAnimEnd will be called again next frame
+    // This allows sprite animations to complete naturally
 }

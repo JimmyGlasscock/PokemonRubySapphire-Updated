@@ -124,11 +124,21 @@ void sub_80312F0(struct Sprite *sprite)
         else if (gSprites[spriteId].animEnded)
         {
             // Don't overwrite SpriteCB_PlayerMonFromBall callback - it handles backsprite animation
-            if (gSprites[spriteId].callback != SpriteCB_PlayerMonFromBall)
+            // Don't overwrite SpriteCallbackDummy_2 - animation task is about to set the callback
+            // Don't overwrite animation callbacks (sub_80105DC is only set after animation completes)
+            // Animation callbacks are set by Task_HandleMonAnimation and should not be overwritten
+            if (gSprites[spriteId].callback != SpriteCB_PlayerMonFromBall 
+                && gSprites[spriteId].callback != SpriteCallbackDummy_2
+                && gSprites[spriteId].callback != sub_80105DC)
             {
-                gSprites[spriteId].callback = sub_80105DC;
-                StartSpriteAffineAnim(&gSprites[spriteId], 0);
-                sprite->callback = SpriteCallbackDummy;
+                // Only overwrite if callback is SpriteCallbackDummy (idle state)
+                // Animation callbacks will be different function pointers
+                if (gSprites[spriteId].callback == SpriteCallbackDummy)
+                {
+                    gSprites[spriteId].callback = sub_80105DC;
+                    StartSpriteAffineAnim(&gSprites[spriteId], 0);
+                    sprite->callback = SpriteCallbackDummy;
+                }
             }
         }
     }
