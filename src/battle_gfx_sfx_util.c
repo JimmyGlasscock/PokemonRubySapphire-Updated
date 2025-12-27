@@ -117,6 +117,14 @@ void sub_80312F0(struct Sprite *sprite)
 {
     u8 spriteId = sprite->data[1];
 
+    // Check for completion when callback is sub_80105DC (set by Task_HandleMonAnimation after animation completes)
+    // This must be checked first, regardless of affineAnimEnded state
+    if (gSprites[spriteId].animEnded && !gSprites[spriteId].invisible && gSprites[spriteId].callback == sub_80105DC)
+    {
+        sprite->callback = SpriteCallbackDummy;
+        return;
+    }
+
     if (gSprites[spriteId].affineAnimEnded && !gSprites[spriteId].invisible)
     {
         if (gSprites[spriteId].animPaused)
@@ -141,12 +149,6 @@ void sub_80312F0(struct Sprite *sprite)
                 }
             }
         }
-    }
-    // Also check for completion even if affineAnimEnded is false (in case it was reset)
-    // This handles the case where the back sprite animation completes after the affine animation was reset
-    else if (gSprites[spriteId].animEnded && !gSprites[spriteId].invisible && gSprites[spriteId].callback == sub_80105DC)
-    {
-        sprite->callback = SpriteCallbackDummy;
     }
 }
 

@@ -3930,8 +3930,9 @@ static void VerticalShakeBack(struct Sprite *sprite)
     s32 counter = sprite->data[2];
     if (counter > 2304)
     {
+        ResetSpriteAfterAnim(sprite);
+        sprite->animEnded = TRUE;
         sprite->callback = WaitAnimEnd;
-        sprite->y2 = 0;
     }
     else
     {
@@ -4412,7 +4413,11 @@ static void TriangleDown(struct Sprite *sprite)
     if (sTriangleDownData[sprite->data[3]][2] / sprite->data[5] == 0)
     {
         if (--sprite->data[6] == 0)
+        {
+            ResetSpriteAfterAnim(sprite);
+            sprite->animEnded = TRUE;
             sprite->callback = WaitAnimEnd;
+        }
         else
             sprite->data[2] = 0;
     }
@@ -4695,9 +4700,11 @@ static void ConcaveArc(struct Sprite *sprite)
     {
         if (sprite->data[6] <= 1)
         {
-            sprite->callback = WaitAnimEnd;
             sprite->x2 = 0;
             sprite->y2 = 0;
+            ResetSpriteAfterAnim(sprite);
+            sprite->animEnded = TRUE;
+            sprite->callback = WaitAnimEnd;
         }
         else
         {
@@ -4866,6 +4873,7 @@ static void Anim_ConcaveArcSmall_Slow(struct Sprite *sprite)
     }
 
     ConcaveArc(sprite);
+    sprite->callback = ConcaveArc;
 }
 
 static void Anim_ConcaveArcSmall(struct Sprite *sprite)
@@ -4881,6 +4889,7 @@ static void Anim_ConcaveArcSmall(struct Sprite *sprite)
     }
 
     ConcaveArc(sprite);
+    sprite->callback = ConcaveArc;
 }
 
 static void Anim_ConcaveArcSmall_Twice(struct Sprite *sprite)
@@ -4896,6 +4905,7 @@ static void Anim_ConcaveArcSmall_Twice(struct Sprite *sprite)
     }
 
     ConcaveArc(sprite);
+    sprite->callback = ConcaveArc;
 }
 
 static void SetHorizontalDip(struct Sprite *sprite)
