@@ -113,6 +113,7 @@ extern void bx_wait_t1(void);
 extern u8 GetBattlerAtPosition(u8);
 extern void sub_802DE10(void);
 extern void sub_80105EC(struct Sprite *);
+extern void sub_80105DC(struct Sprite *);
 extern void sub_802D274(void);
 extern void sub_802D23C(void);
 extern u8 GetBattlerPosition(u8);
@@ -122,6 +123,8 @@ extern void sub_802D204(void);
 extern u8 GetBattlerSubpriority();
 extern void sub_802DEAC(void);
 extern void sub_80312F0(struct Sprite *);
+extern void SpriteCB_PlayerMonFromBall(struct Sprite *);
+extern void nullsub_86(struct Sprite *);
 extern u8 GetBattlerSpriteCoord();
 extern u8 sub_8077F68();
 extern u8 StartSendOutMonAnimation();
@@ -1243,10 +1246,70 @@ void sub_802D500(void)
     }
 }
 
+// Track stable frames for each battler
+static u8 sBackspriteStableFrames[4];
+
 void sub_802D680(void)
 {
+    struct Sprite *battlerSprite = &gSprites[gBattlerSpriteIds[gActiveBattler]];
+    bool8 backspriteAnimComplete = FALSE;
+    
+    // The backsprite animation flow:
+    // 1. SpriteCB_PlayerMonFromBall -> emerge animation phase
+    // 2. BattleAnimateBackSprite called -> callback set to SpriteCallbackDummy_2, task created
+    // 3. Task sets callback to animation function -> animation actively running
+    // 4. Animation function finishes -> callback set to WaitAnimEnd (internal, can't check)
+    // 5. WaitAnimEnd sees animEnded -> callback set to SpriteCallbackDummy
+    // 6. Task sees SpriteCallbackDummy -> resets x2/y2, sets callback to sub_80105DC, destroys task
+    // 7. sub_80105DC -> sets callback to nullsub_86
+    // 8. nullsub_86 -> final idle state
+    
+    // Check if we're in a completion state
+    if (battlerSprite->callback == nullsub_86
+     || (battlerSprite->callback == SpriteCallbackDummy && !battlerSprite->invisible))
+    {
+        // We're in a completion state, check if sprite is stable
+        if (battlerSprite->animEnded
+         && battlerSprite->x2 == 0
+         && battlerSprite->y2 == 0
+         && !battlerSprite->invisible)
+        {
+            // Sprite appears stable, increment counter
+            sBackspriteStableFrames[gActiveBattler]++;
+            
+            // Require 3 consecutive frames of stability to ensure animation has truly stopped
+            // This prevents the menu from appearing while the sprite is still being modified
+            if (sBackspriteStableFrames[gActiveBattler] >= 3)
+            {
+                backspriteAnimComplete = TRUE;
+                sBackspriteStableFrames[gActiveBattler] = 0; // Reset counter
+            }
+        }
+        else
+        {
+            // Sprite is not stable, reset counter
+            sBackspriteStableFrames[gActiveBattler] = 0;
+        }
+    }
+    // If callback is SpriteCB_PlayerMonFromBall or SpriteCallbackDummy_2, animation is definitely running
+    else if (battlerSprite->callback == SpriteCB_PlayerMonFromBall
+          || battlerSprite->callback == SpriteCallbackDummy_2)
+    {
+        // Animation is actively running, reset counter
+        sBackspriteStableFrames[gActiveBattler] = 0;
+        backspriteAnimComplete = FALSE;
+    }
+    // For sub_80105DC or any animation function, animation is still in progress
+    else
+    {
+        // Animation still in progress, reset counter
+        sBackspriteStableFrames[gActiveBattler] = 0;
+        backspriteAnimComplete = FALSE;
+    }
+    
     if (gSprites[gHealthboxSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy
-     && ewram17810[gActiveBattler].unk1_0)
+     && ewram17810[gActiveBattler].unk1_0
+     && backspriteAnimComplete)
     {
         ewram17810[gActiveBattler].unk0_7 = 0;
         ewram17810[gActiveBattler].unk1_0 = 0;
@@ -1255,16 +1318,70 @@ void sub_802D680(void)
         if (gBattleSpriteInfo[gActiveBattler].substituteSprite)
             move_anim_start_t4(gActiveBattler, gActiveBattler, gActiveBattler, 6);
         gBattlerControllerFuncs[gActiveBattler] = sub_802D730;
+        sBackspriteStableFrames[gActiveBattler] = 0; // Reset counter
     }
 }
 
 void sub_802D730(void)
 {
-    if (!ewram17810[gActiveBattler].unk0_6 && !IsCryPlayingOrClearCrySongs())
+    struct Sprite *battlerSprite = &gSprites[gBattlerSpriteIds[gActiveBattler]];
+    bool8 backspriteAnimComplete = FALSE;
+    
+    // Check if sprite is NOT in an active animation state
+    // Active animation states: SpriteCB_PlayerMonFromBall, SpriteCallbackDummy_2, or any animation function
+    // Completion states: nullsub_86, SpriteCallbackDummy, or sub_80105DC (which transitions to nullsub_86)
+    bool8 notInActiveAnimation = (battlerSprite->callback != SpriteCB_PlayerMonFromBall
+                                 && battlerSprite->callback != SpriteCallbackDummy_2);
+    
+    // Also require that animEnded is TRUE, indicating the animation logic has completed
+    if (notInActiveAnimation && battlerSprite->animEnded)
     {
-        m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 0x100);
-        HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
-        PlayerBufferExecCompleted();
+        // Animation logic is complete, check if sprite is visually stable
+        if (battlerSprite->x2 == 0
+         && battlerSprite->y2 == 0
+         && !battlerSprite->invisible)
+        {
+            // Sprite appears stable, increment counter
+            sBackspriteStableFrames[gActiveBattler]++;
+            
+            // Require 20 consecutive frames of stability to ensure animation has truly stopped
+            // This prevents the menu from appearing while the sprite is still being modified
+            // Increased significantly to handle slow animations like Trapinch
+            if (sBackspriteStableFrames[gActiveBattler] >= 20)
+            {
+                backspriteAnimComplete = TRUE;
+            }
+        }
+        else
+        {
+            // Sprite is not stable, reset counter
+            sBackspriteStableFrames[gActiveBattler] = 0;
+        }
+    }
+    // If animation is still active, reset counter
+    else
+    {
+        // Animation still in progress, reset counter
+        sBackspriteStableFrames[gActiveBattler] = 0;
+        backspriteAnimComplete = FALSE;
+    }
+    
+    // Only proceed if cry is done, backsprite animation is complete, and we've waited
+    if (!ewram17810[gActiveBattler].unk0_6 && !IsCryPlayingOrClearCrySongs() && backspriteAnimComplete)
+    {
+        // Add an additional delay similar to switching (sub_802D2E0 uses unk9 = 3)
+        // This gives extra time for any lingering animation effects to settle
+        if (ewram17810[gActiveBattler].unk9 == 0)
+        {
+            ewram17810[gActiveBattler].unk9 = 10; // Wait 10 more frames for safety
+        }
+        else if (--ewram17810[gActiveBattler].unk9 == 0)
+        {
+            m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 0x100);
+            HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
+            PlayerBufferExecCompleted();
+            sBackspriteStableFrames[gActiveBattler] = 0; // Reset counter
+        }
     }
 }
 
@@ -2602,7 +2719,30 @@ void PlayerHandlePrintStringPlayerOnly(void)
 
 void PlayerHandlecmd18(void)
 {
+    struct Sprite *battlerSprite = &gSprites[gBattlerSpriteIds[gActiveBattler]];
     int r4;
+    
+    // Check if backsprite animation is still running
+    // If so, delay showing the menu until animation is complete
+    bool8 animationStillRunning = (battlerSprite->callback == SpriteCB_PlayerMonFromBall
+                                  || battlerSprite->callback == SpriteCallbackDummy_2
+                                  || (battlerSprite->callback != nullsub_86 
+                                      && battlerSprite->callback != SpriteCallbackDummy
+                                      && battlerSprite->callback != sub_80105DC));
+    
+    bool8 spriteNotStable = (battlerSprite->x2 != 0 
+                            || battlerSprite->y2 != 0
+                            || !battlerSprite->animEnded
+                            || battlerSprite->invisible);
+    
+    if (animationStillRunning || spriteNotStable)
+    {
+        // Animation still running, wait and check again next frame
+        // Don't change controller function, so this will be called again
+        return;
+    }
+    
+    // Animation is complete, show the menu
 
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 160;
