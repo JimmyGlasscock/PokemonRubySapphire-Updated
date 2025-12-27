@@ -409,18 +409,29 @@ void sub_80330C8(void)
     else
     {
         // For wild battles, wait for Pokemon animation to complete before continuing
-        // In trainer battles, the animation is handled by the pokeball opening sequence
-        // and doesn't need to be waited for here
+        // BUT only during the initial Pokemon appearance, not during attacks
+        // We detect initial appearance by checking if the Pokemon sprite is still sliding in
+        // (x2 != 0 indicates it's still animating from off-screen) or pokeball animation is in progress
         if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         {
-            // Check if the Pokemon animation is complete (callback should be SpriteCallbackDummy)
-            // If it's still SpriteCallbackDummy_2, the animation is still running
-            if (gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
+            struct Sprite *battlerSprite = &gSprites[gBattlerSpriteIds[gActiveBattler]];
+            // Only wait for sprite animation if this is the initial appearance
+            // Initial appearance is indicated by sprite still sliding in (x2 != 0)
+            // or pokeball animation in progress (unk0_3 set)
+            bool8 isInitialAppearance = (battlerSprite->x2 != 0) || ewram17810[gActiveBattler].unk0_3;
+            
+            if (isInitialAppearance && battlerSprite->callback != SpriteCallbackDummy)
             {
-                // Animation is complete, continue with battle
+                // This is the initial appearance and sprite animation is still running
+                // Wait for it to complete (this function will be called again next frame)
+                return;
+            }
+            else
+            {
+                // Either this is not the initial appearance, or sprite animation is complete
+                // Proceed normally without waiting
                 OpponentBufferExecCompleted();
             }
-            // If animation is not complete, wait (this function will be called again next frame)
         }
         else
         {
