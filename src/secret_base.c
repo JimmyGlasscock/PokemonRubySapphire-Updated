@@ -455,6 +455,8 @@ void InitSecretBaseAppearance(u8 flagIn)
 {
     u16 curBaseId;
     u16 x, y;
+    u8 posVal;
+    s16 decX, decY;
 
     if (CurrentMapIsSecretBase())
     {
@@ -465,10 +467,10 @@ void InitSecretBaseAppearance(u8 flagIn)
              && gSaveBlock1.secretBases[curBaseId].decorations[x] <= 0x78
              && gDecorations[gSaveBlock1.secretBases[curBaseId].decorations[x]].permission != DECORPERM_SOLID_MAT)
             {
-                sub_80FF394(
-                    (gSaveBlock1.secretBases[curBaseId].decorationPos[x] >> 4) + 7,
-                    (gSaveBlock1.secretBases[curBaseId].decorationPos[x] & 0xF) + 7,
-                    gSaveBlock1.secretBases[curBaseId].decorations[x]);
+                posVal = gSaveBlock1.secretBases[curBaseId].decorationPos[x];
+                decX = (posVal >> 4) + 7;
+                decY = (posVal & 0xF) + 7;
+                sub_80FF394(decX, decY, gSaveBlock1.secretBases[curBaseId].decorations[x]);
             }
         }
         if (curBaseId != 0)
@@ -493,6 +495,7 @@ void sub_80BBDD0(void)
     u8 metatile;
     u8 permission;
     u8 ndecor;
+    u8 posVal;
     u16 curBase = VarGet(VAR_CURRENT_SECRET_BASE);
 
     if (!CurrentMapIsSecretBase())
@@ -521,27 +524,22 @@ void sub_80BBDD0(void)
                 }
                 if (objid != gMapHeader.events->objectEventCount)
                 {
-                    gSpecialVar_0x8006 = roomdecorpos[decidx] >> 4;
-                    gSpecialVar_0x8007 = roomdecorpos[decidx] & 0xF;
+                    posVal = roomdecorpos[decidx];
+                    // Decode base map coordinates (sub_805C0F8 will add 7 for us)
+                    gSpecialVar_0x8006 = (posVal >> 4);
+                    gSpecialVar_0x8007 = (posVal & 0xF);
                     metatile = MapGridGetMetatileBehaviorAt(gSpecialVar_0x8006 + 7, gSpecialVar_0x8007 + 7);
-                    // Allow dolls to be loaded on normal floor tiles or mats
+                    // Always load dolls regardless of mat placement
                     if (gDecorations[roomdecor[decidx]].category == DECORCAT_DOLL)
                     {
-                        if (MetatileBehavior_IsNormal(metatile) == TRUE
-                         || MetatileBehavior_IsSecretBaseLargeMatEdge(metatile) == TRUE
-                         || MetatileBehavior_IsLargeMatCenter(metatile) == TRUE
-                         || MetatileBehavior_IsSecretBaseMusicNoteMat(metatile) == TRUE
-                         || MetatileBehavior_IsSecretBaseGlitterMat(metatile) == TRUE)
-                        {
-                            gSpecialVar_Result = VAR_OBJ_GFX_ID_0 + (gMapHeader.events->objectEvents[objid].graphicsId - OBJ_EVENT_GFX_VAR_0);
-                            VarSet(gSpecialVar_Result, gDecorations[roomdecor[decidx]].tiles[0]);
-                            gSpecialVar_Result = gMapHeader.events->objectEvents[objid].localId;
-                            FlagClear(gSpecialVar_0x8004 + 0xAE);
-                            show_sprite(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup);
-                            sub_805C0F8(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup, gSpecialVar_0x8006, gSpecialVar_0x8007);
-                            TryOverrideTemplateCoordsForObjectEvent(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup);
-                            gSpecialVar_0x8004 ++;
-                        }
+                        gSpecialVar_Result = VAR_OBJ_GFX_ID_0 + (gMapHeader.events->objectEvents[objid].graphicsId - OBJ_EVENT_GFX_VAR_0);
+                        VarSet(gSpecialVar_Result, gDecorations[roomdecor[decidx]].tiles[0]);
+                        gSpecialVar_Result = gMapHeader.events->objectEvents[objid].localId;
+                        FlagClear(gSpecialVar_0x8004 + 0xAE);
+                        show_sprite(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup);
+                        sub_805C0F8(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup, gSpecialVar_0x8006, gSpecialVar_0x8007);
+                        TryOverrideTemplateCoordsForObjectEvent(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup);
+                        gSpecialVar_0x8004 ++;
                     }
                     else if (MetatileBehavior_IsSecretBaseLargeMatEdge(metatile) == TRUE || MetatileBehavior_IsLargeMatCenter(metatile) == TRUE)
                     {

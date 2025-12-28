@@ -2604,12 +2604,20 @@ void sub_81000C4(u8 taskId)
 void sub_8100174(u8 taskId)
 {
     u16 i;
+    s16 xPos;
+    s16 yPos;
     for (i=0; i<sDecorationContext.size; i++)
     {
         if (sDecorationContext.items[i] == 0)
         {
             sDecorationContext.items[i] = gUnknown_020388D0[gUnknown_020388F5];
-            sDecorationContext.pos[i] = ((gTasks[taskId].data[0] - 7) << 4) + (gTasks[taskId].data[1] - 7);
+            xPos = gTasks[taskId].data[0] - 7;
+            yPos = gTasks[taskId].data[1] - 7;
+            if (xPos < 0) xPos = 0;
+            if (xPos > 15) xPos = 15;
+            if (yPos < 0) yPos = 0;
+            if (yPos > 15) yPos = 15;
+            sDecorationContext.pos[i] = (xPos << 4) + yPos;
             break;
         }
     }
@@ -3143,11 +3151,13 @@ void sub_8100B6C(void)
     u8 x;
     u8 y;
     u8 permission;
+    u8 posVal;
     for (i=0; i<gUnknown_02039234; i++)
     {
         permission = gDecorations[sDecorationContext.items[gUnknown_020391B4[i].decorId]].permission;
-        x = sDecorationContext.pos[gUnknown_020391B4[i].decorId] >> 4;
-        y = sDecorationContext.pos[gUnknown_020391B4[i].decorId] & 0xf;
+        posVal = sDecorationContext.pos[gUnknown_020391B4[i].decorId];
+        x = (posVal >> 4) + 7;
+        y = (posVal & 0xF) + 7;
         if (permission != DECORPERM_SOLID_MAT)
         {
             if (sDecorationContext.items[gUnknown_020391B4[i].decorId] == DECOR_SAND_ORNAMENT && MapGridGetMetatileIdAt(x + 7, y + 7) == 0x28c)
@@ -3384,10 +3394,12 @@ bool8 sub_8101200(u8 taskId, u8 decorIdx, struct UnkStruct_020391B4 *unk_020391B
     u8 y;
     u8 xOff;
     u8 yOff;
+    u8 posVal;
     x = gTasks[taskId].data[0] - 7;
     y = gTasks[taskId].data[1] - 7;
-    xOff = sDecorationContext.pos[decorIdx] >> 4;
-    yOff = sDecorationContext.pos[decorIdx] & 0xf;
+        posVal = sDecorationContext.pos[decorIdx];
+        xOff = (posVal >> 4) + 7;
+        yOff = (posVal & 0xF) + 7;
     if (sDecorationContext.items[decorIdx] == DECOR_SAND_ORNAMENT && MapGridGetMetatileIdAt(xOff + 7, yOff + 7) == 0x28c)
     {
         unk_020391B4->height--;
@@ -3405,8 +3417,10 @@ void sub_81012A0(void)
     u8 xOff;
     u8 yOff;
     u16 i;
-    xOff = sDecorationContext.pos[gUnknown_020391B4[gUnknown_02039234].decorId] >> 4;
-    yOff = sDecorationContext.pos[gUnknown_020391B4[gUnknown_02039234].decorId] & 0xf;
+    u8 posVal;
+    posVal = sDecorationContext.pos[gUnknown_020391B4[gUnknown_02039234].decorId];
+    xOff = (posVal >> 4) + 7;
+    yOff = (posVal & 0xF) + 7;
     for (i=0; i<0x40; i++)
     {
         if (gSaveBlock1.objectEventTemplates[i].x == xOff && gSaveBlock1.objectEventTemplates[i].y == yOff && !FlagGet(gSaveBlock1.objectEventTemplates[i].flagId))
@@ -3446,11 +3460,13 @@ void sub_81013B8(u8 a0, u8 a1, u8 a2, u8 a3)
     u8 xOff;
     u8 yOff;
     u8 decorIdx;
+    u8 posVal;
     for (i=0; i<sDecorationContext.size; i++)
     {
         decorIdx = sDecorationContext.items[i];
-        xOff = sDecorationContext.pos[i] >> 4;
-        yOff = sDecorationContext.pos[i] & 0xf;
+        posVal = sDecorationContext.pos[i];
+        xOff = (posVal >> 4) + 7;
+        yOff = (posVal & 0xF) + 7;
         if (decorIdx != 0 && gDecorations[decorIdx].permission == DECORPERM_SOLID_MAT && a0 <= xOff && a1 <= yOff && a2 >= xOff && a3 >= yOff)
         {
             gUnknown_020391B4[gUnknown_02039234].decorId = i;
@@ -3467,6 +3483,7 @@ void sub_8101460(u8 taskId)
     u8 yOff;
     u8 var1;
     u32 var2;
+    u8 posVal;
 
     gUnknown_02039234 = 0;
     if (sub_8101340(taskId) != TRUE)
@@ -3487,8 +3504,9 @@ void sub_8101460(u8 taskId)
         }
         if (gUnknown_02039234 != 0)
         {
-            xOff = sDecorationContext.pos[gUnknown_020391B4[0].decorId] >> 4;
-            yOff = sDecorationContext.pos[gUnknown_020391B4[0].decorId] & 0xf;
+            posVal = sDecorationContext.pos[gUnknown_020391B4[0].decorId];
+            xOff = (posVal >> 4) + 7;
+            yOff = (posVal & 0xF) + 7;
             var1 = yOff - gUnknown_020391B4[0].height + 1;
             var2 = gUnknown_020391B4[0].width + xOff - 1;
 
