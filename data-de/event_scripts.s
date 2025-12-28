@@ -1594,11 +1594,68 @@ S_RunningShoesManual:: @ 81B6E5A
 	.include "data/text/trainers.inc"
 
 S_RepelWoreOff:: @ 81C33E6
+	checkitem ITEM_MAX_REPEL, 1
+	compare VAR_RESULT, TRUE
+	goto_if_eq S_RepelWoreOff_UseMaxRepel
+	checkitem ITEM_SUPER_REPEL, 1
+	compare VAR_RESULT, TRUE
+	goto_if_eq S_RepelWoreOff_UseSuperRepel
+	checkitem ITEM_REPEL, 1
+	compare VAR_RESULT, TRUE
+	goto_if_eq S_RepelWoreOff_UseRepel
+	goto S_RepelWoreOff_NoMoreRepels
+
+S_RepelWoreOff_UseMaxRepel:
+	msgbox Text_RepelExpiredUseAnother, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq S_RepelWoreOff_ApplyMaxRepel
+	goto S_RepelWoreOff_NoMoreRepels
+
+S_RepelWoreOff_UseSuperRepel:
+	msgbox Text_RepelExpiredUseAnother, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq S_RepelWoreOff_ApplySuperRepel
+	goto S_RepelWoreOff_NoMoreRepels
+
+S_RepelWoreOff_UseRepel:
+	msgbox Text_RepelExpiredUseAnother, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq S_RepelWoreOff_ApplyRepel
+	goto S_RepelWoreOff_NoMoreRepels
+
+S_RepelWoreOff_ApplyMaxRepel:
+	removeitem ITEM_MAX_REPEL, 1
+	setvar VAR_REPEL_STEP_COUNT, 250
+	bufferitemname 0, ITEM_MAX_REPEL
+	msgbox Text_RepelUsed, MSGBOX_SIGN
+	end
+
+S_RepelWoreOff_ApplySuperRepel:
+	removeitem ITEM_SUPER_REPEL, 1
+	setvar VAR_REPEL_STEP_COUNT, 200
+	bufferitemname 0, ITEM_SUPER_REPEL
+	msgbox Text_RepelUsed, MSGBOX_SIGN
+	end
+
+S_RepelWoreOff_ApplyRepel:
+	removeitem ITEM_REPEL, 1
+	setvar VAR_REPEL_STEP_COUNT, 100
+	bufferitemname 0, ITEM_REPEL
+	msgbox Text_RepelUsed, MSGBOX_SIGN
+	end
+
+S_RepelWoreOff_NoMoreRepels:
 	msgbox Text_RepelWoreOff, MSGBOX_SIGN
 	end
 
 Text_RepelWoreOff: @ 81C33EF
 	.string "SCHUTZ wirkt nicht mehr...$"
+
+Text_RepelExpiredUseAnother: @ 81C3400
+	.string "SCHUTZ wirkt nicht mehr...\nNoch einen benutzen?$"
+
+Text_RepelUsed: @ 81C3420
+	.string "{STR_VAR_1} wurde benutzt.\pWilde POKéMON werden abgehalten.$"
 
 	.include "data/scripts/safari_zone.inc"
 	.include "data/text/safari_zone.inc"
