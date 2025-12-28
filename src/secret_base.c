@@ -524,7 +524,26 @@ void sub_80BBDD0(void)
                     gSpecialVar_0x8006 = roomdecorpos[decidx] >> 4;
                     gSpecialVar_0x8007 = roomdecorpos[decidx] & 0xF;
                     metatile = MapGridGetMetatileBehaviorAt(gSpecialVar_0x8006 + 7, gSpecialVar_0x8007 + 7);
-                    if (MetatileBehavior_IsSecretBaseLargeMatEdge(metatile) == TRUE || MetatileBehavior_IsLargeMatCenter(metatile) == TRUE)
+                    // Allow dolls to be loaded on normal floor tiles or mats
+                    if (gDecorations[roomdecor[decidx]].category == DECORCAT_DOLL)
+                    {
+                        if (MetatileBehavior_IsNormal(metatile) == TRUE
+                         || MetatileBehavior_IsSecretBaseLargeMatEdge(metatile) == TRUE
+                         || MetatileBehavior_IsLargeMatCenter(metatile) == TRUE
+                         || MetatileBehavior_IsSecretBaseMusicNoteMat(metatile) == TRUE
+                         || MetatileBehavior_IsSecretBaseGlitterMat(metatile) == TRUE)
+                        {
+                            gSpecialVar_Result = VAR_OBJ_GFX_ID_0 + (gMapHeader.events->objectEvents[objid].graphicsId - OBJ_EVENT_GFX_VAR_0);
+                            VarSet(gSpecialVar_Result, gDecorations[roomdecor[decidx]].tiles[0]);
+                            gSpecialVar_Result = gMapHeader.events->objectEvents[objid].localId;
+                            FlagClear(gSpecialVar_0x8004 + 0xAE);
+                            show_sprite(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup);
+                            sub_805C0F8(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup, gSpecialVar_0x8006, gSpecialVar_0x8007);
+                            TryOverrideTemplateCoordsForObjectEvent(gSpecialVar_Result, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup);
+                            gSpecialVar_0x8004 ++;
+                        }
+                    }
+                    else if (MetatileBehavior_IsSecretBaseLargeMatEdge(metatile) == TRUE || MetatileBehavior_IsLargeMatCenter(metatile) == TRUE)
                     {
                         gSpecialVar_Result = VAR_OBJ_GFX_ID_0 + (gMapHeader.events->objectEvents[objid].graphicsId - OBJ_EVENT_GFX_VAR_0);
                         VarSet(gSpecialVar_Result, gDecorations[roomdecor[decidx]].tiles[0]);

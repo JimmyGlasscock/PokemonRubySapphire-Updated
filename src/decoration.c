@@ -2399,6 +2399,17 @@ bool8 sub_80FFBDC(u16 metatileBehavior, const struct Decoration *decoration)
         {
             return TRUE;
         }
+        // Allow dolls to be placed on mats (but not on other decorations)
+        if (decoration->category == DECORCAT_DOLL)
+        {
+            if (MetatileBehavior_IsSecretBaseLargeMatEdge(metatileBehavior) == TRUE
+             || MetatileBehavior_IsLargeMatCenter(metatileBehavior) == TRUE
+             || MetatileBehavior_IsSecretBaseMusicNoteMat(metatileBehavior) == TRUE
+             || MetatileBehavior_IsSecretBaseGlitterMat(metatileBehavior) == TRUE)
+            {
+                return TRUE;
+            }
+        }
     }
     return FALSE;
 }
@@ -2511,18 +2522,38 @@ bool8 sub_80FFC24(u8 taskId, const struct Decoration *decoration)
             {
                 curX = gTasks[taskId].data[0] + j;
                 behaviorAt = MapGridGetMetatileBehaviorAt(curX, curY);
-                if (decoration->shape == DECORSHAPE_1x2)
+                // Allow dolls to be placed on normal floor tiles or mats (but not on other decorations)
+                if (decoration->category == DECORCAT_DOLL)
                 {
-                    if (!MetatileBehavior_IsLargeMatCenter(behaviorAt))
+                    if (MetatileBehavior_IsBlockDecoration(behaviorAt) == TRUE)
+                    {
+                        return FALSE;
+                    }
+                    if (!MetatileBehavior_IsNormal(behaviorAt)
+                     && !MetatileBehavior_IsSecretBaseLargeMatEdge(behaviorAt)
+                     && !MetatileBehavior_IsLargeMatCenter(behaviorAt)
+                     && !MetatileBehavior_IsSecretBaseMusicNoteMat(behaviorAt)
+                     && !MetatileBehavior_IsSecretBaseGlitterMat(behaviorAt))
                     {
                         return FALSE;
                     }
                 }
-                else if (!MetatileBehavior_IsSecretBaseLargeMatEdge(behaviorAt))
+                else
                 {
-                    if (!MetatileBehavior_IsLargeMatCenter(behaviorAt))
+                    // Original mat placement logic for non-dolls
+                    if (decoration->shape == DECORSHAPE_1x2)
                     {
-                        return FALSE;
+                        if (!MetatileBehavior_IsLargeMatCenter(behaviorAt))
+                        {
+                            return FALSE;
+                        }
+                    }
+                    else if (!MetatileBehavior_IsSecretBaseLargeMatEdge(behaviorAt))
+                    {
+                        if (!MetatileBehavior_IsLargeMatCenter(behaviorAt))
+                        {
+                            return FALSE;
+                        }
                     }
                 }
                 if (GetObjectEventIdByXYZ(curX, curY, 0) != 16)
