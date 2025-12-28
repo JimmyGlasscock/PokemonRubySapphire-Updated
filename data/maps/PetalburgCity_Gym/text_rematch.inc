@@ -1,8 +1,8 @@
 PetalburgCity_Gym_Text_NormanRematchIntro:: @ 817AB00
 	.string "DAD: Hey, {PLAYER}.\p"
     .string "It's good to see you.\n"
-	.string "I've been training hard to keep up\p"
-	.string "with you.$"
+	.string "I've been training hard to \p"
+	.string "keep up with you.$"
 
 PetalburgCity_Gym_Text_NormanRematchAsk:: @ 817AB50
 	.string "How about a battle?$"
