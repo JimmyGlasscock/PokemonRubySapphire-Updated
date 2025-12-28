@@ -89,8 +89,10 @@ void SetDefaultOptions(void)
     gSaveBlock2.regionMapZoom = FALSE;
 #if defined(SAPPHIRE)
     gSaveBlock2.optionsVersion = OPTIONS_VERSION_SAPPHIRE;
-#else
+#elif defined(RUBY)
     gSaveBlock2.optionsVersion = OPTIONS_VERSION_RUBY;
+#else
+    gSaveBlock2.optionsVersion = OPTIONS_VERSION_RUBY; // Default to Ruby if neither is defined
 #endif
 }
 
