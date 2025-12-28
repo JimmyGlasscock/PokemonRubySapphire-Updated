@@ -35,6 +35,9 @@ extern const u8 gSystemText_Terminator[];
 extern const u8 gSystemText_Normal[];
 extern const u8 gSystemText_LR[];
 extern const u8 gSystemText_LA[];
+extern const u8 gSystemText_Version[];
+extern const u8 gSystemText_Ruby[];
+extern const u8 gSystemText_Sapphire[];
 
 // start_menu
 extern const u8 SystemText_Pokedex[];

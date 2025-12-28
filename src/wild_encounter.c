@@ -256,11 +256,13 @@ static u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon)
 static u16 GetCurrentMapWildMonHeader(void)
 {
     u16 i;
+    u8 versionOption = gSaveBlock2.optionsVersion;
 
     for (i = 0; gWildMonHeaders[i].mapGroup != 0xFF; i++)
     {
         if (gWildMonHeaders[i].mapGroup == gSaveBlock1.location.mapGroup &&
-        gWildMonHeaders[i].mapNum == gSaveBlock1.location.mapNum)
+        gWildMonHeaders[i].mapNum == gSaveBlock1.location.mapNum &&
+        gWildMonHeaders[i].version == versionOption)
             return i;
     }
     return -1;

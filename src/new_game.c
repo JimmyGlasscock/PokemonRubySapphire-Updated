@@ -87,6 +87,11 @@ void SetDefaultOptions(void)
     gSaveBlock2.optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
     gSaveBlock2.optionsBattleSceneOff = FALSE;
     gSaveBlock2.regionMapZoom = FALSE;
+#if defined(SAPPHIRE)
+    gSaveBlock2.optionsVersion = OPTIONS_VERSION_SAPPHIRE;
+#else
+    gSaveBlock2.optionsVersion = OPTIONS_VERSION_RUBY;
+#endif
 }
 
 void ClearPokedexFlags(void)

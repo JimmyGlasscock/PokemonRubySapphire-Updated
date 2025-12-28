@@ -18,6 +18,7 @@ struct WildPokemonHeader
 {
     u8 mapGroup;
     u8 mapNum;
+    u8 version; // OPTIONS_VERSION_RUBY or OPTIONS_VERSION_SAPPHIRE
     const struct WildPokemonInfo *landMonsInfo;
     const struct WildPokemonInfo *waterMonsInfo;
     const struct WildPokemonInfo *rockSmashMonsInfo;

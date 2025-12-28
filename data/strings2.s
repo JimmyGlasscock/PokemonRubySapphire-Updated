@@ -85,6 +85,15 @@ gSystemText_LR:: @ 842C465
 gSystemText_LA:: @ 842C46B
 	.string "{PALETTE 15}L=A$"
 
+gSystemText_Version:: @ 842C471
+	.string "{PALETTE 9}VERSION$"
+
+gSystemText_Ruby:: @ 842C47B
+	.string "{PALETTE 15}RUBY$"
+
+gSystemText_Sapphire:: @ 842C482
+	.string "{PALETTE 15}SAPPHIRE$"
+
 SystemText_Pokedex::
 	.string "POKéDEX$"
 SystemText_Pokemon::
