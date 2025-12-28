@@ -220,6 +220,10 @@ static void sub_8089A8C(void)
     else
     {
         u16 moveID, tableID;
+        // Summary is always first
+        AppendToList(sPokeMenuOptionsOrder, &sPokeMenuOptionsNo, POKEMENU_SUMMARY);
+
+        // Add field moves right after Summary
         for (moveID = 0; moveID < 4; moveID++) // 4, max number of possible field moves
         {
             for (tableID = 0; sPokeMenuFieldMoves[tableID] != sFieldMovesTerminator; tableID++)
@@ -232,7 +236,6 @@ static void sub_8089A8C(void)
                 }
             }
         }
-        AppendToList(sPokeMenuOptionsOrder, &sPokeMenuOptionsNo, POKEMENU_SUMMARY);
 
         // can't switch a pokemon if it's the only one in the party
         if (GetMonData(&gPlayerParty[1], MON_DATA_SPECIES) != 0)
