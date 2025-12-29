@@ -92,3 +92,126 @@ BattleTower_Outside_EventScript_16026C:: @ 816026C
 BattleTower_Outside_EventScript_160275:: @ 8160275
 	msgbox BattleTower_Outside_Text_199ED4, MSGBOX_NPC
 	end
+
+BattleTower_Outside_EventScript_Scientist:: @ 816027D
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_HOENN_STARTERS_BATTLE_TOWER, BattleTower_Outside_EventScript_Scientist_AlreadyReceived
+	msgbox BattleTower_Outside_Text_ScientistGreeting, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_Declined
+	msgbox BattleTower_Outside_Text_ScientistGivingStarters, MSGBOX_DEFAULT
+	compare VAR_STARTER_MON, 0
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_GiveTorchicMudkip
+	compare VAR_STARTER_MON, 1
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_GiveTreeckoMudkip
+	compare VAR_STARTER_MON, 2
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_GiveTreeckoTorchic
+	release
+	end
+
+BattleTower_Outside_EventScript_Scientist_AlreadyReceived:: @ 81602B5
+	msgbox BattleTower_Outside_Text_ScientistAlreadyReceived, MSGBOX_DEFAULT
+	release
+	end
+
+BattleTower_Outside_EventScript_Scientist_Declined:: @ 81602BF
+	msgbox BattleTower_Outside_Text_ScientistDeclined, MSGBOX_DEFAULT
+	release
+	end
+
+BattleTower_Outside_EventScript_Scientist_GiveTorchicMudkip:: @ 81602C3
+	playfanfare MUS_OBTAIN_ITEM
+	bufferspeciesname 0, SPECIES_TORCHIC
+	message BattleTower_Outside_Text_ScientistReceivedFirst
+	waitfanfare
+	waitmessage
+	givemon SPECIES_TORCHIC, 10, ITEM_NONE
+	compare VAR_RESULT, 1
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_TorchicToPC
+	goto BattleTower_Outside_EventScript_Scientist_GiveMudkip
+	end
+
+BattleTower_Outside_EventScript_Scientist_TorchicToPC:: @ 81602E5
+	bufferspeciesname 0, SPECIES_TORCHIC
+	msgbox BattleTower_Outside_Text_ScientistPartyFull, MSGBOX_DEFAULT
+	goto BattleTower_Outside_EventScript_Scientist_GiveMudkip
+	end
+
+BattleTower_Outside_EventScript_Scientist_GiveMudkip:: @ 81602F5
+	playfanfare MUS_OBTAIN_ITEM
+	bufferspeciesname 0, SPECIES_MUDKIP
+	message BattleTower_Outside_Text_ScientistReceivedSecond
+	waitfanfare
+	waitmessage
+	givemon SPECIES_MUDKIP, 10, ITEM_NONE
+	compare VAR_RESULT, 1
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_MudkipToPC
+	goto BattleTower_Outside_EventScript_Scientist_Complete
+	end
+
+BattleTower_Outside_EventScript_Scientist_MudkipToPC:: @ 8160317
+	bufferspeciesname 0, SPECIES_MUDKIP
+	msgbox BattleTower_Outside_Text_ScientistPartyFull, MSGBOX_DEFAULT
+	goto BattleTower_Outside_EventScript_Scientist_Complete
+	end
+
+BattleTower_Outside_EventScript_Scientist_GiveTreeckoMudkip:: @ 8160327
+	playfanfare MUS_OBTAIN_ITEM
+	bufferspeciesname 0, SPECIES_TREECKO
+	message BattleTower_Outside_Text_ScientistReceivedFirst
+	waitfanfare
+	waitmessage
+	givemon SPECIES_TREECKO, 10, ITEM_NONE
+	compare VAR_RESULT, 1
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_TreeckoToPC
+	goto BattleTower_Outside_EventScript_Scientist_GiveMudkip
+	end
+
+BattleTower_Outside_EventScript_Scientist_TreeckoToPC:: @ 8160349
+	bufferspeciesname 0, SPECIES_TREECKO
+	msgbox BattleTower_Outside_Text_ScientistPartyFull, MSGBOX_DEFAULT
+	goto BattleTower_Outside_EventScript_Scientist_GiveMudkip
+	end
+
+BattleTower_Outside_EventScript_Scientist_GiveTreeckoTorchic:: @ 8160359
+	playfanfare MUS_OBTAIN_ITEM
+	bufferspeciesname 0, SPECIES_TREECKO
+	message BattleTower_Outside_Text_ScientistReceivedFirst
+	waitfanfare
+	waitmessage
+	givemon SPECIES_TREECKO, 10, ITEM_NONE
+	compare VAR_RESULT, 1
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_TreeckoToPC2
+	goto BattleTower_Outside_EventScript_Scientist_GiveTorchic
+	end
+
+BattleTower_Outside_EventScript_Scientist_TreeckoToPC2:: @ 816037B
+	bufferspeciesname 0, SPECIES_TREECKO
+	msgbox BattleTower_Outside_Text_ScientistPartyFull, MSGBOX_DEFAULT
+	goto BattleTower_Outside_EventScript_Scientist_GiveTorchic
+	end
+
+BattleTower_Outside_EventScript_Scientist_GiveTorchic:: @ 816038B
+	playfanfare MUS_OBTAIN_ITEM
+	bufferspeciesname 0, SPECIES_TORCHIC
+	message BattleTower_Outside_Text_ScientistReceivedSecond
+	waitfanfare
+	waitmessage
+	givemon SPECIES_TORCHIC, 10, ITEM_NONE
+	compare VAR_RESULT, 1
+	goto_if_eq BattleTower_Outside_EventScript_Scientist_TorchicToPC2
+	goto BattleTower_Outside_EventScript_Scientist_Complete
+	end
+
+BattleTower_Outside_EventScript_Scientist_TorchicToPC2:: @ 81603AD
+	bufferspeciesname 0, SPECIES_TORCHIC
+	msgbox BattleTower_Outside_Text_ScientistPartyFull, MSGBOX_DEFAULT
+	goto BattleTower_Outside_EventScript_Scientist_Complete
+	end
+
+BattleTower_Outside_EventScript_Scientist_Complete:: @ 81603BD
+	setflag FLAG_RECEIVED_HOENN_STARTERS_BATTLE_TOWER
+	msgbox BattleTower_Outside_Text_ScientistComplete, MSGBOX_DEFAULT
+	release
+	end

@@ -46,3 +46,29 @@ BattleTower_Outside_Text_199ED4:: @ 8199ED4
 	.string "Gee, there're a lot of tough-looking\n"
 	.string "TRAINERS here.\l"
 	.string "I'm not good enough to enter yet...$"
+
+BattleTower_Outside_Text_ScientistGreeting:: @ 8199F0C
+	.string "Howdy! I'm the STARTER GUY!\p"
+	.string "Would you like some starters?$"
+
+BattleTower_Outside_Text_ScientistAlreadyReceived:: @ 8199FA0
+	.string "Ho ho! Take good care of them!$"
+
+BattleTower_Outside_Text_ScientistGivingStarters:: @ 8199FD8
+	.string "Excellent! Here you go!$"
+
+BattleTower_Outside_Text_ScientistDeclined:: @ 8199FF0
+	.string "You're no fun!$"
+
+BattleTower_Outside_Text_ScientistReceivedFirst:: @ 819A040
+	.string "{PLAYER} received {STR_VAR_1}!$"
+
+BattleTower_Outside_Text_ScientistReceivedSecond:: @ 819A058
+	.string "{PLAYER} received {STR_VAR_1}!$"
+
+BattleTower_Outside_Text_ScientistPartyFull:: @ 819A070
+	.string "Your party is full, so {STR_VAR_1} was\n"
+	.string "sent to your PC BOX.$"
+
+BattleTower_Outside_Text_ScientistComplete:: @ 819A0A0
+	.string "Ho ho! Take good care of them!$"
