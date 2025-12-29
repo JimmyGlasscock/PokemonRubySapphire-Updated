@@ -27,9 +27,8 @@
 #define REVISION 0
 #endif
 
-#if (ENGLISH && REVISION == 2) || (GERMAN && REVISION == 1)
+// Berry glitch fix - always enabled
 #define BUGFIX_BERRY
-#endif
 
 #if (ENGLISH && REVISION >= 1) || GERMAN
 #define BUGFIX_GLYPHWIDTH
