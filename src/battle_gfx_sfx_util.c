@@ -461,16 +461,51 @@ void sub_8031A6C(u16 a, u8 b)
 void LoadPlayerTrainerBankSprite(u16 a, u8 b)
 {
     u8 status;
+    const struct CompressedSpriteSheet *backPicTable;
+    const struct CompressedSpritePalette *paletteTable;
 
     status = GetBattlerPosition(b);
+    
+    // Check if Emerald trainer option is set
+    if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+    {
+        // Use Emerald backsprites
+        extern const u8 gTrainerBackPic_BrendanEmerald[];
+        extern const u8 gTrainerBackPic_MayEmerald[];
+        extern const u8 gTrainerPalette_BrendanEmerald[];
+        extern const u8 gTrainerPalette_MayEmerald[];
+        
+        // Use non-static arrays to avoid potential issues with multiple calls
+        const struct CompressedSpriteSheet emeraldBackPicTable[] = {
+            {gTrainerBackPic_BrendanEmerald, 0x2000, 0},
+            {gTrainerBackPic_MayEmerald, 0x2000, 1},
+        };
+        const struct CompressedSpritePalette emeraldPaletteTable[] = {
+            {gTrainerPalette_BrendanEmerald, 0},
+            {gTrainerPalette_MayEmerald, 1},
+        };
+        
+        backPicTable = &emeraldBackPicTable[a];
+        paletteTable = &emeraldPaletteTable[a];
+    }
+    else
+    {
+        // Use original backsprites
+        backPicTable = &gTrainerBackPicTable[a];
+        paletteTable = &gTrainerBackPicPaletteTable[a];
+    }
+    
     DecompressPicFromTable_2(
-      &gTrainerBackPicTable[a],
+      backPicTable,
       gTrainerBackPicCoords[a].coords,
       gTrainerBackPicCoords[a].y_offset,
       eBattleInterfaceGfxBuffer,
       gMonSpriteGfx_Sprite_ptr[status],
       0);
-    LoadCompressedPalette(gTrainerBackPicPaletteTable[a].data, 0x100 + b * 16, 32);
+    // Load palette to both faded and unfaded buffers to ensure all frames use correct palette
+    LoadCompressedPalette(paletteTable->data, 0x100 + b * 16, 32);
+    // Also load to the backup palette slot used for some animations
+    LoadCompressedPalette(paletteTable->data, 0x80 + b * 16, 32);
 }
 
 void nullsub_10(int unused)

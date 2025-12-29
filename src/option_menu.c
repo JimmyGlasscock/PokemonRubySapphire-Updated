@@ -21,6 +21,7 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
     MENUITEM_VERSION,
+    MENUITEM_TRAINER,
     MENUITEM_CANCEL,
 };
 
@@ -33,7 +34,8 @@ enum
 #define tOptButtonMode  data[5]
 #define tOptFrameType   data[6]
 #define tOptVersion     data[7]
-#define tScrollOffset   data[8]
+#define tOptTrainer     data[8]
+#define tScrollOffset   data[9]
 
 #if ENGLISH
 #define TEXTSPEED_SLOW_LEFT (120)
@@ -68,6 +70,7 @@ static u8   Sound_ProcessInput(u8 selection);
 static u8   FrameType_ProcessInput(u8 selection);
 static u8   ButtonMode_ProcessInput(u8 selection);
 static u8   Version_ProcessInput(u8 selection);
+static u8   Trainer_ProcessInput(u8 selection);
 
 static void MainCB(void)
 {
@@ -171,6 +174,7 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tOptButtonMode  = gSaveBlock2.optionsButtonMode;
         gTasks[taskId].tOptFrameType   = gSaveBlock2.optionsWindowFrameType;
         gTasks[taskId].tOptVersion      = gSaveBlock2.optionsVersion;
+        gTasks[taskId].tOptTrainer      = gSaveBlock2.optionsTrainer;
         gTasks[taskId].tScrollOffset    = 0;
 
         Menu_DrawStdWindowFrame(2, 0, 27, 3);   // title box
@@ -235,7 +239,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
     else if (gMain.newKeys & DPAD_DOWN)
     {
         u8 oldScroll = gTasks[taskId].tScrollOffset;
-        if (gTasks[taskId].tMenuSelection < 7)
+        if (gTasks[taskId].tMenuSelection < 8)
         {
             gTasks[taskId].tMenuSelection++;
             // Scroll down if selection is below visible area
@@ -359,6 +363,18 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                     DrawOptionMenuChoice(gSystemText_Sapphire, 162, yPos, styles[1]);
                 }
                 break;
+            case MENUITEM_TRAINER:
+                gTasks[taskId].tOptTrainer = Trainer_ProcessInput(gTasks[taskId].tOptTrainer);
+                if (visibleIndex < 7)
+                {
+                    u8 styles[2];
+                    u8 sel = gTasks[taskId].tOptTrainer;
+                    styles[0] = (sel == 0) ? 0x8 : 0xF;
+                    styles[1] = (sel == 1) ? 0x8 : 0xF;
+                    DrawOptionMenuChoice(gSystemText_Original, 120, yPos, styles[0]);
+                    DrawOptionMenuChoice(gSystemText_Emerald, 162, yPos, styles[1]);
+                }
+                break;
             }
         }
     }
@@ -373,6 +389,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2.optionsButtonMode      = gTasks[taskId].tOptButtonMode;
     gSaveBlock2.optionsWindowFrameType = gTasks[taskId].tOptFrameType;
     gSaveBlock2.optionsVersion         = gTasks[taskId].tOptVersion;
+    gSaveBlock2.optionsTrainer         = gTasks[taskId].tOptTrainer;
 
     BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB(0, 0, 0));
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -401,7 +418,7 @@ static void RedrawOptionMenuItems(u8 taskId)
     Menu_BlankWindowRect(3, 5, 26, 18);
     
     // Draw visible items based on scroll offset
-    for (i = 0; i < 7 && (scrollOffset + i) < 8; i++)
+    for (i = 0; i < 7 && (scrollOffset + i) < 9; i++)
     {
         u8 itemIndex = scrollOffset + i;
         u8 row = visibleRows[i];
@@ -481,6 +498,17 @@ static void RedrawOptionMenuItems(u8 taskId)
                 styles[1] = (sel == 1) ? 0x8 : 0xF;
                 DrawOptionMenuChoice(gSystemText_Ruby, 120, yPos, styles[0]);
                 DrawOptionMenuChoice(gSystemText_Sapphire, 162, yPos, styles[1]);
+            }
+            break;
+        case MENUITEM_TRAINER:
+            Menu_PrintText(gSystemText_Trainer, 4, row);
+            {
+                u8 styles[2];
+                u8 sel = gTasks[taskId].tOptTrainer;
+                styles[0] = (sel == 0) ? 0x8 : 0xF;
+                styles[1] = (sel == 1) ? 0x8 : 0xF;
+                DrawOptionMenuChoice(gSystemText_Original, 120, yPos, styles[0]);
+                DrawOptionMenuChoice(gSystemText_Emerald, 162, yPos, styles[1]);
             }
             break;
         case MENUITEM_CANCEL:
@@ -662,6 +690,13 @@ static u8 ButtonMode_ProcessInput(u8 selection)
 }
 
 static u8 Version_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & (DPAD_LEFT | DPAD_RIGHT))
+        selection ^= 1;
+    return selection;
+}
+
+static u8 Trainer_ProcessInput(u8 selection)
 {
     if (gMain.newKeys & (DPAD_LEFT | DPAD_RIGHT))
         selection ^= 1;

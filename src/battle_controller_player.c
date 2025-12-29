@@ -3045,7 +3045,24 @@ void PlayerHandleTrainerBallThrow(void)
     StoreSpriteCallbackInData(&gSprites[gBattlerSpriteIds[gActiveBattler]], sub_8030E38);
     StartSpriteAnim(&gSprites[gBattlerSpriteIds[gActiveBattler]], 1);
     paletteNum = AllocSpritePalette(0xD6F8);
-    LoadCompressedPalette(gTrainerBackPicPaletteTable[gSaveBlock2.playerGender].data, 0x100 + paletteNum * 16, 32);
+    // Check if Emerald trainer option is set and use appropriate palette
+    if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+    {
+        extern const u8 gTrainerPalette_BrendanEmerald[];
+        extern const u8 gTrainerPalette_MayEmerald[];
+        const u8 *emeraldPalette = (gSaveBlock2.playerGender == MALE) 
+            ? gTrainerPalette_BrendanEmerald 
+            : gTrainerPalette_MayEmerald;
+        LoadCompressedPalette(emeraldPalette, 0x100 + paletteNum * 16, 32);
+        // Also load to backup slot used during animation
+        LoadCompressedPalette(emeraldPalette, 0x80 + paletteNum * 16, 32);
+    }
+    else
+    {
+        LoadCompressedPalette(gTrainerBackPicPaletteTable[gSaveBlock2.playerGender].data, 0x100 + paletteNum * 16, 32);
+        // Also load to backup slot used during animation
+        LoadCompressedPalette(gTrainerBackPicPaletteTable[gSaveBlock2.playerGender].data, 0x80 + paletteNum * 16, 32);
+    }
     gSprites[gBattlerSpriteIds[gActiveBattler]].oam.paletteNum = paletteNum;
     taskId = CreateTask(task05_08033660, 5);
     gTasks[taskId].data[0] = gActiveBattler;

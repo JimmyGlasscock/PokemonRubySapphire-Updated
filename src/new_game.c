@@ -94,6 +94,7 @@ void SetDefaultOptions(void)
 #else
     gSaveBlock2.optionsVersion = OPTIONS_VERSION_RUBY; // Default to Ruby if neither is defined
 #endif
+    gSaveBlock2.optionsTrainer = OPTIONS_TRAINER_ORIGINAL; // Default to Original
 }
 
 void ClearPokedexFlags(void)

@@ -129,6 +129,38 @@ $(OBJEVENTGFXDIR)/people/brendan/underwater.4bpp: %.4bpp: %.png
 $(OBJEVENTGFXDIR)/people/brendan/watering.4bpp: %.4bpp: %.png
 	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
 
+$(OBJEVENTGFXDIR)/people/brendan/decorating.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/normal.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
+$(OBJEVENTGFXDIR)/people/brendan_emerald/running.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/mach_bike.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/acro_bike.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/surfing.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/underwater.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/field_move.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/fishing.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/watering.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/brendan_emerald/decorating.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
+
 
 $(OBJEVENTGFXDIR)/people/may/acro_bike.4bpp: %.4bpp: %.png
 	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
@@ -153,6 +185,36 @@ $(OBJEVENTGFXDIR)/people/may/underwater.4bpp: %.4bpp: %.png
 
 $(OBJEVENTGFXDIR)/people/may/watering.4bpp: %.4bpp: %.png
 	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may/decorating.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/normal.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/mach_bike.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/acro_bike.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/surfing.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/underwater.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/field_move.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/fishing.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/watering.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/people/may_emerald/decorating.4bpp: %.4bpp: %.png
+	$(GBAGFX) $< $@ -mwidth 2 -mheight 4
 
 
 $(OBJEVENTGFXDIR)/people/aqua_member_f.4bpp: %.4bpp: %.png

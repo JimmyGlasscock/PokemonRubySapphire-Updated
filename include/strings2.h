@@ -38,6 +38,9 @@ extern const u8 gSystemText_LA[];
 extern const u8 gSystemText_Version[];
 extern const u8 gSystemText_Ruby[];
 extern const u8 gSystemText_Sapphire[];
+extern const u8 gSystemText_Trainer[];
+extern const u8 gSystemText_Original[];
+extern const u8 gSystemText_Emerald[];
 
 // start_menu
 extern const u8 SystemText_Pokedex[];

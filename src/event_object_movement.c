@@ -1582,9 +1582,9 @@ void sub_805B75C(u8 objectEventId, s16 x, s16 y)
     struct Sprite *sprite;
     struct ObjectEvent *objectEvent;
     struct SpriteTemplate spriteTemplate;
-    struct SpriteFrameImage spriteFrameImage;
     const struct SubspriteTable *subspriteTables;
     const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct SpriteFrameImage *imagesToUse;
 
 #define i spriteId
     for (i = 0; i < 4; i++)
@@ -1598,13 +1598,158 @@ void sub_805B75C(u8 objectEventId, s16 x, s16 y)
     asm("":::"r5");
     subspriteTables = NULL;
     graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
-    spriteFrameImage.size = graphicsInfo->size;
+    
+    // Determine which image table to use BEFORE creating the sprite
+    // This ensures tiles are allocated with the correct size
+    imagesToUse = graphicsInfo->images;
+    if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+    {
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanNormalEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanRunningEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanMachBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanAcroBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanSurfingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanFieldMoveEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanUnderwaterEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanFishingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanWateringEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanDecoratingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayNormalEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayRunningEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayMachBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayAcroBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MaySurfingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayFieldMoveEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayUnderwaterEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayFishingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayWateringEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayDecoratingEmerald[];
+        
+        // Check if we're using a running animation (20-23)
+        // Running animations use frames 9-17, which don't exist in Emerald's normal sprite
+        // So we need to use the running sprite instead
+        bool8 isRunningAnim = FALSE;
+        if (sprite != NULL && sprite->animNum >= 20 && sprite->animNum <= 23)
+        {
+            isRunningAnim = TRUE;
+        }
+        
+        // Use Emerald pic tables for player sprites
+        switch (objectEvent->graphicsId)
+        {
+        case OBJ_EVENT_GFX_BRENDAN_NORMAL:
+            if (isRunningAnim)
+                imagesToUse = gObjectEventPicTable_BrendanRunningEmerald;
+            else
+                imagesToUse = gObjectEventPicTable_BrendanNormalEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_MACH_BIKE:
+            imagesToUse = gObjectEventPicTable_BrendanMachBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE:
+            imagesToUse = gObjectEventPicTable_BrendanAcroBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_SURFING:
+            imagesToUse = gObjectEventPicTable_BrendanSurfingEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE:
+            imagesToUse = gObjectEventPicTable_BrendanFieldMoveEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_UNDERWATER:
+            imagesToUse = gObjectEventPicTable_BrendanUnderwaterEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_FISHING:
+            imagesToUse = gObjectEventPicTable_BrendanFishingEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_WATERING:
+            imagesToUse = gObjectEventPicTable_BrendanWateringEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_DECORATING:
+            imagesToUse = gObjectEventPicTable_BrendanDecoratingEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_NORMAL:
+            if (isRunningAnim)
+                imagesToUse = gObjectEventPicTable_MayRunningEmerald;
+            else
+                imagesToUse = gObjectEventPicTable_MayNormalEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_MACH_BIKE:
+            imagesToUse = gObjectEventPicTable_MayMachBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_ACRO_BIKE:
+            imagesToUse = gObjectEventPicTable_MayAcroBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_SURFING:
+            imagesToUse = gObjectEventPicTable_MaySurfingEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_FIELD_MOVE:
+            imagesToUse = gObjectEventPicTable_MayFieldMoveEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_UNDERWATER:
+            imagesToUse = gObjectEventPicTable_MayUnderwaterEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_FISHING:
+            imagesToUse = gObjectEventPicTable_MayFishingEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_WATERING:
+            imagesToUse = gObjectEventPicTable_MayWateringEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_DECORATING:
+            imagesToUse = gObjectEventPicTable_MayDecoratingEmerald;
+            break;
+        default:
+            break;
+        }
+    }
+    
+    // Set the sprite template to use the correct image table from the start
+    // This ensures tiles are allocated with the correct size
     MakeObjectTemplateFromObjectEventGraphicsInfoWithCallbackIndex(objectEvent->graphicsId, objectEvent->movementType, &spriteTemplate, &subspriteTables);
-    spriteTemplate.images = &spriteFrameImage;
+    spriteTemplate.images = imagesToUse;  // Use the image table directly, not a temporary frame
     *(u16 *)&spriteTemplate.paletteTag = 0xFFFF;
+    // Handle palette loading for Emerald sprites
     if (graphicsInfo->paletteSlot == 0)
     {
+        // Check if we should use Emerald palette for player sprites
+        if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+        {
+            extern const u16 gObjectEventPaletteBrendanEmerald[];
+            extern const u16 gObjectEventPaletteMayEmerald[];
+            
+            // Use Emerald palettes for player sprites
+            switch (objectEvent->graphicsId)
+            {
+            case OBJ_EVENT_GFX_BRENDAN_NORMAL:
+            case OBJ_EVENT_GFX_BRENDAN_MACH_BIKE:
+            case OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE:
+            case OBJ_EVENT_GFX_BRENDAN_SURFING:
+            case OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE:
+            case OBJ_EVENT_GFX_BRENDAN_UNDERWATER:
+            case OBJ_EVENT_GFX_BRENDAN_FISHING:
+            case OBJ_EVENT_GFX_BRENDAN_WATERING:
+            case OBJ_EVENT_GFX_BRENDAN_DECORATING:
+                LoadPalette(gObjectEventPaletteBrendanEmerald, 16 * graphicsInfo->paletteSlot + 0x100, 0x20);
+                break;
+            case OBJ_EVENT_GFX_MAY_NORMAL:
+            case OBJ_EVENT_GFX_MAY_MACH_BIKE:
+            case OBJ_EVENT_GFX_MAY_ACRO_BIKE:
+            case OBJ_EVENT_GFX_MAY_SURFING:
+            case OBJ_EVENT_GFX_MAY_FIELD_MOVE:
+            case OBJ_EVENT_GFX_MAY_UNDERWATER:
+            case OBJ_EVENT_GFX_MAY_FISHING:
+            case OBJ_EVENT_GFX_MAY_WATERING:
+            case OBJ_EVENT_GFX_MAY_DECORATING:
+                LoadPalette(gObjectEventPaletteMayEmerald, 16 * graphicsInfo->paletteSlot + 0x100, 0x20);
+                break;
+            default:
         LoadPlayerObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
+                break;
+            }
+        }
+        else
+        {
+            LoadPlayerObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
+        }
     }
     if (graphicsInfo->paletteSlot > 9)
     {
@@ -1620,7 +1765,10 @@ void sub_805B75C(u8 objectEventId, s16 x, s16 y)
         sprite->centerToCornerVecY = -(graphicsInfo->height >> 1);
         sprite->x += 8;
         sprite->y += 16 + sprite->centerToCornerVecY;
-        sprite->images = graphicsInfo->images;
+        
+        // sprite->images is already set by CreateSprite from spriteTemplate.images
+        // which we set to imagesToUse before creating the sprite
+        
         if (objectEvent->movementType == MOVEMENT_TYPE_PLAYER)
         {
             SetPlayerAvatarObjectEventIdAndObjectId(objectEventId, spriteId);
@@ -1634,8 +1782,16 @@ void sub_805B75C(u8 objectEventId, s16 x, s16 y)
         sprite->coordOffsetEnabled = TRUE;
         sprite->data[0] = objectEventId;
         objectEvent->spriteId = spriteId;
+        
+        // Start animation - this will load the first frame automatically
         if (!objectEvent->inanimate && objectEvent->movementType != MOVEMENT_TYPE_PLAYER)
         {
+            StartSpriteAnim(sprite, GetFaceDirectionAnimNum(objectEvent->facingDirection));
+        }
+        else if (objectEvent->movementType == MOVEMENT_TYPE_PLAYER)
+        {
+            // For player, we need to manually start the animation to load the first frame
+            // The animation system will handle frame loading
             StartSpriteAnim(sprite, GetFaceDirectionAnimNum(objectEvent->facingDirection));
         }
         sub_805B914(objectEvent);
@@ -1668,25 +1824,276 @@ void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u8 graphicsId)
 {
     const struct ObjectEventGraphicsInfo *graphicsInfo;
     struct Sprite *sprite;
+    const struct SpriteFrameImage *imagesToUse;
 
     graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
     sprite = &gSprites[objectEvent->spriteId];
+    
+    // Check if Emerald trainer option is set and this is a player sprite
+    imagesToUse = graphicsInfo->images;
+    
     if (graphicsInfo->paletteSlot == 0)
     {
+        // Check if we should use Emerald palette
+        if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+        {
+            extern const u16 gObjectEventPaletteBrendanEmerald[];
+            extern const u16 gObjectEventPaletteMayEmerald[];
+            
+            // Use Emerald palettes for player sprites
+            switch (graphicsId)
+            {
+            case OBJ_EVENT_GFX_BRENDAN_NORMAL:
+            case OBJ_EVENT_GFX_BRENDAN_MACH_BIKE:
+            case OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE:
+            case OBJ_EVENT_GFX_BRENDAN_SURFING:
+            case OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE:
+            case OBJ_EVENT_GFX_BRENDAN_UNDERWATER:
+            case OBJ_EVENT_GFX_BRENDAN_FISHING:
+            case OBJ_EVENT_GFX_BRENDAN_WATERING:
+            case OBJ_EVENT_GFX_BRENDAN_DECORATING:
+                // Load Emerald Brendan palette directly
+                LoadPalette(gObjectEventPaletteBrendanEmerald, 16 * graphicsInfo->paletteSlot + 0x100, 0x20);
+                break;
+            case OBJ_EVENT_GFX_MAY_NORMAL:
+            case OBJ_EVENT_GFX_MAY_MACH_BIKE:
+            case OBJ_EVENT_GFX_MAY_ACRO_BIKE:
+            case OBJ_EVENT_GFX_MAY_SURFING:
+            case OBJ_EVENT_GFX_MAY_FIELD_MOVE:
+            case OBJ_EVENT_GFX_MAY_UNDERWATER:
+            case OBJ_EVENT_GFX_MAY_FISHING:
+            case OBJ_EVENT_GFX_MAY_WATERING:
+            case OBJ_EVENT_GFX_MAY_DECORATING:
+                // Load Emerald May palette directly
+                LoadPalette(gObjectEventPaletteMayEmerald, 16 * graphicsInfo->paletteSlot + 0x100, 0x20);
+                break;
+            default:
+                // Use original palette for non-player sprites
         PatchObjectPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
+                break;
+            }
+        }
+        else
+        {
+            PatchObjectPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
+        }
     }
     if (graphicsInfo->paletteSlot == 10)
     {
+        // For reflection palettes, use Emerald palettes if option is set
+        if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+        {
+            extern const u16 gObjectEventPaletteBrendanEmerald[];
+            extern const u16 gObjectEventPaletteMayEmerald[];
+            
+            // Use Emerald palettes for player sprites (reflection uses same palette)
+            switch (graphicsId)
+            {
+            case OBJ_EVENT_GFX_BRENDAN_NORMAL:
+            case OBJ_EVENT_GFX_BRENDAN_MACH_BIKE:
+            case OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE:
+            case OBJ_EVENT_GFX_BRENDAN_SURFING:
+            case OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE:
+            case OBJ_EVENT_GFX_BRENDAN_UNDERWATER:
+            case OBJ_EVENT_GFX_BRENDAN_FISHING:
+            case OBJ_EVENT_GFX_BRENDAN_WATERING:
+            case OBJ_EVENT_GFX_BRENDAN_DECORATING:
+                LoadSpecialObjectReflectionPalette(OBJ_EVENT_PAL_TAG_8, graphicsInfo->paletteSlot);
+                // Also patch the main palette
+                LoadPalette(gObjectEventPaletteBrendanEmerald, 16 * graphicsInfo->paletteSlot + 0x100, 0x20);
+                break;
+            case OBJ_EVENT_GFX_MAY_NORMAL:
+            case OBJ_EVENT_GFX_MAY_MACH_BIKE:
+            case OBJ_EVENT_GFX_MAY_ACRO_BIKE:
+            case OBJ_EVENT_GFX_MAY_SURFING:
+            case OBJ_EVENT_GFX_MAY_FIELD_MOVE:
+            case OBJ_EVENT_GFX_MAY_UNDERWATER:
+            case OBJ_EVENT_GFX_MAY_FISHING:
+            case OBJ_EVENT_GFX_MAY_WATERING:
+            case OBJ_EVENT_GFX_MAY_DECORATING:
+                LoadSpecialObjectReflectionPalette(OBJ_EVENT_PAL_TAG_17, graphicsInfo->paletteSlot);
+                // Also patch the main palette
+                LoadPalette(gObjectEventPaletteMayEmerald, 16 * graphicsInfo->paletteSlot + 0x100, 0x20);
+                break;
+            default:
         LoadSpecialObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
+                break;
+            }
+        }
+        else
+        {
+            LoadSpecialObjectReflectionPalette(graphicsInfo->paletteTag, graphicsInfo->paletteSlot);
+        }
     }
+    
+    if (gSaveBlock2.optionsTrainer == OPTIONS_TRAINER_EMERALD)
+    {
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanNormalEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanRunningEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanMachBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanAcroBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanSurfingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanFieldMoveEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanUnderwaterEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanFishingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanWateringEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_BrendanDecoratingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayNormalEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayRunningEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayMachBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayAcroBikeEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MaySurfingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayFieldMoveEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayUnderwaterEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayFishingEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayWateringEmerald[];
+        extern const struct SpriteFrameImage gObjectEventPicTable_MayDecoratingEmerald[];
+        
+        // Check if we're using a running animation (20-23)
+        // Running animations use frames 9-17, which don't exist in Emerald's normal sprite
+        // So we need to use the running sprite instead
+        bool8 isRunningAnim = FALSE;
+        if (sprite != NULL && sprite->animNum >= 20 && sprite->animNum <= 23)
+        {
+            isRunningAnim = TRUE;
+        }
+        
+        // Use Emerald pic tables for player sprites
+        switch (graphicsId)
+        {
+        case OBJ_EVENT_GFX_BRENDAN_NORMAL:
+            if (isRunningAnim)
+                imagesToUse = gObjectEventPicTable_BrendanRunningEmerald;
+            else
+                imagesToUse = gObjectEventPicTable_BrendanNormalEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_MACH_BIKE:
+            imagesToUse = gObjectEventPicTable_BrendanMachBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE:
+            imagesToUse = gObjectEventPicTable_BrendanAcroBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_SURFING:
+            imagesToUse = gObjectEventPicTable_BrendanSurfingEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE:
+            imagesToUse = gObjectEventPicTable_BrendanFieldMoveEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_UNDERWATER:
+            imagesToUse = gObjectEventPicTable_BrendanUnderwaterEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_FISHING:
+            imagesToUse = gObjectEventPicTable_BrendanFishingEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_WATERING:
+            imagesToUse = gObjectEventPicTable_BrendanWateringEmerald;
+            break;
+        case OBJ_EVENT_GFX_BRENDAN_DECORATING:
+            imagesToUse = gObjectEventPicTable_BrendanDecoratingEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_NORMAL:
+            if (isRunningAnim)
+                imagesToUse = gObjectEventPicTable_MayRunningEmerald;
+            else
+                imagesToUse = gObjectEventPicTable_MayNormalEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_MACH_BIKE:
+            imagesToUse = gObjectEventPicTable_MayMachBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_ACRO_BIKE:
+            imagesToUse = gObjectEventPicTable_MayAcroBikeEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_SURFING:
+            imagesToUse = gObjectEventPicTable_MaySurfingEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_FIELD_MOVE:
+            imagesToUse = gObjectEventPicTable_MayFieldMoveEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_UNDERWATER:
+            imagesToUse = gObjectEventPicTable_MayUnderwaterEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_FISHING:
+            imagesToUse = gObjectEventPicTable_MayFishingEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_WATERING:
+            imagesToUse = gObjectEventPicTable_MayWateringEmerald;
+            break;
+        case OBJ_EVENT_GFX_MAY_DECORATING:
+            imagesToUse = gObjectEventPicTable_MayDecoratingEmerald;
+            break;
+        default:
+            // Use original images for non-player sprites
+            break;
+        }
+    }
+    
     sprite->oam.shape = graphicsInfo->oam->shape;
     sprite->oam.size = graphicsInfo->oam->size;
-    sprite->images = graphicsInfo->images;
+    
+    // If we're switching image tables (OG to Emerald or vice versa), we need to reload tiles
+    // The tiles should already be allocated, we just need to copy the new frame data
+    
+    sprite->images = imagesToUse;
     sprite->anims = graphicsInfo->anims;
     sprite->subspriteTables = graphicsInfo->subspriteTables;
     sprite->oam.paletteNum = graphicsInfo->paletteSlot;
     objectEvent->inanimate = graphicsInfo->inanimate;
     objectEvent->graphicsId = graphicsId;
+    
+    // Force immediate frame reload when using individual frame images (not a sheet)
+    // This ensures the sprite uses the new image table right away
+    if (!sprite->usingSheet && sprite->images != NULL && sprite->anims != NULL)
+    {
+        // Get the current animation frame index before restarting
+        s16 currentFrame = 0;
+        u16 maxFrame = 0;
+        
+        if (sprite->animNum < 24 && sprite->anims[sprite->animNum] != NULL)
+        {
+            if (sprite->animCmdIndex < 32)
+            {
+                s16 animType = sprite->anims[sprite->animNum][sprite->animCmdIndex].type;
+                if (animType >= 0)  // It's a frame command
+                {
+                    currentFrame = sprite->anims[sprite->animNum][sprite->animCmdIndex].frame.imageValue;
+                }
+            }
+        }
+        
+        // Find the end of the image array by checking for NULL data pointer
+        // This prevents out-of-bounds access when using Emerald sprites (9 frames) vs OG (18 frames)
+        while (maxFrame < 32 && sprite->images[maxFrame].data != NULL)
+            maxFrame++;
+        
+        // Reload the current frame from the new image table immediately
+        // Clamp frame index to valid range
+        if (currentFrame >= 0 && currentFrame < maxFrame && sprite->images[currentFrame].data != NULL)
+        {
+            // Queue the frame copy
+            RequestSpriteCopy(
+                sprite->images[currentFrame].data,
+                (u8 *)OBJ_VRAM0 + sprite->oam.tileNum * 32,  // TILE_SIZE_4BPP = 32
+                sprite->images[currentFrame].size
+            );
+            // Process it immediately to ensure the frame is loaded right away
+            ProcessSpriteCopyRequests();
+        }
+        else if (maxFrame > 0)
+        {
+            // If current frame is out of bounds, use frame 0 instead
+            RequestSpriteCopy(
+                sprite->images[0].data,
+                (u8 *)OBJ_VRAM0 + sprite->oam.tileNum * 32,
+                sprite->images[0].size
+            );
+            ProcessSpriteCopyRequests();
+        }
+        
+        // Restart animation to ensure future frames use the new table
+        // This will also reload the frame, but we've already done that above
+        StartSpriteAnim(sprite, sprite->animNum);
+    }
+    
     sub_80603CC(objectEvent->currentCoords.x, objectEvent->currentCoords.y, &sprite->x, &sprite->y);
     sprite->centerToCornerVecX = -(graphicsInfo->width >> 1);
     sprite->centerToCornerVecY = -(graphicsInfo->height >> 1);

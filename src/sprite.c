@@ -824,9 +824,31 @@ static void RequestSpriteFrameImageCopy(u16 index, u16 tileNum, const struct Spr
 {
     if (gSpriteCopyRequestCount < MAX_SPRITE_COPY_REQUESTS)
     {
-        sSpriteCopyRequests[gSpriteCopyRequestCount].src = images[index].data;
+        // Bounds check: find the actual number of frames by checking for NULL data
+        // This prevents out-of-bounds access when using Emerald sprites (9 frames) vs OG (18 frames)
+        u16 maxFrame = 0;
+        u16 safeIndex;
+        
+        while (maxFrame < 32 && images[maxFrame].data != NULL)
+            maxFrame++;
+        
+        // Map out-of-bounds frames to valid ones
+        // For Emerald sprites (9 frames), map frames 9-17 to 0-8 using modulo
+        // This allows running animations (which use frames 9-17) to work with Emerald sprites
+        if (index >= maxFrame && maxFrame > 0)
+        {
+            // Use modulo to map high frame indices to valid range
+            // This works well for Emerald's 9 frames vs OG's 18 frames
+            safeIndex = index % maxFrame;
+        }
+        else
+        {
+            safeIndex = index;
+        }
+        
+        sSpriteCopyRequests[gSpriteCopyRequestCount].src = images[safeIndex].data;
         sSpriteCopyRequests[gSpriteCopyRequestCount].dest = OBJ_VRAM0 + TILE_SIZE_4BPP * tileNum;
-        sSpriteCopyRequests[gSpriteCopyRequestCount].size = images[index].size;
+        sSpriteCopyRequests[gSpriteCopyRequestCount].size = images[safeIndex].size;
         gSpriteCopyRequestCount++;
     }
 #if DEBUG
