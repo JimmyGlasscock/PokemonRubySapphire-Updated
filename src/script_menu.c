@@ -430,15 +430,16 @@ const struct MenuAction MultichoiceList_67[] =
 
 const struct MenuAction MultichoiceList_68[] =
 {
-    {OtherText_RedShard, NULL},
-    {OtherText_YellowShard, NULL},
-    {OtherText_GreenShard, NULL},
+    {OtherText_Slateport, NULL},
+    {OtherText_BattleTower, NULL},
+    {OtherText_BirthIsland, NULL},
     {gOtherText_CancelNoTerminator, NULL},
 };
 
 const struct MenuAction MultichoiceList_69[] =
 {
-    {OtherText_BlueShard, NULL},
+    {OtherText_RedShard, NULL},
+    {OtherText_YellowShard, NULL},
     {OtherText_GreenShard, NULL},
     {gOtherText_CancelNoTerminator, NULL},
 };

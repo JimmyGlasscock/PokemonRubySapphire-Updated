@@ -410,16 +410,36 @@ LilycoveCity_EventScript_14CF6B:: @ 814CF6B
 LilycoveCity_EventScript_EonTicketOldMan:: @ New
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_EON_TICKET, LilycoveCity_EventScript_EonTicketOldMan_AlreadyGave
+	goto_if_set FLAG_RECEIVED_EON_TICKET, LilycoveCity_EventScript_EonTicketOldMan_CheckAuroraTicket
 	goto_if_unset FLAG_SYS_GAME_CLEAR, LilycoveCity_EventScript_EonTicketOldMan_NotYet
 	msgbox LilycoveCity_Text_EonTicketOldMan_Congratulations, MSGBOX_DEFAULT
 	checkitemspace ITEM_EON_TICKET, 1
 	compare VAR_RESULT, FALSE
 	goto_if_eq LilycoveCity_EventScript_EonTicketOldMan_BagFull
+	checkitemspace ITEM_AURORA_TICKET, 1
+	compare VAR_RESULT, FALSE
+	goto_if_eq LilycoveCity_EventScript_EonTicketOldMan_BagFull
 	giveitem ITEM_EON_TICKET
 	setflag FLAG_RECEIVED_EON_TICKET
 	setflag FLAG_SYS_HAS_EON_TICKET
+	giveitem ITEM_AURORA_TICKET
+	setflag FLAG_RECEIVED_AURORA_TICKET
+	setflag FLAG_ENABLE_SHIP_BIRTH_ISLAND
 	msgbox LilycoveCity_Text_EonTicketOldMan_Enjoy, MSGBOX_DEFAULT
+	release
+	end
+
+LilycoveCity_EventScript_EonTicketOldMan_CheckAuroraTicket::
+	goto_if_set FLAG_RECEIVED_AURORA_TICKET, LilycoveCity_EventScript_EonTicketOldMan_AlreadyGave
+	goto_if_unset FLAG_SYS_GAME_CLEAR, LilycoveCity_EventScript_EonTicketOldMan_AlreadyGave
+	msgbox LilycoveCity_Text_EonTicketOldMan_AuroraTicket, MSGBOX_DEFAULT
+	checkitemspace ITEM_AURORA_TICKET, 1
+	compare VAR_RESULT, FALSE
+	goto_if_eq LilycoveCity_EventScript_EonTicketOldMan_BagFull
+	giveitem ITEM_AURORA_TICKET
+	setflag FLAG_RECEIVED_AURORA_TICKET
+	setflag FLAG_ENABLE_SHIP_BIRTH_ISLAND
+	msgbox LilycoveCity_Text_EonTicketOldMan_AuroraTicketEnjoy, MSGBOX_DEFAULT
 	release
 	end
 

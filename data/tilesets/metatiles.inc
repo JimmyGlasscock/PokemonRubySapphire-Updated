@@ -399,7 +399,15 @@ gMetatileAttributes_Ship:: @ 8284A5C
 	.incbin "data/tilesets/secondary/ship/metatile_attributes.bin"
 
 	.align 1
-gMetatiles_SecretBasePrimary:: @ 8284C54
+gMetatiles_IslandHarbor:: @ 8284C54
+	.incbin "data/tilesets/secondary/island_harbor/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_IslandHarbor:: @ 8285A54
+	.incbin "data/tilesets/secondary/island_harbor/metatile_attributes.bin"
+
+	.align 1
+gMetatiles_SecretBasePrimary:: @ 8285C54
 	.incbin "data/tilesets/primary/secret_base/metatiles.bin"
 
 	.align 1

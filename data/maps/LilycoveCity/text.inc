@@ -310,9 +310,10 @@ LilycoveCity_Text_EonTicketOldMan_Congratulations::
 	.string "watching the sea and the lighthouse.\p"
 	.string "You remind me of myself in my youth.\n"
 	.string "So full of spirit and determination!\p"
-	.string "I want you to have this.\n"
-	.string "It will take you to SOUTHERN ISLAND!\p"
-	.string "Show it to the ferry sailors, and\n"
+	.string "I want you to have these.\n"
+	.string "They will take you to SOUTHERN ISLAND\n"
+	.string "and BIRTH ISLAND!\p"
+	.string "Show them to the ferry sailors, and\n"
 	.string "they'll know where to take you!$"
 
 LilycoveCity_Text_EonTicketOldMan_Enjoy::
@@ -321,9 +322,24 @@ LilycoveCity_Text_EonTicketOldMan_Enjoy::
 	.string "POKéMON on your adventures!$"
 
 LilycoveCity_Text_EonTicketOldMan_AlreadyGave::
-	.string "Have you visited SOUTHERN ISLAND yet?\p"
-	.string "Show your EON TICKET to the ferry\n"
+	.string "Have you visited SOUTHERN ISLAND or\n"
+	.string "BIRTH ISLAND yet?\p"
+	.string "Show your tickets to the ferry\n"
 	.string "sailors if you haven't already!$"
+
+LilycoveCity_Text_EonTicketOldMan_AuroraTicket::
+	.string "Ah, I see you already have the EON\n"
+	.string "TICKET!\p"
+	.string "I have one more ticket for you.\n"
+	.string "This one will take you to BIRTH ISLAND!\p"
+	.string "Show it to the ferry sailors, and\n"
+	.string "they'll know where to take you!$"
+
+LilycoveCity_Text_EonTicketOldMan_AuroraTicketEnjoy::
+	.string "Enjoy your journey to BIRTH ISLAND,\n"
+	.string "young CHAMPION!\p"
+	.string "May you encounter many wonderful\n"
+	.string "POKéMON on your adventures!$"
 
 LilycoveCity_Text_EonTicketOldMan_BagFull::
 	.string "Oh my! Your BAG is full!\p"

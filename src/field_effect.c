@@ -27,6 +27,7 @@
 #include "constants/event_object_movement.h"
 #include "constants/field_effects.h"
 #include "constants/songs.h"
+#include "constants/maps.h"
 
 #define subsprite_table(ptr) {.subsprites = ptr, .subspriteCount = (sizeof ptr) / (sizeof(struct Subsprite))}
 
@@ -3168,3 +3169,146 @@ void fishE(struct Task *task)
         DestroyTask(FindTaskIdByFunc(sub_8089270));
     }
 }
+
+// Deoxys Rock Movement and Destruction Field Effects
+
+#define SAFE_DIV(a, b) ((b) != 0 ? (a) / (b) : 0)
+
+// Task data for Task_MoveDeoxysRock
+#define tState      data[0]
+#define tSpriteId   data[1]
+#define tTargetX    data[2]
+#define tTargetY    data[3]
+#define tCurX       data[4]
+#define tCurY       data[5]
+#define tVelocityX  data[6]
+#define tVelocityY  data[7]
+#define tMoveSteps  data[8]
+#define tObjEventId data[9]
+
+static void Task_MoveDeoxysRock(u8 taskId);
+static void Task_DestroyDeoxysRock(u8 taskId);
+
+bool8 FldEff_MoveDeoxysRock(void)
+{
+    u8 objectEventId;
+    if (!TryGetObjectEventIdByLocalIdAndMap(gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2], &objectEventId))
+    {
+        struct ObjectEvent *object;
+        int xPos, yPos;
+        u8 taskId;
+        object = &gObjectEvents[objectEventId];
+        xPos = object->currentCoords.x - MAP_OFFSET;
+        yPos = object->currentCoords.y - MAP_OFFSET;
+        xPos = (gFieldEffectArguments[3] - xPos) * 16;
+        yPos = (gFieldEffectArguments[4] - yPos) * 16;
+        ShiftObjectEventCoords(object, gFieldEffectArguments[3] + MAP_OFFSET, gFieldEffectArguments[4] + MAP_OFFSET);
+        taskId = CreateTask(Task_MoveDeoxysRock, 80);
+        gTasks[taskId].tSpriteId = object->spriteId;
+        gTasks[taskId].tTargetX = gSprites[object->spriteId].x + xPos;
+        gTasks[taskId].tTargetY = gSprites[object->spriteId].y + yPos;
+        gTasks[taskId].tMoveSteps = gFieldEffectArguments[5];
+        gTasks[taskId].tObjEventId = objectEventId;
+    }
+    else
+    {
+        // Object not found, remove from active list and re-enable script immediately
+        FieldEffectActiveListRemove(FLDEFF_MOVE_DEOXYS_ROCK);
+        ScriptContext2_Enable();
+    }
+    return FALSE;
+}
+
+static void Task_MoveDeoxysRock(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    struct Sprite *sprite = &gSprites[tSpriteId];
+    switch (tState)
+    {
+        case 0:
+            tCurX = sprite->x << 4;
+            tCurY = sprite->y << 4;
+            tVelocityX = SAFE_DIV(tTargetX * 16 - tCurX, tMoveSteps);
+            tVelocityY = SAFE_DIV(tTargetY * 16 - tCurY, tMoveSteps);
+            tState++;
+            // fallthrough
+        case 1:
+            if (tMoveSteps != 0)
+            {
+                tMoveSteps--;
+                tCurX += tVelocityX;
+                tCurY += tVelocityY;
+                sprite->x = tCurX >> 4;
+                sprite->y = tCurY >> 4;
+            }
+            else
+            {
+                struct ObjectEvent *object = &gObjectEvents[tObjEventId];
+                sprite->x = tTargetX;
+                sprite->y = tTargetY;
+                ShiftStillObjectEventCoords(object);
+                object->triggerGroundEffectsOnStop = TRUE;
+                FieldEffectActiveListRemove(FLDEFF_MOVE_DEOXYS_ROCK);
+                DestroyTask(taskId);
+            }
+            break;
+    }
+}
+
+#undef tState
+#undef tSpriteId
+#undef tTargetX
+#undef tTargetY
+#undef tCurX
+#undef tCurY
+#undef tVelocityX
+#undef tVelocityY
+#undef tMoveSteps
+#undef tObjEventId
+
+// Task data for Task_DestroyDeoxysRock
+#define tState         data[0]
+#define tObjectEventId data[1]
+#define tTimer         data[2]
+#define tCameraTaskId  data[3]
+#define tLocalId       data[4]
+#define tMapNum        data[5]
+#define tMapGroup      data[6]
+
+bool8 FldEff_DestroyDeoxysRock(void)
+{
+    u8 taskId;
+    u8 objectEventId;
+    if (!TryGetObjectEventIdByLocalIdAndMap(gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2], &objectEventId))
+    {
+        taskId = CreateTask(Task_DestroyDeoxysRock, 80);
+        gTasks[taskId].tObjectEventId = objectEventId;
+        gTasks[taskId].tLocalId = gFieldEffectArguments[0];
+        gTasks[taskId].tMapNum = gFieldEffectArguments[1];
+        gTasks[taskId].tMapGroup = gFieldEffectArguments[2];
+    }
+    else
+    {
+        FieldEffectActiveListRemove(FLDEFF_DESTROY_DEOXYS_ROCK);
+    }
+    return FALSE;
+}
+
+static void Task_DestroyDeoxysRock(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    (void)data; // Suppress unused variable warning
+    // Hide the rock object immediately
+    gObjectEvents[tObjectEventId].invisible = TRUE;
+    RemoveObjectEventByLocalIdAndMap(tLocalId, tMapNum, tMapGroup);
+    FieldEffectActiveListRemove(FLDEFF_DESTROY_DEOXYS_ROCK);
+    DestroyTask(taskId);
+}
+
+#undef tState
+#undef tObjectEventId
+#undef tTimer
+#undef tCameraTaskId
+#undef tLocalId
+#undef tMapNum
+#undef tMapGroup

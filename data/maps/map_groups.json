@@ -466,6 +466,8 @@
     "BattleTower_BattleRoom",
     "SouthernIsland_Exterior",
     "SouthernIsland_Interior",
+    "BirthIsland_Exterior",
+    "BirthIsland_Harbor",
     "SafariZone_RestHouse"
   ],
   "gMapGroup_IndoorRoute104Prototype": [
