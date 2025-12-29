@@ -2974,6 +2974,7 @@ static void Anim_RotateUpToSides(struct Sprite *sprite)
     {
         HandleStartAffineAnim(sprite);
         sprite->data[2]++;
+        sprite->data[7] = 0;
     }
 
     TryFlipX(sprite);
