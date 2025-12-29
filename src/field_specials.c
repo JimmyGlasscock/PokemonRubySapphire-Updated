@@ -2355,7 +2355,7 @@ static void Task_DeoxysRockInteraction(u8 taskId)
     if (FlagGet(FLAG_DEOXYS_ROCK_COMPLETE) == TRUE)
     {
         gSpecialVar_Result = DEOXYS_ROCK_COMPLETE;
-        ScriptContext2_Enable();
+        EnableBothScriptContexts();
         DestroyTask(taskId);
     }
     else
@@ -2378,7 +2378,7 @@ static void Task_DeoxysRockInteraction(u8 taskId)
         {
             FlagSet(FLAG_DEOXYS_ROCK_COMPLETE);
             gSpecialVar_Result = DEOXYS_ROCK_SOLVED;
-            ScriptContext2_Enable();
+            EnableBothScriptContexts();
             DestroyTask(taskId);
         }
         else
@@ -2397,7 +2397,6 @@ static void Task_DeoxysRockInteraction(u8 taskId)
 static void ChangeDeoxysRockLevel(u8 rockLevel)
 {
     u8 objectEventId;
-    u8 waitTaskId;
     LoadPalette(&sDeoxysRockPalettes[rockLevel], OBJ_PLTT_ID(ROCK_PAL_ID), PLTT_SIZEOF(4));
     TryGetObjectEventIdByLocalIdAndMap(LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup, &objectEventId);
 
@@ -2406,11 +2405,10 @@ static void ChangeDeoxysRockLevel(u8 rockLevel)
     else
         PlaySE(SE_M_DOUBLE_SLAP); // Success sound (using placeholder)
 
-    // Set up field effect arguments before starting the effect
-    // Use current map location instead of hardcoded values
+    CreateTask(WaitForDeoxysRockMovement, 8);
     gFieldEffectArguments[0] = LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK;
-    gFieldEffectArguments[1] = gSaveBlock1.location.mapNum;
-    gFieldEffectArguments[2] = gSaveBlock1.location.mapGroup;
+    gFieldEffectArguments[1] = (MAP_BIRTH_ISLAND_EXTERIOR & 0xFF);
+    gFieldEffectArguments[2] = (MAP_BIRTH_ISLAND_EXTERIOR >> 8);
     gFieldEffectArguments[3] = sDeoxysRockCoords[rockLevel][0];
     gFieldEffectArguments[4] = sDeoxysRockCoords[rockLevel][1];
 
@@ -2421,34 +2419,21 @@ static void ChangeDeoxysRockLevel(u8 rockLevel)
     else
         gFieldEffectArguments[5] = 5;
 
-    // Create wait task after setting up arguments but before starting effect
-    waitTaskId = CreateTask(WaitForDeoxysRockMovement, 8);
-    gTasks[waitTaskId].data[0] = 0; // Initialize timeout counter
-    
     FieldEffectStart(FLDEFF_MOVE_DEOXYS_ROCK);
     Overworld_SetObjEventTemplateCoords(LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK, sDeoxysRockCoords[rockLevel][0], sDeoxysRockCoords[rockLevel][1]);
 }
 
 static void WaitForDeoxysRockMovement(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-    
-    // Increment timeout counter
-    data[0]++;
-    
-    // Check if field effect completed or timeout after 300 frames (~5 seconds)
-    if (FieldEffectActiveListContains(FLDEFF_MOVE_DEOXYS_ROCK) == FALSE || data[0] > 300)
+    if (FieldEffectActiveListContains(FLDEFF_MOVE_DEOXYS_ROCK) == FALSE)
     {
-        if (FieldEffectActiveListContains(FLDEFF_MOVE_DEOXYS_ROCK) == TRUE)
-            FieldEffectActiveListRemove(FLDEFF_MOVE_DEOXYS_ROCK);
-        ScriptContext2_Enable();
+        EnableBothScriptContexts();
         DestroyTask(taskId);
     }
 }
 
 void DoDeoxysRockInteraction(void)
 {
-    ScriptContext2_Disable();
     CreateTask(Task_DeoxysRockInteraction, 8);
 }
 

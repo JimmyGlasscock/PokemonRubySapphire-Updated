@@ -3212,9 +3212,9 @@ bool8 FldEff_MoveDeoxysRock(void)
     }
     else
     {
-        // Object not found, remove from active list and re-enable script immediately
+        // Object not found - remove from active list immediately and re-enable script
         FieldEffectActiveListRemove(FLDEFF_MOVE_DEOXYS_ROCK);
-        ScriptContext2_Enable();
+        EnableBothScriptContexts();
     }
     return FALSE;
 }
