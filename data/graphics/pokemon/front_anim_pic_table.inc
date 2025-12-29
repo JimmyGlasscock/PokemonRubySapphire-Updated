@@ -250,7 +250,7 @@ gMonFrontAnimPicTable::
 	obj_tiles gMonFrontAnimPic_Pupitar, 0x800, SPECIES_PUPITAR
 	obj_tiles gMonFrontAnimPic_Tyranitar, 0x800, SPECIES_TYRANITAR
 	obj_tiles gMonFrontAnimPic_Lugia, 0x800, SPECIES_LUGIA
-	obj_tiles gMonFrontPic_HoOh, 0x800, SPECIES_HO_OH
+	obj_tiles gMonFrontAnimPic_HoOh, 0x800, SPECIES_HO_OH
 	obj_tiles gMonFrontAnimPic_Celebi, 0x800, SPECIES_CELEBI
 	obj_tiles gMonFrontPic_QuestionMark, 0x800, SPECIES_OLD_UNOWN_B
 	obj_tiles gMonFrontPic_QuestionMark, 0x800, SPECIES_OLD_UNOWN_C
