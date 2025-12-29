@@ -61,18 +61,14 @@ Route111_Text_16FA22:: @ 816FA22
 
 Route111_Text_16FA54:: @ 816FA54
 	.string "You found the ROOT FOSSIL.\p"
-	.string "If this FOSSIL is taken, the other\n"
-	.string "one will sink into the sand...\p"
-	.string "Take the ROOT FOSSIL anyway?$"
+	.string "Take the ROOT FOSSIL?$"
 
 Route111_Text_16FACE:: @ 816FACE
 	.string "{PLAYER} left the ROOT FOSSIL alone.$"
 
 Route111_Text_16FAED:: @ 816FAED
 	.string "You found the CLAW FOSSIL.\p"
-	.string "If this FOSSIL is taken, the other\n"
-	.string "one will sink into the sand...\p"
-	.string "Take the CLAW FOSSIL anyway?$"
+	.string "Take the CLAW FOSSIL?$"
 
 Route111_Text_16FB67:: @ 816FB67
 	.string "{PLAYER} left the CLAW FOSSIL alone.$"

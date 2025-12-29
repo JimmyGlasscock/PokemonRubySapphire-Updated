@@ -61,8 +61,6 @@ Route111_Text_16FA22:: @ 816FA22
 
 Route111_Text_16FA54:: @ 816FA54
 	.string "Du hast das WURZELFOSSIL gefunden.\p"
-	.string "Wenn du dieses FOSSIL nimmst,\n"
-	.string "versinkt das andere im Sand...\p"
 	.string "Willst du das WURZELFOSSIL nehmen?$"
 
 Route111_Text_16FACE:: @ 816FACE
@@ -70,8 +68,6 @@ Route111_Text_16FACE:: @ 816FACE
 
 Route111_Text_16FAED:: @ 816FAED
 	.string "Du hast das KLAUENFOSSIL gefunden.\p"
-	.string "Wenn du dieses FOSSIL nimmst,\n"
-	.string "versinkt das andere im Sand...\p"
 	.string "Willst du das KLAUENFOSSIL nehmen?$"
 
 Route111_Text_16FB67:: @ 816FB67

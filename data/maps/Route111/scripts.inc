@@ -55,12 +55,7 @@ Route111_EventScript_150023:: @ 8150023
 	giveitem ITEM_ROOT_FOSSIL
 	closemessage
 	setflag FLAG_HIDE_ROOT_FOSSIL
-	setflag FLAG_HIDE_CLAW_FOSSIL
 	removeobject 34
-	delay 30
-	applymovement 35, Route111_Movement_1500AF
-	waitmovement 0
-	removeobject 35
 	releaseall
 	end
 
@@ -77,12 +72,7 @@ Route111_EventScript_150069:: @ 8150069
 	giveitem ITEM_CLAW_FOSSIL
 	closemessage
 	setflag FLAG_HIDE_CLAW_FOSSIL
-	setflag FLAG_HIDE_ROOT_FOSSIL
 	removeobject 35
-	delay 30
-	applymovement 34, Route111_Movement_1500AF
-	waitmovement 0
-	removeobject 34
 	releaseall
 	end
 
