@@ -1796,12 +1796,12 @@ const struct SpriteFrameImage gObjectEventPicTable_Deoxys[] = {
     overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
     overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
     overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
-    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
     overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
-    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
     overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
-    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
-    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0)
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1)
 };
 
 const struct SpriteFrameImage gObjectEventPicTable_BirthIslandStone[] = {
