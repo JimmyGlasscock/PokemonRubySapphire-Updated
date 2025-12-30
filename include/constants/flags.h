@@ -411,6 +411,8 @@
 #define FLAG_HIDE_BRENDAN_UPSTAIRS          0x2F8
 #define FLAG_HIDE_MOVING_TRUCK_BRENDAN      0x2F9
 #define FLAG_HIDE_MOVING_TRUCK_MAY          0x2FA
+#define FLAG_HIDE_DEOXYS                    0x2FB
+#define FLAG_HIDE_BIRTH_ISLAND_DEOXYS_TRIANGLE 0x2FC
 
 #define FLAG_HIDE_VICTOR_WINSTRATE          0x300
 #define FLAG_HIDE_VICTORIA_WINSTRATE        0x301
@@ -893,6 +895,13 @@
 #define FLAG_LANDMARK_BERRY_MASTERS_HOUSE (SYSTEM_FLAGS + 0x63)
 #define FLAG_ARRIVED_AT_MARINE_CAVE_EMERGE_SPOT (SYSTEM_FLAGS + 0x64)
 
+#define FLAG_MAP_SCRIPT_CHECKED_DEOXYS              (SYSTEM_FLAGS + 0x65)
+#define FLAG_DEOXYS_ROCK_COMPLETE                   (SYSTEM_FLAGS + 0x66)
+#define FLAG_ENABLE_SHIP_BIRTH_ISLAND               (SYSTEM_FLAGS + 0x67)
+#define FLAG_BATTLED_DEOXYS                         (SYSTEM_FLAGS + 0x68)
+#define FLAG_DEFEATED_DEOXYS                        (SYSTEM_FLAGS + 0x69)
+#define FLAG_RECEIVED_AURORA_TICKET                 (SYSTEM_FLAGS + 0x6A)
+#define FLAG_SHOWN_AURORA_TICKET                    (SYSTEM_FLAGS + 0x6B)
 
 // Daily Flags. These 64 flags are cleared once per day.
 #define DAILY_FLAGS_START (SYSTEM_FLAGS + 0xC0)

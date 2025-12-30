@@ -12,6 +12,17 @@ LilycoveCity_Harbor_EventScript_1598A2:: @ 81598A2
 	checkitem ITEM_EON_TICKET, 1
 	compare VAR_RESULT, 1
 	goto_if_eq LilycoveCity_Harbor_EventScript_1599EE
+	checkitem ITEM_AURORA_TICKET, 1
+	compare VAR_RESULT, 1
+	goto_if_eq LilycoveCity_Harbor_EventScript_CheckAuroraTicket
+	goto LilycoveCity_Harbor_EventScript_1598BA
+	end
+
+LilycoveCity_Harbor_EventScript_CheckAuroraTicket::
+	goto_if_unset FLAG_SYS_GAME_CLEAR, LilycoveCity_Harbor_EventScript_1598BA
+	goto_if_unset FLAG_ENABLE_SHIP_BIRTH_ISLAND, LilycoveCity_Harbor_EventScript_1598BA
+	goto_if_set FLAG_SHOWN_AURORA_TICKET, LilycoveCity_Harbor_EventScript_1598BA
+	setflag FLAG_SHOWN_AURORA_TICKET
 	goto LilycoveCity_Harbor_EventScript_1598BA
 	end
 
@@ -25,19 +36,62 @@ LilycoveCity_Harbor_EventScript_1598CD:: @ 81598CD
 	msgbox LilycoveCity_Harbor_Text_18B36F, MSGBOX_DEFAULT
 	checkitem ITEM_SS_TICKET, 1
 	compare VAR_RESULT, 0
-	goto_if_eq LilycoveCity_Harbor_EventScript_159929
+	goto_if_eq LilycoveCity_Harbor_EventScript_CheckAuroraTicketOnly
 	message LilycoveCity_Harbor_Text_18B406
 	waitmessage
 	goto LilycoveCity_Harbor_EventScript_1598F1
 	end
 
+LilycoveCity_Harbor_EventScript_CheckAuroraTicketOnly::
+	checkitem ITEM_AURORA_TICKET, 1
+	compare VAR_RESULT, 0
+	goto_if_eq LilycoveCity_Harbor_EventScript_159929
+	goto_if_unset FLAG_ENABLE_SHIP_BIRTH_ISLAND, LilycoveCity_Harbor_EventScript_159929
+	msgbox EventTicket_Text_OddTicketGetOnBoard, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LilycoveCity_Harbor_EventScript_1599E4
+	call LilycoveCity_Harbor_EventScript_15998A
+	special ScrSpecial_HealPlayerParty
+	setvar VAR_0x8004, 2
+	call Common_EventScript_FerryDepart
+	warp MAP_BIRTH_ISLAND_HARBOR, 255, 8, 4
+	waitstate
+	release
+	end
+
 LilycoveCity_Harbor_EventScript_1598F1:: @ 81598F1
+	checkitem ITEM_AURORA_TICKET, 1
+	compare VAR_RESULT, 1
+	goto_if_eq LilycoveCity_Harbor_EventScript_1598F1_CheckAuroraFlag
 	multichoicedefault 18, 6, 56, 2, 0
 	switch VAR_RESULT
 	case 0, LilycoveCity_Harbor_EventScript_159933
 	case 1, LilycoveCity_Harbor_EventScript_15995B
 	case 2, LilycoveCity_Harbor_EventScript_1599E4
 	case 127, LilycoveCity_Harbor_EventScript_1599E4
+	end
+
+LilycoveCity_Harbor_EventScript_1598F1_CheckAuroraFlag::
+	goto_if_unset FLAG_ENABLE_SHIP_BIRTH_ISLAND, LilycoveCity_Harbor_EventScript_1598F1
+	multichoicedefault 18, 6, 68, 2, 0
+	switch VAR_RESULT
+	case 0, LilycoveCity_Harbor_EventScript_159933
+	case 1, LilycoveCity_Harbor_EventScript_15995B
+	case 2, LilycoveCity_Harbor_EventScript_GoToBirthIsland
+	case 3, LilycoveCity_Harbor_EventScript_1599E4
+	case 127, LilycoveCity_Harbor_EventScript_1599E4
+	end
+
+LilycoveCity_Harbor_EventScript_GoToBirthIsland::
+	msgbox EventTicket_Text_HeadedFarAway, MSGBOX_DEFAULT
+	closemessage
+	call LilycoveCity_Harbor_EventScript_15998A
+	special ScrSpecial_HealPlayerParty
+	setvar VAR_0x8004, 2
+	call Common_EventScript_FerryDepart
+	warp MAP_BIRTH_ISLAND_HARBOR, 255, 8, 4
+	waitstate
+	release
 	end
 
 LilycoveCity_Harbor_EventScript_159929:: @ 8159929

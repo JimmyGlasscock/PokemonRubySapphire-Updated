@@ -1384,7 +1384,32 @@ gTilesetPalettes_Ship:: @ 824FC78
 
 	.align 2
 
-gTilesetTiles_SecretBase:: @ 824FE78
+gTilesetTiles_IslandHarbor:: @ 824FE78
+	.incbin "data/tilesets/secondary/island_harbor/tiles.4bpp.lz"
+
+	.align 2
+
+gTilesetPalettes_IslandHarbor:: @ 82506C8
+	.incbin "data/tilesets/secondary/island_harbor/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/island_harbor/palettes/15.gbapal"
+
+	.align 2
+
+gTilesetTiles_SecretBase:: @ 8250EC8
 	.incbin "data/tilesets/primary/secret_base/tiles.4bpp"
 
 	.align 2

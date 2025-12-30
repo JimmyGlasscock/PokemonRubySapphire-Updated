@@ -209,6 +209,8 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Kecleon1;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Kyogre2;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Groudon2;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Rayquaza;
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Deoxys;
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BirthIslandStone;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Zigzagoon;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Pikachu;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Azumarill;
@@ -429,6 +431,8 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_KYOGRE_2] =                  &gObjectEventGraphicsInfo_Kyogre2,
     [OBJ_EVENT_GFX_GROUDON_2] =                 &gObjectEventGraphicsInfo_Groudon2,
     [OBJ_EVENT_GFX_RAYQUAZA] =                  &gObjectEventGraphicsInfo_Rayquaza,
+    [OBJ_EVENT_GFX_DEOXYS] =                    &gObjectEventGraphicsInfo_Deoxys,
+    [OBJ_EVENT_GFX_DEOXYS_TRIANGLE] =           &gObjectEventGraphicsInfo_BirthIslandStone,
     [OBJ_EVENT_GFX_ZIGZAGOON] =                 &gObjectEventGraphicsInfo_Zigzagoon,
     [OBJ_EVENT_GFX_PIKACHU] =                   &gObjectEventGraphicsInfo_Pikachu,
     [OBJ_EVENT_GFX_AZUMARILL] =                 &gObjectEventGraphicsInfo_Azumarill,

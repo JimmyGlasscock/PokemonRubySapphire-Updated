@@ -97,6 +97,8 @@
 
 #define VAR_ROUTE118_STATE         0x4071
 #define VAR_ROUTE119_STATE         0x4072
+#define VAR_DEOXYS_ROCK_STEP_COUNT 0x4034
+#define VAR_DEOXYS_ROCK_LEVEL       0x4035
 
 #define VAR_ROUTE121_STATE         0x4074
 #define VAR_ROUTE128_STATE         0x407B

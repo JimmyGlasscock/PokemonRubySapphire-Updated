@@ -92,6 +92,7 @@
 #define MAPSEC_TERRA_CAVE            0x58
 #define MAPSEC_MARINE_CAVE            0x59
 #define MAPSEC_UNDERWATER_MARINE_CAVE 0x5A
-#define MAPSEC_NONE                  0x5B
+#define MAPSEC_BIRTH_ISLAND           0x5B
+#define MAPSEC_NONE                  0x5C
 
 #endif // GUARD_REGIONMAPSEC_H

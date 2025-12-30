@@ -1,0 +1,13 @@
+#ifndef GUARD_CONSTANTS_FIELD_SPECIALS_H
+#define GUARD_CONSTANTS_FIELD_SPECIALS_H
+
+// Return values for DoDeoxysRockInteraction
+#define DEOXYS_ROCK_FAILED     0
+#define DEOXYS_ROCK_PROGRESSED 1
+#define DEOXYS_ROCK_SOLVED     2
+#define DEOXYS_ROCK_COMPLETE   3
+
+#endif // GUARD_CONSTANTS_FIELD_SPECIALS_H
+
+
+

@@ -660,7 +660,19 @@ gTileset_Ship:: @ 8287204
 
 	.align 2
 
-gTileset_SecretBase:: @ 828721C
+gTileset_IslandHarbor:: @ 828721C
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary tileset
+	.2byte 0 @ padding
+	.4byte gTilesetTiles_IslandHarbor
+	.4byte gTilesetPalettes_IslandHarbor
+	.4byte gMetatiles_IslandHarbor
+	.4byte gMetatileAttributes_IslandHarbor
+	.4byte NULL @ animation callback
+
+	.align 2
+
+gTileset_SecretBase:: @ 8287234
 	.byte FALSE @ is compressed
 	.byte FALSE @ is secondary tileset
 	.2byte 0 @ padding

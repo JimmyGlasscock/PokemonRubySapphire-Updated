@@ -40,6 +40,16 @@
 #include "constants/weather.h"
 #include "constants/region_map_sections.h"
 #include "region_map.h"
+#include "task.h"
+#include "field_effect.h"
+#include "event_object_lock.h"
+#include "palette.h"
+#include "sound.h"
+#include "constants/field_effects.h"
+#include "constants/field_specials.h"
+#include "constants/vars.h"
+#include "constants/flags.h"
+#include "constants/songs.h"
 
 #if ENGLISH
 #define CHAR_DECIMAL_SEPARATOR CHAR_PERIOD
@@ -2300,4 +2310,147 @@ bool32 GetAbnormalWeatherMapNameAndType(void)
     // Sapphire: Return FALSE for Groudon/Terra Cave (Route 115)
     return FALSE;
 #endif
+}
+
+#define DEOXYS_ROCK_LEVELS 11
+#define ROCK_PAL_ID 10
+#define LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK 0
+#define LOCALID_BIRTH_ISLAND_DEOXYS 1
+
+static void ChangeDeoxysRockLevel(u8 rockLevel);
+static void WaitForDeoxysRockMovement(u8 taskId);
+
+static const u16 sDeoxysRockPalettes[DEOXYS_ROCK_LEVELS][16] = {
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_1.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_2.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_3.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_4.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_5.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_6.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_7.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_8.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_9.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_10.gbapal"),
+    INCBIN_U16("graphics/field_effects/palettes/deoxys_rock_11.gbapal"),
+};
+
+static const u8 sDeoxysRockCoords[DEOXYS_ROCK_LEVELS][2] = {
+    { 15, 12 },
+    { 11, 14 },
+    { 15,  8 },
+    { 19, 14 },
+    { 12, 11 },
+    { 18, 11 },
+    { 15, 14 },
+    { 11, 14 },
+    { 19, 14 },
+    { 15, 15 },
+    { 15, 10 },
+};
+
+static void Task_DeoxysRockInteraction(u8 taskId)
+{
+    static const u8 sStoneMaxStepCounts[DEOXYS_ROCK_LEVELS - 1] = { 4, 8, 8, 8, 4, 4, 4, 6, 3, 3 };
+
+    if (FlagGet(FLAG_DEOXYS_ROCK_COMPLETE) == TRUE)
+    {
+        gSpecialVar_Result = DEOXYS_ROCK_COMPLETE;
+        EnableBothScriptContexts();
+        DestroyTask(taskId);
+    }
+    else
+    {
+        u16 rockLevel = VarGet(VAR_DEOXYS_ROCK_LEVEL);
+        u16 stepCount = VarGet(VAR_DEOXYS_ROCK_STEP_COUNT);
+
+        VarSet(VAR_DEOXYS_ROCK_STEP_COUNT, 0);
+        if (rockLevel != 0 && sStoneMaxStepCounts[rockLevel - 1] < stepCount)
+        {
+            // Player failed to take the shortest path to the stone, so it resets.
+            ChangeDeoxysRockLevel(0);
+            VarSet(VAR_DEOXYS_ROCK_LEVEL, 0);
+            gSpecialVar_Result = DEOXYS_ROCK_FAILED;
+            // Wait for the reset movement to complete before re-enabling script
+            CreateTask(WaitForDeoxysRockMovement, 8);
+            DestroyTask(taskId);
+        }
+        else if (rockLevel == DEOXYS_ROCK_LEVELS - 1)
+        {
+            FlagSet(FLAG_DEOXYS_ROCK_COMPLETE);
+            gSpecialVar_Result = DEOXYS_ROCK_SOLVED;
+            EnableBothScriptContexts();
+            DestroyTask(taskId);
+        }
+        else
+        {
+            rockLevel++;
+            ChangeDeoxysRockLevel(rockLevel);
+            VarSet(VAR_DEOXYS_ROCK_LEVEL, rockLevel);
+            gSpecialVar_Result = DEOXYS_ROCK_PROGRESSED;
+            // Wait for the movement to complete before re-enabling script
+            // WaitForDeoxysRockMovement is already created by ChangeDeoxysRockLevel
+            DestroyTask(taskId);
+        }
+    }
+}
+
+static void ChangeDeoxysRockLevel(u8 rockLevel)
+{
+    u8 objectEventId;
+    LoadPalette(&sDeoxysRockPalettes[rockLevel], OBJ_PLTT_ID(ROCK_PAL_ID), PLTT_SIZEOF(4));
+    TryGetObjectEventIdByLocalIdAndMap(LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK, gSaveBlock1.location.mapNum, gSaveBlock1.location.mapGroup, &objectEventId);
+
+    if (rockLevel == 0)
+        PlaySE(SE_M_CONFUSE_RAY); // Failure sound
+    else
+        PlaySE(SE_M_DOUBLE_SLAP); // Success sound (using placeholder)
+
+    CreateTask(WaitForDeoxysRockMovement, 8);
+    gFieldEffectArguments[0] = LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK;
+    gFieldEffectArguments[1] = (MAP_BIRTH_ISLAND_EXTERIOR & 0xFF);
+    gFieldEffectArguments[2] = (MAP_BIRTH_ISLAND_EXTERIOR >> 8);
+    gFieldEffectArguments[3] = sDeoxysRockCoords[rockLevel][0];
+    gFieldEffectArguments[4] = sDeoxysRockCoords[rockLevel][1];
+
+    // Set number of movement steps.
+    // Resetting for failure is slow, successful movement is fast.
+    if (rockLevel == 0)
+        gFieldEffectArguments[5] = 60;
+    else
+        gFieldEffectArguments[5] = 5;
+
+    FieldEffectStart(FLDEFF_MOVE_DEOXYS_ROCK);
+    Overworld_SetObjEventTemplateCoords(LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK, sDeoxysRockCoords[rockLevel][0], sDeoxysRockCoords[rockLevel][1]);
+}
+
+static void WaitForDeoxysRockMovement(u8 taskId)
+{
+    if (FieldEffectActiveListContains(FLDEFF_MOVE_DEOXYS_ROCK) == FALSE)
+    {
+        EnableBothScriptContexts();
+        DestroyTask(taskId);
+    }
+}
+
+void DoDeoxysRockInteraction(void)
+{
+    CreateTask(Task_DeoxysRockInteraction, 8);
+}
+
+void IncrementBirthIslandRockStepCount(void)
+{
+    u16 stepCount = VarGet(VAR_DEOXYS_ROCK_STEP_COUNT);
+    if (gSaveBlock1.location.mapNum == 11 && gSaveBlock1.location.mapGroup == 26)
+    {
+        if (++stepCount > 99)
+            VarSet(VAR_DEOXYS_ROCK_STEP_COUNT, 0);
+        else
+            VarSet(VAR_DEOXYS_ROCK_STEP_COUNT, stepCount);
+    }
+}
+
+void SetDeoxysRockPalette(void)
+{
+    LoadPalette(&sDeoxysRockPalettes[(u8)VarGet(VAR_DEOXYS_ROCK_LEVEL)], OBJ_PLTT_ID(ROCK_PAL_ID), PLTT_SIZEOF(4));
+    BlendPalettes(1 << (ROCK_PAL_ID + 16), 16, 0);
 }

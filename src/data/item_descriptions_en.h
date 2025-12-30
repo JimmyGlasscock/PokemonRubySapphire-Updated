@@ -1040,6 +1040,11 @@ static const u8 gItemDescription_EonTicket[] = _(
     "ferry to a distant\n"
     "southern island.");
 
+static const u8 gItemDescription_AuroraTicket[] = _(
+    "A ticket required\n"
+    "to board the ship\n"
+    "to BIRTH ISLAND.");
+
 static const u8 gItemDescription_RedOrb[] = _(
     "A red, glowing orb\n"
     "said to contain an\n"

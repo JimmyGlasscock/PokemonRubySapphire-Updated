@@ -436,7 +436,9 @@
 #define MAP_BATTLE_TOWER_BATTLE_ROOM (8 | (26 << 8))
 #define MAP_SOUTHERN_ISLAND_EXTERIOR (9 | (26 << 8))
 #define MAP_SOUTHERN_ISLAND_INTERIOR (10 | (26 << 8))
-#define MAP_SAFARI_ZONE_REST_HOUSE   (11 | (26 << 8))
+#define MAP_BIRTH_ISLAND_EXTERIOR    (11 | (26 << 8))
+#define MAP_BIRTH_ISLAND_HARBOR      (12 | (26 << 8))
+#define MAP_SAFARI_ZONE_REST_HOUSE   (13 | (26 << 8))
 
 // gMapGroup_IndoorRoute104Prototype
 #define MAP_ROUTE104_PROTOTYPE                          (0 | (27 << 8))

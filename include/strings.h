@@ -628,6 +628,7 @@ extern const u8 OtherText_YellowShard[];
 extern const u8 OtherText_BlueShard[];
 extern const u8 OtherText_GreenShard[];
 extern const u8 OtherText_BattleTower[];
+extern const u8 OtherText_BirthIsland[];
 extern const u8 OtherText_Right[];
 extern const u8 OtherText_Left[];
 extern const u8 OtherText_TM32[];

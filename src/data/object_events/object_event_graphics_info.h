@@ -3950,6 +3950,44 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Rayquaza = {
     .affineAnims = gDummySpriteAffineAnimTable,
 };
 
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Deoxys = {
+    .tileTag = 0xffff,
+    .paletteTag = 0x111B,
+    .bridgeReflectionPaletteTag = 0x11ff,
+    .size = 512,
+    .width = 32,
+    .height = 32,
+    .paletteSlot = 10,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = FALSE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_FOOT,
+    .oam = &gFieldOamData_32x32,
+    .subspriteTables = gObjectEventSubspriteTables_32x32,
+    .anims = gObjectEventImageAnimTable_Standard,
+    .images = gObjectEventPicTable_Deoxys,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BirthIslandStone = {
+    .tileTag = 0xffff,
+    .paletteTag = 0x111C,
+    .bridgeReflectionPaletteTag = 0x11ff,
+    .size = 512,
+    .width = 32,
+    .height = 32,
+    .paletteSlot = 10,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = TRUE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gFieldOamData_32x32,
+    .subspriteTables = gObjectEventSubspriteTables_32x32,
+    .anims = gObjectEventImageAnimTable_Inanimate,
+    .images = gObjectEventPicTable_BirthIslandStone,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Zigzagoon = {
     .tileTag = 0xffff,
     .paletteTag = 0x1103,

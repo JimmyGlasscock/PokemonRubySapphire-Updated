@@ -65,5 +65,7 @@
 #define FLDEFF_SECRET_BASE_PC_TURN_ON    61
 #define FLDEFF_HALL_OF_FAME_RECORD       62
 #define FLDEFF_USE_TELEPORT              63
+#define FLDEFF_MOVE_DEOXYS_ROCK          64
+#define FLDEFF_DESTROY_DEOXYS_ROCK       65
 
 #endif

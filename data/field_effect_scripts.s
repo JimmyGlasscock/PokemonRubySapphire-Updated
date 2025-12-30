@@ -70,6 +70,8 @@ gFieldEffectScriptPointers:: @ 81D9B34
 	.4byte gFieldEffectScript_SecretBasePCTurnOn
 	.4byte gFieldEffectScript_HallOfFameRecord
 	.4byte gFieldEffectScript_UseTeleport
+	.4byte gFieldEffectScript_MoveDeoxysRock
+	.4byte gFieldEffectScript_DestroyDeoxysRock
 
 gFieldEffectScript_ExclamationMarkIcon: @ 81D9C34
 	callnative FldEff_ExclamationMarkIcon
@@ -328,4 +330,12 @@ gFieldEffectScript_HallOfFameRecord: @ 81D9E32
 
 gFieldEffectScript_UseTeleport: @ 81D9E41
 	callnative FldEff_UseTeleport
+	end
+
+gFieldEffectScript_MoveDeoxysRock: @ FLDEFF_MOVE_DEOXYS_ROCK
+	callnative FldEff_MoveDeoxysRock
+	end
+
+gFieldEffectScript_DestroyDeoxysRock: @ FLDEFF_DESTROY_DEOXYS_ROCK
+	callnative FldEff_DestroyDeoxysRock
 	end

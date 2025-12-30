@@ -2,7 +2,7 @@ TILESETDIR := data/tilesets
 
 $(TILESETDIR)/secondary/petalburg/tiles.4bpp: GFX_OPTS := -num_tiles 159
 $(TILESETDIR)/secondary/rustboro/tiles.4bpp: GFX_OPTS := -num_tiles 498
-$(TILESETDIR)/secondary/dewford/tiles.4bpp: GFX_OPTS := -num_tiles 343
+$(TILESETDIR)/secondary/dewford/tiles.4bpp: GFX_OPTS := -num_tiles 512
 $(TILESETDIR)/secondary/slateport/tiles.4bpp: GFX_OPTS := -num_tiles 504
 $(TILESETDIR)/secondary/mauville/tiles.4bpp: GFX_OPTS := -num_tiles 450
 $(TILESETDIR)/secondary/lavaridge/tiles.4bpp: GFX_OPTS := -num_tiles 348

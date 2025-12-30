@@ -1792,6 +1792,22 @@ const struct SpriteFrameImage gObjectEventPicTable_Rayquaza[] = {
     overworld_frame(gObjectEventPic_Rayquaza, 4, 4, 1)
 };
 
+const struct SpriteFrameImage gObjectEventPicTable_Deoxys[] = {
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 0),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1),
+    overworld_frame(gObjectEventPic_Deoxys, 4, 4, 1)
+};
+
+const struct SpriteFrameImage gObjectEventPicTable_BirthIslandStone[] = {
+    obj_frame_tiles(gObjectEventPic_BirthIslandStone),
+};
+
 const struct SpriteFrameImage gObjectEventPicTable_Zigzagoon[] = {
     overworld_frame(gObjectEventPic_Zigzagoon, 2, 2, 0),
     overworld_frame(gObjectEventPic_Zigzagoon, 2, 2, 1),
