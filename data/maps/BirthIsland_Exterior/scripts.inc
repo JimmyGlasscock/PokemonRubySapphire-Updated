@@ -1,70 +1,66 @@
 BirthIsland_Exterior_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, BirthIsland_Exterior_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, BirthIsland_Exterior_OnResume
+	map_script MAP_SCRIPT_ON_TRANSITION, BirthIsland_Exterior_OnTransition
 	.byte 0
 
-BirthIsland_Exterior_OnTransition:
-	setflag FLAG_MAP_SCRIPT_CHECKED_DEOXYS
-	call_if_set FLAG_BATTLED_DEOXYS, BirthIsland_Exterior_EventScript_HideDeoxys
-	call_if_unset FLAG_BATTLED_DEOXYS, BirthIsland_Exterior_EventScript_ShowDeoxys
-	end
-
-BirthIsland_Exterior_EventScript_HideDeoxys::
-	setflag FLAG_HIDE_DEOXYS
-	return
-
-BirthIsland_Exterior_EventScript_ShowDeoxys::
-	goto_if_set FLAG_DEFEATED_DEOXYS, BirthIsland_Exterior_EventScript_ShowDeoxys_End
-	clearflag FLAG_HIDE_DEOXYS
-BirthIsland_Exterior_EventScript_ShowDeoxys_End:
-	return
-
-BirthIsland_Exterior_OnResume:
+BirthIsland_Exterior_OnResume::
 	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, BirthIsland_Exterior_EventScript_TryRemoveDeoxys
 	end
 
 BirthIsland_Exterior_EventScript_TryRemoveDeoxys::
-	specialvar VAR_RESULT, GetBattleOutcome
-	compare VAR_RESULT, B_OUTCOME_CAUGHT
-	goto_if_ne BirthIsland_Exterior_EventScript_TryRemoveDeoxys_End
-	removeobject 0
-BirthIsland_Exterior_EventScript_TryRemoveDeoxys_End:
+	removeobject 1
 	return
 
+BirthIsland_Exterior_OnTransition::
+	setvar VAR_TEMP_0, 0
+	checkflag FLAG_DEFEATED_DEOXYS
+	goto_if_eq BirthIsland_Exterior_OnTransition_Hide
+	clearflag FLAG_HIDE_DEOXYS
+	end
+
+BirthIsland_Exterior_OnTransition_Hide::
+	setflag FLAG_HIDE_DEOXYS
+	setvar VAR_TEMP_0, 1
+	end
+
 BirthIsland_Exterior_EventScript_Deoxys::
-	lock
+	checkflag FLAG_DEFEATED_DEOXYS
+	goto_if_eq BirthIsland_Exterior_EventScript_Deoxys_End
+	lockall
 	faceplayer
-	applymovement 0, Common_Movement_ExclamationMark
+	applymovement 1, Common_Movement_ExclamationMark
 	waitmovement 0
 	waitse
 	playmoncry SPECIES_DEOXYS, 2
 	delay 40
 	waitmoncry
 	playbgm MUS_ENCOUNTER_INTENSE, FALSE
-	setvar VAR_LAST_TALKED, 0
+	setvar VAR_LAST_TALKED, 1
 	setwildbattle SPECIES_DEOXYS, 30, ITEM_NONE
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special ScrSpecial_StartSouthernIslandBattle
 	waitstate
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
-	removeobject 0
-	setflag FLAG_HIDE_DEOXYS
+	setflag FLAG_DEFEATED_DEOXYS
+	removeobject VAR_LAST_TALKED
 	specialvar VAR_RESULT, GetBattleOutcome
 	compare VAR_RESULT, B_OUTCOME_WON
-	goto_if_eq BirthIsland_Exterior_EventScript_DefeatedDeoxys
+	call_if_eq BirthIsland_Exterior_EventScript_DefeatedDeoxys
+	compare VAR_RESULT, B_OUTCOME_CAUGHT
+	call_if_eq BirthIsland_Exterior_EventScript_DefeatedDeoxys
 	compare VAR_RESULT, B_OUTCOME_RAN
-	goto_if_eq BirthIsland_Exterior_EventScript_RanFromDeoxys
+	call_if_eq BirthIsland_Exterior_EventScript_RanFromDeoxys
 	compare VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED
-	goto_if_eq BirthIsland_Exterior_EventScript_RanFromDeoxys
-	setflag FLAG_BATTLED_DEOXYS
-	release
+	call_if_eq BirthIsland_Exterior_EventScript_RanFromDeoxys
+	releaseall
+	end
+
+BirthIsland_Exterior_EventScript_Deoxys_End::
+	releaseall
 	end
 
 BirthIsland_Exterior_EventScript_DefeatedDeoxys::
-	setflag FLAG_DEFEATED_DEOXYS
-	setvar VAR_0x8004, SPECIES_DEOXYS
-	goto Common_EventScript_LegendaryFlewAway
-	end
+	return
 
 BirthIsland_Exterior_EventScript_RanFromDeoxys::
 	setvar VAR_0x8004, SPECIES_DEOXYS
