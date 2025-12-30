@@ -31,6 +31,10 @@ EventTicket_Text_OddTicketGetOnBoard:
 	.string "as a sailing man!\p"
 	.string "Get on board, youngster!$"
 
+EventTicket_Text_HeadedFarAway:
+	.string "We're headed far away, so\n"
+	.string "prepare accordingly. All aboard!$"
+
 FarawayIsland_Entrance_Text_SailorReturn:
 	.string "CAPT. BRINEY can be so maddeningly\n"
 	.string "fickle…\p"
