@@ -375,6 +375,8 @@
 #define MUS_GSC_RADIO_TOWER_TAKEOVER 467
 
 #define SE_RG_BALL_CLICK             468 // FRLG Poké Ball capture click
+#define MUS_RG_VS_DEOXYS            469 // MUS_RG_VS_DEO
+#define MUS_RG_ENCOUNTER_DEOXYS      470 // MUS_RG_DEOEYE
 
 #define MUS_ROUTE_118  0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
 

@@ -31,7 +31,7 @@ BirthIsland_Exterior_EventScript_Deoxys::
 	playmoncry SPECIES_DEOXYS, 2
 	delay 40
 	waitmoncry
-	playbgm MUS_ENCOUNTER_INTENSE, FALSE
+	playbgm MUS_RG_ENCOUNTER_DEOXYS, FALSE
 	setvar VAR_LAST_TALKED, 1
 	setwildbattle SPECIES_DEOXYS, 30, ITEM_NONE
 	setflag FLAG_SYS_CTRL_OBJ_DELETE

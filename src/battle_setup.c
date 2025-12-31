@@ -578,10 +578,23 @@ void BattleSetup_StartScriptedWildBattle(void)
 
 void ScrSpecial_StartSouthernIslandBattle(void)
 {
+    u16 species;
+    u16 music = 0;
+    u8 transition = GetWildBattleTransition();
+    
     ScriptContext2_Enable();
     gMain.savedCallback = CB2_EndScriptedWildBattle;
     gBattleTypeFlags = BATTLE_TYPE_LEGENDARY;
-    CreateBattleStartTask(GetWildBattleTransition(), 0);
+    
+    // Check if this is a Deoxys battle and use appropriate music
+    species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
+    if (species == SPECIES_DEOXYS)
+    {
+        music = MUS_RG_VS_DEOXYS;
+        transition = B_TRANSITION_BLUR;
+    }
+    
+    CreateBattleStartTask(transition, music);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
 }

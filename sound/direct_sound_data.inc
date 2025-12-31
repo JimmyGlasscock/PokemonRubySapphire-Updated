@@ -2021,3 +2021,27 @@ DirectSoundWaveData_Phoneme_Vowel57:: @ 8654170
 	.align 2
 DirectSoundWaveData_sc88pro_accordion_duplicate:: @ 8654C20
 	.incbin "sound/direct_sound_samples/synth/sc88pro_accordion_duplicate.bin"
+
+	.align 2
+DirectSoundWaveData_sd90_classical_overdrive_guitar::
+	.incbin "sound/direct_sound_samples/sd90_classical_overdrive_guitar.bin"
+
+	.align 2
+DirectSoundWaveData_sd90_classical_distortion_guitar_high::
+	.incbin "sound/direct_sound_samples/sd90_classical_distortion_guitar_high.bin"
+
+	.align 2
+DirectSoundWaveData_sd90_special_scream_drive::
+	.incbin "sound/direct_sound_samples/sd90_special_scream_drive.bin"
+
+	.align 2
+DirectSoundWaveData_sd90_classical_distortion_guitar_low::
+	.incbin "sound/direct_sound_samples/sd90_classical_distortion_guitar_low.bin"
+
+	.align 2
+DirectSoundWaveData_sd90_classical_whistle::
+	.incbin "sound/direct_sound_samples/sd90_classical_whistle.bin"
+
+	.align 2
+DirectSoundWaveData_classical_choir_voice_ahhs::
+	.incbin "sound/direct_sound_samples/classical_choir_voice_ahhs.bin"

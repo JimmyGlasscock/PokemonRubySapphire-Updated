@@ -469,6 +469,8 @@ gSongTable:: @ 845548C
 	song mus_vs_aqua_magma_leader, 0, 0
 	song mus_radio_tower_takeover, 0, 0
 	song se_rg_ball_click, 1, 1
+	song mus_rg_vs_deoxys, 0, 0
+	song mus_rg_encounter_deoxys, 0, 0
 
 	.align 2
 dummy_song_header:      @ 845632C

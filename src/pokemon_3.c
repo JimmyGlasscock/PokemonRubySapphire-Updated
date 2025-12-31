@@ -1143,6 +1143,14 @@ u16 GetMUS_ForBattle(void)
             return MUS_VS_TRAINER;
         }
     }
+    // Check if this is a Deoxys battle
+    // We check the enemy party - it should be set up by the time this is called during battle init
+    if (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY)
+    {
+        u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
+        if (species == SPECIES_DEOXYS)
+            return MUS_RG_VS_DEOXYS;
+    }
     return MUS_VS_WILD;
 }
 
@@ -1158,9 +1166,9 @@ void current_map_music_set__default_for_battle(u16 song)
     ResetMapMusic();
     m4aMPlayAllStop();
     if (song)
-        PlayNewMapMusic(song);
+        PlayBGM(song);  // Use PlayBGM for battle music instead of PlayNewMapMusic
     else
-        PlayNewMapMusic(GetMUS_ForBattle());
+        PlayBGM(GetMUS_ForBattle());
 }
 
 const u8 *GetMonSpritePal(struct Pokemon *mon)
