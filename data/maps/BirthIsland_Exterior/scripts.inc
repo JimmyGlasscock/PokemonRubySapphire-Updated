@@ -28,9 +28,6 @@ BirthIsland_Exterior_EventScript_Deoxys::
 	goto_if_eq BirthIsland_Exterior_EventScript_Deoxys_End
 	lockall
 	faceplayer
-	applymovement 1, Common_Movement_ExclamationMark
-	waitmovement 0
-	waitse
 	playmoncry SPECIES_DEOXYS, 2
 	delay 40
 	waitmoncry
