@@ -2570,6 +2570,28 @@ void DoMonFrontSpriteAnimation(struct Sprite *sprite, u16 species, bool8 noCry, 
     }
 }
 
+void TriggerMonFrontSpriteAnimation(struct Sprite *sprite, u16 species)
+{
+    // For two-frame animation Pokemon, switch to animation 1 (the toggling animation)
+    // This must happen before launching the animation task so the sprite uses the correct animation
+    if (HasTwoFramesAnimation(species))
+        StartSpriteAnim(sprite, 1);
+    if (sMonAnimationDelayTable[species - 1] != 0)
+    {
+        // Animation has delay, start delay task
+        u8 taskId = CreateTask(Task_AnimateAfterDelay, 0);
+        STORE_PTR_IN_TASK(sprite, taskId, 0);
+        gTasks[taskId].sAnimId = sMonFrontAnimIdsTable[species - 1];
+        gTasks[taskId].sAnimDelay = sMonAnimationDelayTable[species - 1];
+    }
+    else
+    {
+        // No delay, start animation
+        LaunchAnimationTaskForFrontSprite(sprite, sMonFrontAnimIdsTable[species - 1]);
+    }
+    sprite->callback = SpriteCallbackDummy_2;
+}
+
 void PokemonSummaryDoMonAnimation(struct Sprite *sprite, u16 species, bool8 oneFrame)
 {
     if (!oneFrame && HasTwoFramesAnimation(species))

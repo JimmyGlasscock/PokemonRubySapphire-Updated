@@ -25,6 +25,7 @@
 #include "menu_cursor.h"
 #include "strings2.h"
 #include "ewram.h"
+#include "pokemon_animation.h"
 
 struct EvoInfo
 {
@@ -229,6 +230,21 @@ void EvolutionScene(struct Pokemon* mon, u16 speciesToEvolve, bool8 canStopEvo, 
                              gMonFrontPicCoords[currSpecies].y_offset,
                              (void*)EWRAM,
                              gMonSpriteGfx_Sprite_ptr[1], currSpecies);
+    // Load frame 1 (anim_front) if Pokemon has two-frame animation
+    if (HasTwoFramesAnimation(currSpecies))
+    {
+        // anim_front.png contains both frames stacked vertically, so we need to
+        // decompress it and extract only the bottom frame (second 0x800 bytes)
+        LZ77UnCompWram(gMonFrontAnimPicTable[currSpecies].data, (void*)EWRAM);
+        // Copy only the bottom frame (second 0x800 bytes) to the destination
+        CpuCopy32((void*)EWRAM + 0x800, (u8*)gMonSpriteGfx_Sprite_ptr[1] + 0x800, 0x800);
+    }
+    else
+    {
+        // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+        // This ensures the sprite image table always has valid data for both frames
+        CpuCopy32(gMonSpriteGfx_Sprite_ptr[1], (u8*)gMonSpriteGfx_Sprite_ptr[1] + 0x800, 0x800);
+    }
     pokePal = (void*) GetMonSpritePalStructFromOtIdPersonality(currSpecies, TiD, PiD);
     LoadCompressedPalette(*pokePal, 0x110, 0x20);
 
@@ -246,6 +262,21 @@ void EvolutionScene(struct Pokemon* mon, u16 speciesToEvolve, bool8 canStopEvo, 
                              gMonFrontPicCoords[speciesToEvolve].y_offset,
                              (void*)EWRAM,
                              gMonSpriteGfx_Sprite_ptr[3], speciesToEvolve);
+    // Load frame 1 (anim_front) if Pokemon has two-frame animation
+    if (HasTwoFramesAnimation(speciesToEvolve))
+    {
+        // anim_front.png contains both frames stacked vertically, so we need to
+        // decompress it and extract only the bottom frame (second 0x800 bytes)
+        LZ77UnCompWram(gMonFrontAnimPicTable[speciesToEvolve].data, (void*)EWRAM);
+        // Copy only the bottom frame (second 0x800 bytes) to the destination
+        CpuCopy32((void*)EWRAM + 0x800, (u8*)gMonSpriteGfx_Sprite_ptr[3] + 0x800, 0x800);
+    }
+    else
+    {
+        // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+        // This ensures the sprite image table always has valid data for both frames
+        CpuCopy32(gMonSpriteGfx_Sprite_ptr[3], (u8*)gMonSpriteGfx_Sprite_ptr[3] + 0x800, 0x800);
+    }
     pokePal = (void*) GetMonSpritePalStructFromOtIdPersonality(speciesToEvolve, TiD, PiD);
     LoadCompressedPalette(*pokePal, 0x120, 0x20);
 
@@ -326,6 +357,21 @@ static void CB2_EvolutionSceneLoadGraphics(void)
                              gMonFrontPicCoords[postEvoSpecies].y_offset,
                              (void*)EWRAM,
                              gMonSpriteGfx_Sprite_ptr[3], postEvoSpecies);
+    // Load frame 1 (anim_front) if Pokemon has two-frame animation
+    if (HasTwoFramesAnimation(postEvoSpecies))
+    {
+        // anim_front.png contains both frames stacked vertically, so we need to
+        // decompress it and extract only the bottom frame (second 0x800 bytes)
+        LZ77UnCompWram(gMonFrontAnimPicTable[postEvoSpecies].data, (void*)EWRAM);
+        // Copy only the bottom frame (second 0x800 bytes) to the destination
+        CpuCopy32((void*)EWRAM + 0x800, (u8*)gMonSpriteGfx_Sprite_ptr[3] + 0x800, 0x800);
+    }
+    else
+    {
+        // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+        // This ensures the sprite image table always has valid data for both frames
+        CpuCopy32(gMonSpriteGfx_Sprite_ptr[3], (u8*)gMonSpriteGfx_Sprite_ptr[3] + 0x800, 0x800);
+    }
     pokePal = (void*) GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, TiD, PiD);
     LoadCompressedPalette(*pokePal, 0x120, 0x20);
 
@@ -396,6 +442,21 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void)
                                      gMonFrontPicCoords[postEvoSpecies].y_offset,
                                      (void*)EWRAM,
                                      gMonSpriteGfx_Sprite_ptr[3], postEvoSpecies);
+            // Load frame 1 (anim_front) if Pokemon has two-frame animation
+            if (HasTwoFramesAnimation(postEvoSpecies))
+            {
+                // anim_front.png contains both frames stacked vertically, so we need to
+                // decompress it and extract only the bottom frame (second 0x800 bytes)
+                LZ77UnCompWram(gMonFrontAnimPicTable[postEvoSpecies].data, (void*)EWRAM);
+                // Copy only the bottom frame (second 0x800 bytes) to the destination
+                CpuCopy32((void*)EWRAM + 0x800, (u8*)gMonSpriteGfx_Sprite_ptr[3] + 0x800, 0x800);
+            }
+            else
+            {
+                // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+                // This ensures the sprite image table always has valid data for both frames
+                CpuCopy32(gMonSpriteGfx_Sprite_ptr[3], (u8*)gMonSpriteGfx_Sprite_ptr[3] + 0x800, 0x800);
+            }
             pokePal = (void*) GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, TiD, PiD);
             LoadCompressedPalette(*pokePal, 0x120, 0x20);
             gMain.state++;
@@ -446,6 +507,21 @@ void TradeEvolutionScene(struct Pokemon* mon, u16 speciesToEvolve, u8 preEvoSpri
                              gMonFrontPicCoords[speciesToEvolve].y_offset,
                              (void*)EWRAM,
                              gMonSpriteGfx_Sprite_ptr[1], speciesToEvolve);
+    // Load frame 1 (anim_front) if Pokemon has two-frame animation
+    if (HasTwoFramesAnimation(speciesToEvolve))
+    {
+        // anim_front.png contains both frames stacked vertically, so we need to
+        // decompress it and extract only the bottom frame (second 0x800 bytes)
+        LZ77UnCompWram(gMonFrontAnimPicTable[speciesToEvolve].data, (void*)EWRAM);
+        // Copy only the bottom frame (second 0x800 bytes) to the destination
+        CpuCopy32((void*)EWRAM + 0x800, (u8*)gMonSpriteGfx_Sprite_ptr[1] + 0x800, 0x800);
+    }
+    else
+    {
+        // For Pokemon without two-frame animation, copy frame 0 to frame 1 slot
+        // This ensures the sprite image table always has valid data for both frames
+        CpuCopy32(gMonSpriteGfx_Sprite_ptr[1], (u8*)gMonSpriteGfx_Sprite_ptr[1] + 0x800, 0x800);
+    }
     pokePal = (void*) GetMonSpritePalStructFromOtIdPersonality(speciesToEvolve, TiD, PiD);
     LoadCompressedPalette(*pokePal, 0x120, 0x20);
 
@@ -553,9 +629,11 @@ static void Task_EvolutionScene(u8 taskID)
             gTasks[taskID].tState++;
         }
         break;
-    case 2: // wait for string, play cry
+    case 2: // wait for string, trigger animation and play cry
         if (gWindowTemplate_Contest_MoveDescription.state == 0)
         {
+            // Trigger pre-evo animation
+            TriggerMonFrontSpriteAnimation(&gSprites[sEvoInfo.preEvoSpriteID], gTasks[taskID].tPreEvoSpecies);
             PlayCry1(gTasks[taskID].tPreEvoSpecies, 0);
             gTasks[taskID].tState++;
         }
@@ -627,6 +705,8 @@ static void Task_EvolutionScene(u8 taskID)
         if (IsSEPlaying())
         {
             m4aMPlayAllStop();
+            // Trigger post-evo animation
+            TriggerMonFrontSpriteAnimation(&gSprites[sEvoInfo.postEvoSpriteID], gTasks[taskID].tPostEvoSpecies);
             PlayCry1(gTasks[taskID].tPostEvoSpecies, 0);
             memcpy(&gPlttBufferUnfaded[0x20], (void *)(EWRAM + 0x9000), 0x60);
             BeginNormalPaletteFade(0x1C, 0, 16, 0, RGB(0, 0, 0));
@@ -909,6 +989,8 @@ static void Task_TradeEvolutionScene(u8 taskID)
     case 1:
         if (gUnknown_03004828->window.state == 0)
         {
+            // Trigger pre-evo animation (using the preEvoSpriteID which is passed in)
+            TriggerMonFrontSpriteAnimation(&gSprites[sEvoInfo.preEvoSpriteID], gTasks[taskID].tPreEvoSpecies);
             PlayCry1(gTasks[taskID].tPreEvoSpecies, 0);
             gTasks[taskID].tState++;
         }
@@ -981,6 +1063,8 @@ static void Task_TradeEvolutionScene(u8 taskID)
     case 11:
         if (IsSEPlaying())
         {
+            // Trigger post-evo animation
+            TriggerMonFrontSpriteAnimation(&gSprites[sEvoInfo.postEvoSpriteID], gTasks[taskID].tPostEvoSpecies);
             PlayCry1(gTasks[taskID].tPostEvoSpecies, 0);
             memcpy(&gPlttBufferUnfaded[0x20], (void *)(EWRAM + 0x9000), 0x60);
             BeginNormalPaletteFade(0x1, 0, 16, 0, RGB(0, 0, 0));
