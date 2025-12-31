@@ -2201,8 +2201,12 @@ static void CreateMonListEntry(u8 position, u16 b, u16 screenBase)
 static void CreateMonDexNum(u16 entryNum, u8 x, u8 y, u16 screenBase)
 {
     u8 text[4];
+    u8 blankChar[2];
     u16 unk[2];
     u16 r7 = gPokedexView->pokedexList[entryNum].dexNum;
+    u16 tileNum;
+    u8 *tileData;
+    u8 row;
 
     if (gPokedexView->dexMode == DEX_MODE_HOENN)
         r7 = NationalToHoennOrder(r7);
@@ -2214,7 +2218,30 @@ static void CreateMonDexNum(u16 entryNum, u8 x, u8 y, u16 screenBase)
     text[3] = EOS;
     *(u16 *)(BG_VRAM + screenBase * 0x800 + y * 0x40 + x * 2) = unk[0];
     *(u16 *)(BG_VRAM + screenBase * 0x800 + (y + 1) * 0x40 + x * 2) = unk[1];
-    Menu_PrintTextPixelCoords(text, (x - 15) * 8 + 2, y * 8, 0);  // Add 2 pixels
+    // Render a space character first (this will be our 2-pixel blank)
+    blankChar[0] = CHAR_SPACE;
+    blankChar[1] = EOS;
+    Menu_PrintTextPixelCoords(blankChar, (x - 15) * 8, y * 8, 0);
+    // Now manually modify the space character to be only 2 pixels wide and blank
+    tileNum = gMenuTextTileOffset + (y / 8) * 16 + (x - 15);
+    tileData = (u8 *)(BG_CHAR_ADDR(2) + tileNum * 32);
+    // Clear all but the first 2 pixels to make it a 2-pixel blank character
+    for (row = 0; row < 8; row++)
+    {
+        // Keep only first byte (2 pixels), clear the rest
+        tileData[row * 4 + 1] = 0;
+        tileData[row * 4 + 2] = 0;
+        tileData[row * 4 + 3] = 0;
+        // Ensure first byte is 0 (blank)
+        tileData[row * 4] = 0;
+        // Same for lower tile
+        tileData[16 + row * 4 + 1] = 0;
+        tileData[16 + row * 4 + 2] = 0;
+        tileData[16 + row * 4 + 3] = 0;
+        tileData[16 + row * 4] = 0;
+    }
+    // Now render the number starting 2 pixels after the blank character
+    Menu_PrintTextPixelCoords(text, (x - 15) * 8 + 2, y * 8, 0);
 }
 
 static void CreateCaughtBall(u16 owned, u8 x, u8 y, u16 screenBase)
@@ -4170,12 +4197,39 @@ static void ResetOtherVideoRegisters(u16 a)
 static void PrintEntryScreenDexNum(u16 order, u8 b, u8 c)
 {
     u8 str[4];
+    u8 blankChar[2];
+    u16 tileNum;
+    u8 *tileData;
+    u8 row;
 
     str[0] = CHAR_0 + order / 100;
     str[1] = CHAR_0 + (order % 100) / 10;
     str[2] = CHAR_0 + (order % 100) % 10;
     str[3] = EOS;
-    Menu_PrintTextPixelCoords(str, b * 8 + 2, c * 8, 0);  // Add 2 pixels to x position
+    // Render a space character first (this will be our 2-pixel blank)
+    blankChar[0] = CHAR_SPACE;
+    blankChar[1] = EOS;
+    Menu_PrintTextPixelCoords(blankChar, b * 8, c * 8, 0);
+    // Now manually modify the space character to be only 2 pixels wide and blank
+    tileNum = gMenuTextTileOffset + (c / 8) * 16 + b;
+    tileData = (u8 *)(BG_CHAR_ADDR(2) + tileNum * 32);
+    // Clear all but the first 2 pixels to make it a 2-pixel blank character
+    for (row = 0; row < 8; row++)
+    {
+        // Keep only first byte (2 pixels), clear the rest
+        tileData[row * 4 + 1] = 0;
+        tileData[row * 4 + 2] = 0;
+        tileData[row * 4 + 3] = 0;
+        // Ensure first byte is 0 (blank)
+        tileData[row * 4] = 0;
+        // Same for lower tile
+        tileData[16 + row * 4 + 1] = 0;
+        tileData[16 + row * 4 + 2] = 0;
+        tileData[16 + row * 4 + 3] = 0;
+        tileData[16 + row * 4] = 0;
+    }
+    // Now render the number starting 2 pixels after the blank character
+    Menu_PrintTextPixelCoords(str, b * 8 + 2, c * 8, 0);
 }
 
 static u8 PrintEntryScreenSpeciesName(u16 num, u8 b, u8 c)
