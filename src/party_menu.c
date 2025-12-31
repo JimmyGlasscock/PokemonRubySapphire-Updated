@@ -4,6 +4,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/species.h"
+#include "constants/global.h"
 #include "party_menu.h"
 #include "player_pc.h"
 #include "battle.h"
@@ -2931,6 +2932,14 @@ bool8 PartyMenuUpdateMonHeldItem(struct Pokemon *pkmn, u16 item)
 void PartyMenuTryGiveMonHeldItem(u8 taskId, u16 newItem, TaskFunc c)
 {
     u16 currentItem;
+
+    // Prevent giving EXP SHARE in Modern mode
+    if (newItem == ITEM_EXP_SHARE && gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN)
+    {
+        DisplayPartyMenuMessage(gOtherText_WontHaveAnyEffect, 0);
+        CreateTask(party_menu_link_mon_held_item_object, 5);
+        return;
+    }
 
     gTasks[taskId].func = TaskDummy;
     sub_806E8D0(taskId, newItem, c);

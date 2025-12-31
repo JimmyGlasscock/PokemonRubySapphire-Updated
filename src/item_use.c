@@ -38,6 +38,7 @@
 #include "constants/map_types.h"
 #include "constants/species.h"
 #include "constants/vars.h"
+#include "constants/global.h"
 
 extern void (*gFieldItemUseCallback)(u8);
 extern void (*gFieldCallback)(void);
@@ -827,6 +828,30 @@ void ItemUseOutOfBattle_BlackWhiteFlute(u8 taskId)
         StringExpandPlaceholders(gStringVar4, gOtherText_UsedRepel);
         gTasks[taskId].func = PlayBlackWhiteFluteSound;
         gTasks[taskId].data[15] = 0;
+    }
+}
+
+void ItemUseOutOfBattle_ExpAll(u8 taskId)
+{
+    // Only works in Modern mode
+    if (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN)
+    {
+        // Toggle Exp All
+        gSaveBlock2.expAllEnabled = !gSaveBlock2.expAllEnabled;
+        
+        if (gSaveBlock2.expAllEnabled)
+        {
+            DisplayItemMessageOnField(taskId, gOtherText_ExpAllTurnedOn, CleanUpItemMenuMessage, 1);
+        }
+        else
+        {
+            DisplayItemMessageOnField(taskId, gOtherText_ExpAllTurnedOff, CleanUpItemMenuMessage, 1);
+        }
+    }
+    else
+    {
+        // In Classic mode, cannot use (shouldn't happen, but just in case)
+        DisplayItemMessageOnField(taskId, gOtherText_WontHaveAnyEffect, CleanUpItemMenuMessage, 1);
     }
 }
 

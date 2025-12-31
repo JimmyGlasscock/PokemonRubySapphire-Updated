@@ -8,8 +8,14 @@
 #include "string_util.h"
 #include "strings2.h"
 #include "task.h"
+#include "item.h"
+#include "pokemon.h"
+#include "constants/items.h"
+#include "constants/hold_effects.h"
+#include "constants/species.h"
 
 extern void SetPokemonCryStereo(u32 val);
+extern struct PokemonStorage gPokemonStorage;
 
 // Menu items
 enum
@@ -21,6 +27,7 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
     MENUITEM_VERSION,
+    MENUITEM_EXP_SHARE,
     MENUITEM_CANCEL,
 };
 
@@ -33,7 +40,8 @@ enum
 #define tOptButtonMode  data[5]
 #define tOptFrameType   data[6]
 #define tOptVersion     data[7]
-#define tScrollOffset   data[8]
+#define tOptExpShare    data[8]
+#define tScrollOffset   data[9]
 
 #if ENGLISH
 #define TEXTSPEED_SLOW_LEFT (120)
@@ -68,6 +76,8 @@ static u8   Sound_ProcessInput(u8 selection);
 static u8   FrameType_ProcessInput(u8 selection);
 static u8   ButtonMode_ProcessInput(u8 selection);
 static u8   Version_ProcessInput(u8 selection);
+static u8   ExpShare_ProcessInput(u8 selection);
+static void HandleExpShareModeChange(u8 oldMode, u8 newMode);
 
 static void MainCB(void)
 {
@@ -171,6 +181,7 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].tOptButtonMode  = gSaveBlock2.optionsButtonMode;
         gTasks[taskId].tOptFrameType   = gSaveBlock2.optionsWindowFrameType;
         gTasks[taskId].tOptVersion      = gSaveBlock2.optionsVersion;
+        gTasks[taskId].tOptExpShare     = gSaveBlock2.optionsExpShareMode;
         gTasks[taskId].tScrollOffset    = 0;
 
         Menu_DrawStdWindowFrame(2, 0, 27, 3);   // title box
@@ -225,8 +236,8 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         else
         {
             // Wrap to last item and scroll to show it
-            gTasks[taskId].tMenuSelection = 7;
-            gTasks[taskId].tScrollOffset = 1; // Show last 7 items (indices 1-7)
+            gTasks[taskId].tMenuSelection = MENUITEM_CANCEL;
+            gTasks[taskId].tScrollOffset = 2; // Show last 7 items (indices 2-8, including Cancel)
         }
         if (oldScroll != gTasks[taskId].tScrollOffset)
             RedrawOptionMenuItems(taskId);
@@ -235,13 +246,18 @@ static void Task_OptionMenuProcessInput(u8 taskId)
     else if (gMain.newKeys & DPAD_DOWN)
     {
         u8 oldScroll = gTasks[taskId].tScrollOffset;
-        if (gTasks[taskId].tMenuSelection < 7)
+        if (gTasks[taskId].tMenuSelection < MENUITEM_CANCEL)
         {
             gTasks[taskId].tMenuSelection++;
             // Scroll down if selection is below visible area
             if (gTasks[taskId].tMenuSelection >= gTasks[taskId].tScrollOffset + 7)
             {
                 gTasks[taskId].tScrollOffset = gTasks[taskId].tMenuSelection - 6;
+            }
+            // Ensure Cancel is visible when selected
+            if (gTasks[taskId].tMenuSelection == MENUITEM_CANCEL && gTasks[taskId].tScrollOffset < 2)
+            {
+                gTasks[taskId].tScrollOffset = 2; // Show items 2-8 (including Cancel)
             }
         }
         else
@@ -359,6 +375,23 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                     DrawOptionMenuChoice(gSystemText_Sapphire, 162, yPos, styles[1]);
                 }
                 break;
+            case MENUITEM_EXP_SHARE:
+                {
+                    u8 oldMode = gTasks[taskId].tOptExpShare;
+                    gTasks[taskId].tOptExpShare = ExpShare_ProcessInput(gTasks[taskId].tOptExpShare);
+                    if (oldMode != gTasks[taskId].tOptExpShare)
+                        HandleExpShareModeChange(oldMode, gTasks[taskId].tOptExpShare);
+                }
+                if (visibleIndex < 7)
+                {
+                    u8 styles[2];
+                    u8 sel = gTasks[taskId].tOptExpShare;
+                    styles[0] = (sel == 0) ? 0x8 : 0xF;
+                    styles[1] = (sel == 1) ? 0x8 : 0xF;
+                    DrawOptionMenuChoice(gSystemText_Classic, 120, yPos, styles[0]);
+                    DrawOptionMenuChoice(gSystemText_Modern, 175, yPos, styles[1]);
+                }
+                break;
             }
         }
     }
@@ -373,6 +406,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2.optionsButtonMode      = gTasks[taskId].tOptButtonMode;
     gSaveBlock2.optionsWindowFrameType = gTasks[taskId].tOptFrameType;
     gSaveBlock2.optionsVersion         = gTasks[taskId].tOptVersion;
+    gSaveBlock2.optionsExpShareMode    = gTasks[taskId].tOptExpShare;
 
     BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB(0, 0, 0));
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -401,7 +435,7 @@ static void RedrawOptionMenuItems(u8 taskId)
     Menu_BlankWindowRect(3, 5, 26, 18);
     
     // Draw visible items based on scroll offset
-    for (i = 0; i < 7 && (scrollOffset + i) < 8; i++)
+    for (i = 0; i < 7 && (scrollOffset + i) < 9; i++)
     {
         u8 itemIndex = scrollOffset + i;
         u8 row = visibleRows[i];
@@ -481,6 +515,17 @@ static void RedrawOptionMenuItems(u8 taskId)
                 styles[1] = (sel == 1) ? 0x8 : 0xF;
                 DrawOptionMenuChoice(gSystemText_Ruby, 120, yPos, styles[0]);
                 DrawOptionMenuChoice(gSystemText_Sapphire, 162, yPos, styles[1]);
+            }
+            break;
+        case MENUITEM_EXP_SHARE:
+            Menu_PrintText(gSystemText_ExpShare, 4, row);
+            {
+                u8 styles[2];
+                u8 sel = gTasks[taskId].tOptExpShare;
+                styles[0] = (sel == 0) ? 0x8 : 0xF;
+                styles[1] = (sel == 1) ? 0x8 : 0xF;
+                DrawOptionMenuChoice(gSystemText_Classic, 120, yPos, styles[0]);
+                DrawOptionMenuChoice(gSystemText_Modern, 175, yPos, styles[1]);
             }
             break;
         case MENUITEM_CANCEL:
@@ -666,5 +711,76 @@ static u8 Version_ProcessInput(u8 selection)
     if (gMain.newKeys & (DPAD_LEFT | DPAD_RIGHT))
         selection ^= 1;
     return selection;
+}
+
+static u8 ExpShare_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & (DPAD_LEFT | DPAD_RIGHT))
+        selection ^= 1;
+    return selection;
+}
+
+static void HandleExpShareModeChange(u8 oldMode, u8 newMode)
+{
+    u8 i, j;
+    u16 heldItem;
+    u8 itemData[2];
+    
+    if (oldMode == newMode)
+        return;
+    
+    if (newMode == OPTIONS_EXP_SHARE_MODE_MODERN)
+    {
+        // Switching to Modern mode: Remove Exp Share from all Pokemon and add to bag
+        // Check party Pokemon
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
+                continue;
+            
+            heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
+            if (heldItem == ITEM_EXP_SHARE)
+            {
+                // Remove item from Pokemon
+                itemData[0] = 0;
+                itemData[1] = 0;
+                SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, itemData);
+                
+                // Add to bag
+                AddBagItem(ITEM_EXP_SHARE, 1);
+            }
+        }
+        
+        // Check PC boxes
+        for (i = 0; i < 14; i++)
+        {
+            for (j = 0; j < 30; j++)
+            {
+                struct BoxPokemon *boxMon = &gPokemonStorage.boxes[i][j];
+                if (GetBoxMonData(boxMon, MON_DATA_SPECIES) == SPECIES_NONE)
+                    continue;
+                
+                heldItem = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM);
+                if (heldItem == ITEM_EXP_SHARE)
+                {
+                    // Remove item from box Pokemon
+                    itemData[0] = 0;
+                    itemData[1] = 0;
+                    SetBoxMonData(boxMon, MON_DATA_HELD_ITEM, itemData);
+                    
+                    // Add to bag
+                    AddBagItem(ITEM_EXP_SHARE, 1);
+                }
+            }
+        }
+        
+        // Turn off Exp All by default when switching to Modern
+        gSaveBlock2.expAllEnabled = 0;
+    }
+    else if (newMode == OPTIONS_EXP_SHARE_MODE_CLASSIC)
+    {
+        // Switching to Classic mode: Turn off Exp All
+        gSaveBlock2.expAllEnabled = 0;
+    }
 }
 

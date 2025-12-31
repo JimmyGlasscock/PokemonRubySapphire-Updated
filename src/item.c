@@ -7,6 +7,7 @@
 #include "berry.h"
 #include "string_util.h"
 #include "strings.h"
+#include "constants/global.h"
 
 struct Item
 {
@@ -46,6 +47,11 @@ void CopyItemName(u16 itemId, u8 *string)
     {
         StringCopy(string, GetBerryInfo(ITEM_TO_BERRY(ITEM_ENIGMA_BERRY))->name);
         StringAppend(string, gOtherText_Berry2);
+    }
+    else if (itemId == ITEM_EXP_SHARE && gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN)
+    {
+        // In Modern mode, display as "EXP. ALL"
+        StringCopy(string, (const u8*)"EXP. ALL");
     }
     else
     {

@@ -12,6 +12,7 @@
 #include "constants/items.h"
 #include "data2.h"
 #include "constants/hold_effects.h"
+#include "constants/global.h"
 #include "random.h"
 #include "battle_controllers.h"
 #include "constants/species.h"
@@ -3357,11 +3358,22 @@ static void atk23_getexp(void)
         {
             u16 calculatedExp;
             s32 viaSentIn;
+            s32 alivePartyCount = 0;
+
+            // Check if Modern mode with Exp All enabled
+            bool8 modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
 
             for (viaSentIn = 0, i = 0; i < PARTY_SIZE; i++)
             {
                 if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE || GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0)
                     continue;
+                
+                if (modernExpAll)
+                {
+                    // In Modern mode with Exp All, count all alive party members
+                    alivePartyCount++;
+                }
+                
                 if (gBitTable[i] & sentIn)
                     viaSentIn++;
 
@@ -3378,7 +3390,16 @@ static void atk23_getexp(void)
 
             calculatedExp = gBaseStats[gBattleMons[gBank1].species].expYield * gBattleMons[gBank1].level / 7;
 
-            if (viaExpShare) // at least one mon is getting exp via exp share
+            if (modernExpAll && alivePartyCount > 0)
+            {
+                // Modern mode: All alive party members split the exp equally
+                *exp = calculatedExp / alivePartyCount;
+                if (*exp == 0)
+                    *exp = 1;
+                gExpShareExp = *exp; // All Pokemon get the same exp
+                viaExpShare = alivePartyCount; // Treat all as having exp share
+            }
+            else if (viaExpShare) // at least one mon is getting exp via exp share (Classic mode)
             {
                 *exp = calculatedExp / 2 / viaSentIn;
                 if (*exp == 0)
@@ -3404,6 +3425,9 @@ static void atk23_getexp(void)
     case 2: // set exp value to the poke in expgetter_id and print message
         if (gBattleControllerExecFlags == 0)
         {
+            bool8 modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
+            bool8 shouldGetExp = FALSE;
+            
             item = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HELD_ITEM);
 
             if (item == ITEM_ENIGMA_BERRY)
@@ -3411,13 +3435,9 @@ static void atk23_getexp(void)
             else
                 holdEffect = ItemId_GetHoldEffect(item);
 
-            if (holdEffect != HOLD_EFFECT_EXP_SHARE && !(gBattleStruct->sentInPokes & 1))
-            {
-                gBattleStruct->sentInPokes >>= 1;
-                gBattleStruct->getexpStateTracker = 5;
-                gBattleMoveDamage = 0; // used for exp
-            }
-            else if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == 100)
+            // In Modern mode with Exp All, all alive Pokemon get exp
+            // In Classic mode, only Pokemon that were sent in or have Exp Share get exp
+            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == 100)
             {
                 gBattleStruct->sentInPokes >>= 1;
                 gBattleStruct->getexpStateTracker = 5;
@@ -3425,66 +3445,96 @@ static void atk23_getexp(void)
             }
             else
             {
-                // music change in wild battle after fainting a poke
-                if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && gBattleMons[0].hp && !gBattleStruct->wildVictorySong)
+                // Determine if this Pokemon should get exp
+                if (modernExpAll)
                 {
-                    BattleStopLowHpSound();
-                    PlayBGM(MUS_VICTORY_WILD);
-                    gBattleStruct->wildVictorySong++;
+                    // Modern mode: All alive Pokemon get exp (already checked HP > 0 and level < 100 above)
+                    shouldGetExp = TRUE;
                 }
-
-                if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))
+                else if (holdEffect == HOLD_EFFECT_EXP_SHARE || (gBattleStruct->sentInPokes & 1))
                 {
-                    if (gBattleStruct->sentInPokes & 1)
-                        gBattleMoveDamage = *exp;
-                    else
-                        gBattleMoveDamage = 0;
-
-                    if (holdEffect == HOLD_EFFECT_EXP_SHARE)
-                        gBattleMoveDamage += gExpShareExp;
-                    if (holdEffect == HOLD_EFFECT_LUCKY_EGG)
-                        gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
-                    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-                        gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
-
-                    if (IsTradedMon(&gPlayerParty[gBattleStruct->expGetterMonId]))
+                    // Classic mode: Pokemon that were sent in or have Exp Share
+                    shouldGetExp = TRUE;
+                }
+                
+                if (!shouldGetExp)
+                {
+                    gBattleStruct->sentInPokes >>= 1;
+                    gBattleStruct->getexpStateTracker = 5;
+                    gBattleMoveDamage = 0; // used for exp
+                }
+                else
+                {
+                    // music change in wild battle after fainting a poke
+                    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && gBattleMons[0].hp && !gBattleStruct->wildVictorySong)
                     {
-                        gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
-                        i = 0x14A;
-                    }
-                    else
-                    {
-                        i = 0x149;
+                        BattleStopLowHpSound();
+                        PlayBGM(MUS_VICTORY_WILD);
+                        gBattleStruct->wildVictorySong++;
                     }
 
-                    // get exp getter bank
-                    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+                    if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))
                     {
-                        if (!(gBattlerPartyIndexes[2] != gBattleStruct->expGetterMonId) && !(gAbsentBattlerFlags & gBitTable[2]))
-                            gBattleStruct->expGetterBattlerId = 2;
+                        if (modernExpAll)
+                        {
+                            // Modern mode: All Pokemon get equal exp
+                            gBattleMoveDamage = gExpShareExp;
+                        }
+                        else if (gBattleStruct->sentInPokes & 1)
+                        {
+                            gBattleMoveDamage = *exp;
+                        }
                         else
                         {
-                            if (!(gAbsentBattlerFlags & gBitTable[0]))
-                                gBattleStruct->expGetterBattlerId = 0;
-                            else
-                                gBattleStruct->expGetterBattlerId = 2;
+                            gBattleMoveDamage = 0;
                         }
+
+                        if (!modernExpAll && holdEffect == HOLD_EFFECT_EXP_SHARE)
+                            gBattleMoveDamage += gExpShareExp;
+                        if (holdEffect == HOLD_EFFECT_LUCKY_EGG)
+                            gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+                        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+                            gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+
+                        if (IsTradedMon(&gPlayerParty[gBattleStruct->expGetterMonId]))
+                        {
+                            gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+                            i = 0x14A;
+                        }
+                        else
+                        {
+                            i = 0x149;
+                        }
+
+                        // get exp getter bank
+                        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+                        {
+                            if (!(gBattlerPartyIndexes[2] != gBattleStruct->expGetterMonId) && !(gAbsentBattlerFlags & gBitTable[2]))
+                                gBattleStruct->expGetterBattlerId = 2;
+                            else
+                            {
+                                if (!(gAbsentBattlerFlags & gBitTable[0]))
+                                    gBattleStruct->expGetterBattlerId = 0;
+                                else
+                                    gBattleStruct->expGetterBattlerId = 2;
+                            }
+                        }
+                        else
+                            gBattleStruct->expGetterBattlerId = 0;
+
+                        PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattleStruct->expGetterBattlerId, gBattleStruct->expGetterMonId)
+
+                        // buffer 'gained' or 'gained a boosted'
+                        PREPARE_STRING_BUFFER(gBattleTextBuff2, i)
+
+                        PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gBattleMoveDamage)
+
+                        PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
+                        MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBank1].species);
                     }
-                    else
-                        gBattleStruct->expGetterBattlerId = 0;
-
-                    PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattleStruct->expGetterBattlerId, gBattleStruct->expGetterMonId)
-
-					// buffer 'gained' or 'gained a boosted'
-					PREPARE_STRING_BUFFER(gBattleTextBuff2, i)
-
-                    PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gBattleMoveDamage)
-
-                    PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
-                    MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBank1].species);
+                    gBattleStruct->sentInPokes >>= 1;
+                    gBattleStruct->getexpStateTracker++;
                 }
-                gBattleStruct->sentInPokes >>= 1;
-                gBattleStruct->getexpStateTracker++;
             }
         }
         break;

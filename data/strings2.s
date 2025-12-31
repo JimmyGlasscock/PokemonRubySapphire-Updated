@@ -94,6 +94,15 @@ gSystemText_Ruby:: @ 842C47B
 gSystemText_Sapphire:: @ 842C482
 	.string "{PALETTE 15}SAPPHIRE$"
 
+gSystemText_ExpShare:: @ 842C48C
+	.string "{PALETTE 9}EXP SHARE$"
+
+gSystemText_Classic:: @ 842C499
+	.string "{PALETTE 15}CLASSIC$"
+
+gSystemText_Modern:: @ 842C4A3
+	.string "{PALETTE 15}MODERN$"
+
 SystemText_Pokedex::
 	.string "POKéDEX$"
 SystemText_Pokemon::

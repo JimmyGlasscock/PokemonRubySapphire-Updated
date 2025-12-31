@@ -32,6 +32,7 @@ void ItemUseOutOfBattle_RareCandy(u8);
 void ItemUseOutOfBattle_TMHM(u8);
 void ItemUseOutOfBattle_Repel(u8);
 void ItemUseOutOfBattle_BlackWhiteFlute(u8);
+void ItemUseOutOfBattle_ExpAll(u8);
 void task08_080A1C44(u8);
 u8 CanUseEscapeRopeOnCurrMap(void);
 void ItemUseOutOfBattle_EscapeRope(u8);

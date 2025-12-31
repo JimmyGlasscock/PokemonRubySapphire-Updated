@@ -94,6 +94,8 @@ void SetDefaultOptions(void)
 #else
     gSaveBlock2.optionsVersion = OPTIONS_VERSION_RUBY; // Default to Ruby if neither is defined
 #endif
+    gSaveBlock2.optionsExpShareMode = OPTIONS_EXP_SHARE_MODE_CLASSIC;
+    gSaveBlock2.expAllEnabled = 0;
 }
 
 void ClearPokedexFlags(void)

@@ -9,6 +9,7 @@
 #include "graphics.h"
 #include "item.h"
 #include "constants/items.h"
+#include "constants/global.h"
 #include "item_menu.h"
 #include "item_use.h"
 #include "link.h"
@@ -2309,6 +2310,16 @@ static void DisplayCannotBeHeldMessage(u8 taskId)
 static void HandlePopupMenuAction_Give(u8 taskId)
 {
     PlaySE(SE_SELECT);
+    
+    // Prevent giving EXP SHARE in Modern mode
+    if (gSpecialVar_ItemId == ITEM_EXP_SHARE && gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN)
+    {
+        sub_80A73FC();
+        sub_80A7590();
+        DisplayCannotUseItemMessage(taskId, gOtherText_ExpShareCantBeHeld, sub_80A6024, 1);
+        return;
+    }
+    
     if (sub_80F931C(gSpecialVar_ItemId) == 0)
     {
         sub_80A73FC();

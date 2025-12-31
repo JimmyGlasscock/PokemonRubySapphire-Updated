@@ -855,6 +855,8 @@ struct SaveBlock2 /* 0x02024EA4 */
              u16 optionsBattleSceneOff:1;  // whether battle animations are disabled
              u16 regionMapZoom:1;          // whether the map is zoomed in
              u16 optionsVersion:1;        // OPTIONS_VERSION_[RUBY/SAPPHIRE]
+             u16 optionsExpShareMode:1;    // OPTIONS_EXP_SHARE_MODE_[CLASSIC/MODERN]
+    /*0x16*/ u8 expAllEnabled;            // Whether Exp All is currently enabled (Modern mode only)
     /*0x18*/ struct Pokedex pokedex;
     /*0x90*/ u8 filler_90[0x8];
     /*0x98*/ struct Time localTimeOffset;
