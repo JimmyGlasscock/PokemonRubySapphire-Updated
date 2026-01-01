@@ -210,7 +210,7 @@
   "warp_events": [
     {
       "x": 2,
-      "y": 8,
+      "y": 13,
       "elevation": 0,
       "dest_map": "MAP_DYNAMIC",
       "dest_warp_id": "WARP_ID_SECRET_BASE"

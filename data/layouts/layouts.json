@@ -2174,8 +2174,8 @@
     {
       "id": "LAYOUT_SECRET_BASE_BROWN_CAVE5",
       "name": "SecretBase_BrownCave5_Layout",
-      "width": 26,
-      "height": 22,
+      "width": 15,
+      "height": 15,
       "primary_tileset": "gTileset_SecretBase",
       "secondary_tileset": "gTileset_SecretBaseBrownCave",
       "border_filepath": "data/layouts/SecretBase_BrownCave5/border.bin",
