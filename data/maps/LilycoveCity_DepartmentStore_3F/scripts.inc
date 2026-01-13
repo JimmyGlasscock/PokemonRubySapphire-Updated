@@ -50,6 +50,8 @@ LilycoveCity_DepartmentStore_3F_Items2:: @ 8159FD0
 	.2byte ITEM_WATER_STONE
 	.2byte ITEM_LEAF_STONE
 	.2byte ITEM_TRADE_STONE
+	.2byte ITEM_DEEP_SEA_TOOTH
+	.2byte ITEM_DEEP_SEA_SCALE
 	.2byte ITEM_NONE
 	release
 	end

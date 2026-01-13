@@ -3075,7 +3075,7 @@ const struct Item gItems[] =
     {
         .name = _("DEEPSEATOOTH"),
         .itemId = ITEM_DEEP_SEA_TOOTH,
-        .price = 200,
+        .price = 2100,
         .holdEffect = HOLD_EFFECT_DEEP_SEA_TOOTH,
         .holdEffectParam = 0,
         .description = gItemDescription_DeepSeaTooth,
@@ -3091,7 +3091,7 @@ const struct Item gItems[] =
     {
         .name = _("DEEPSEASCALE"),
         .itemId = ITEM_DEEP_SEA_SCALE,
-        .price = 200,
+        .price = 2100,
         .holdEffect = HOLD_EFFECT_DEEP_SEA_SCALE,
         .holdEffectParam = 0,
         .description = gItemDescription_DeepSeaScale,
