@@ -2693,17 +2693,36 @@ static void sub_80A0958(struct Pokemon *mon)
 
     level = GetMonData(mon, MON_DATA_LEVEL);
 
+    // Print "Lv" at original position
     buffer = SummaryScreen_SetTextColor(gStringVar1, 13);
     buffer[0] = CHAR_LV;
     buffer += 1;
-    buffer = ConvertIntToDecimalString(buffer, level);
-
     buffer[0] = EXT_CTRL_CODE_BEGIN;
     buffer[1] = 0x13;
     buffer[2] = 0x20;
     buffer[3] = EOS;
-
     Menu_PrintText(gStringVar1, 3, 16);
+
+    // Get width of "Lv" and print level number 1 pixel to the right
+    {
+        u8 lvText[5];
+        u8 lvWidth;
+        u8 levelText[12];
+        u8 *levelBuffer;
+        
+        lvText[0] = CHAR_LV;
+        lvText[1] = EOS;
+        lvWidth = GetStringWidthInMenuWindow(lvText);
+        
+        levelBuffer = SummaryScreen_SetTextColor(levelText, 13);
+        levelBuffer = ConvertIntToDecimalString(levelBuffer, level);
+        levelBuffer[0] = EXT_CTRL_CODE_BEGIN;
+        levelBuffer[1] = 0x13;
+        levelBuffer[2] = 0x20;
+        levelBuffer[3] = EOS;
+        
+        Menu_PrintTextPixelCoords(levelText, 3 * 8 + lvWidth + 1, 16 * 8, 1);
+    }
     sub_80A0A2C(mon, 7, 16);
 }
 
