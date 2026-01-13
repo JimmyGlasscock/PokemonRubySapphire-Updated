@@ -602,9 +602,15 @@ void ScrSpecial_StartGroudonKyogreBattle(void)
     gMain.savedCallback = CB2_EndScriptedWildBattle;
     gBattleTypeFlags = BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_KYOGRE_GROUDON;
     if (gGameVersion == VERSION_RUBY)
+    {
+        gBattleTerrain = BATTLE_TERRAIN_CAVE; // Always use cave terrain for Ruby (Groudon)
         CreateBattleStartTask(B_TRANSITION_SHARDS, MUS_VS_KYOGRE_GROUDON); // GROUDON
+    }
     else
+    {
+        gBattleTerrain = BATTLE_TERRAIN_WATER; // Always use water terrain for Sapphire (Kyogre)
         CreateBattleStartTask(B_TRANSITION_RIPPLE, MUS_VS_KYOGRE_GROUDON); // KYOGRE
+    }
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
 }

@@ -673,25 +673,29 @@ void DrawBattleEntryBackground(void)
     {
         if (gBattleTerrain == BATTLE_TERRAIN_WATER)
         {
-            // Force water terrain (e.g., Marine Cave Kyogre)
+            // Force water terrain (e.g., Marine Cave Kyogre, Cave of Origin Kyogre)
             LZDecompressVram(gBattleTerrainAnimTiles_Water, (void *)(VRAM + 0x4000));
             LZDecompressVram(gBattleTerrainAnimTilemap_Water, (void *)(VRAM + 0xE000));
+            LoadCompressedPalette(gBattleTerrainPalette_Water, 0x20, 0x60);
         }
         else if (gBattleTerrain == BATTLE_TERRAIN_CAVE)
         {
-            // Force cave terrain (e.g., Terra Cave Groudon)
+            // Force cave terrain (e.g., Terra Cave Groudon, Cave of Origin Groudon)
             LZDecompressVram(gBattleTerrainAnimTiles_Cave, (void *)(VRAM + 0x4000));
             LZDecompressVram(gBattleTerrainAnimTilemap_Cave, (void *)(VRAM + 0xE000));
+            LoadCompressedPalette(gBattleTerrainPalette_Groudon, 0x20, 0x60);
         }
         else if (gGameVersion == VERSION_RUBY)
         {
             LZDecompressVram(gBattleTerrainAnimTiles_Cave, (void *)(VRAM + 0x4000));
             LZDecompressVram(gBattleTerrainAnimTilemap_Cave, (void *)(VRAM + 0xE000));
+            LoadCompressedPalette(gBattleTerrainPalette_Groudon, 0x20, 0x60);
         }
         else
         {
             LZDecompressVram(gBattleTerrainAnimTiles_Water, (void *)(VRAM + 0x4000));
             LZDecompressVram(gBattleTerrainAnimTilemap_Water, (void *)(VRAM + 0xE000));
+            LoadCompressedPalette(gBattleTerrainPalette_Kyogre, 0x20, 0x60);
         }
     }
     else
