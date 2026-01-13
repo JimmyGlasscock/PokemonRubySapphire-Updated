@@ -327,6 +327,7 @@ gSpecials::
 	def_special ScrSpecial_StartMarineCaveKyogreBattle
 	def_special ScrSpecial_StartRayquazaBattle
 	def_special ScrSpecial_StartRegiBattle
+	def_special ScrSpecial_StartDeoxysBattle
 	def_special SetUpTrainerMovement
 	def_special DoSealedChamberShakingEffect2
 	def_special FoundBlackGlasses

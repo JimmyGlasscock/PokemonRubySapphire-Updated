@@ -43,6 +43,8 @@ MossdeepCity_EventScript_14CFE4:: @ 814CFE4
 	compare VAR_RESULT, 0
 	goto_if_eq MossdeepCity_EventScript_WhiteRock_DeclinedWish
 	msgbox MossdeepCity_Text_WhiteRock_WishCameTrue, MSGBOX_DEFAULT
+	playmoncry SPECIES_JIRACHI, 2
+	waitmoncry
 	setflag FLAG_BATTLED_JIRACHI
 	setwildbattle SPECIES_JIRACHI, 30, ITEM_NONE
 	setflag FLAG_SYS_CTRL_OBJ_DELETE

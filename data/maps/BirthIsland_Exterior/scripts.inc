@@ -31,11 +31,11 @@ BirthIsland_Exterior_EventScript_Deoxys::
 	playmoncry SPECIES_DEOXYS, 2
 	delay 40
 	waitmoncry
-	playbgm MUS_ENCOUNTER_INTENSE, FALSE
+	playbgm MUS_VS_KYOGRE_GROUDON, FALSE
 	setvar VAR_LAST_TALKED, 1
 	setwildbattle SPECIES_DEOXYS, 30, ITEM_NONE
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
-	special ScrSpecial_StartSouthernIslandBattle
+	special ScrSpecial_StartDeoxysBattle
 	waitstate
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	setflag FLAG_DEFEATED_DEOXYS
