@@ -7,7 +7,7 @@ Route131_MapScript1_152444:: @ 8152444
 	end
 
 Route131_EventScript_15244E:: @ 815244E
-	setmaplayoutindex 47
+	setmaplayoutindex 329
 	return
 
 Route131_EventScript_152452:: @ 8152452
