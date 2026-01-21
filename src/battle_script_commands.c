@@ -3420,6 +3420,12 @@ static void atk23_getexp(void)
             gBattleStruct->getexpStateTracker++;
             gBattleStruct->expGetterMonId = 0;
             gBattleStruct->sentInPokes = sentIn;
+            // Initialize tracking for modern exp share display
+            if (modernExpAll)
+            {
+                gBattleStruct->unk16019 = alivePartyCount; // Store total count of Pokemon that will get exp
+                gBattleStruct->unk160A3 = 0; // Use as flag: 0 = haven't shown first exp message, 1 = shown
+            }
         }
         // fall through
     case 2: // set exp value to the poke in expgetter_id and print message
@@ -3529,7 +3535,30 @@ static void atk23_getexp(void)
 
                         PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gBattleMoveDamage)
 
-                        PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
+                        // In modern mode, only show exp message for the first Pokemon
+                        if (modernExpAll)
+                        {
+                            if (gBattleStruct->unk160A3 == 0)
+                            {
+                                // First Pokemon - show exp message
+                                PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
+                                gBattleCommunication[MSG_DISPLAY] = 1;
+                                gBattleStruct->unk160A3 = 1; // Mark that we've shown the first message
+                                
+                                // If more than 1 Pokemon will get exp, set flag to show "rest of party" message
+                                // after the first message is displayed (before level ups and move learning)
+                                if (gBattleStruct->unk16019 > 1)
+                                {
+                                    gBattleStruct->unk160A6 = 1; // Use as flag to show rest of party message
+                                }
+                            }
+                            // For subsequent Pokemon, skip the exp message but still give exp
+                        }
+                        else
+                        {
+                            // Classic mode - show exp message for all
+                            PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
+                        }
                         MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBank1].species);
                     }
                     gBattleStruct->sentInPokes >>= 1;
@@ -3541,6 +3570,7 @@ static void atk23_getexp(void)
     case 3: // Set stats and give exp
         if (gBattleControllerExecFlags == 0)
         {
+            bool8 modernExpAll;
             gBattleBufferB[gBattleStruct->expGetterBattlerId][0] = 0;
             if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP) && GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) != 100)
             {
@@ -3555,6 +3585,17 @@ static void atk23_getexp(void)
 
                 BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, gBattleMoveDamage);
                 MarkBattlerForControllerExec(gActiveBattler);
+                
+                // Show "rest of party" message after first Pokemon's exp is given (before level ups)
+                modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
+                if (modernExpAll && gBattleStruct->unk160A6 == 1 && gBattleStruct->expGetterMonId == 0)
+                {
+                    // First Pokemon's exp has been given, now show "rest of party" message
+                    gActiveBattler = 0;
+                    PrepareStringBattle(STRINGID_RESTPARTYGAINEDEXP, 0);
+                    gBattleCommunication[MSG_DISPLAY] = 1;
+                    gBattleStruct->unk160A6 = 0; // Mark that we've shown the rest of party message
+                }
             }
             gBattleStruct->getexpStateTracker++;
         }
