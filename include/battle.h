@@ -330,7 +330,7 @@ struct BattleStruct /* 0x2000000 */
     /*0x16003*/ u8 scriptingActive;
     /*0x16004*/ u8 wrappedMove[MAX_BATTLERS_COUNT * 2];
     /*0x1600C*/ u8 cmd49StateTracker;
-    /*0x1600D*/ u8 unk1600D; // unused
+    /*0x1600D*/ u8 modernExpRestPartyMsgAtMonId; // 0=none; 1-5=show RESTPARTY at case 2 for that party idx; PARTY_SIZE=show in case 6 (atk23_getexp)
     /*0x1600E*/ u8 turnCountersTracker;
     /*0x1600F*/ u8 getexpStateTracker;
     /*0x16010*/ u8 moveTarget[MAX_BATTLERS_COUNT];

@@ -3363,6 +3363,8 @@ static void atk23_getexp(void)
             // Check if Modern mode with Exp All enabled
             bool8 modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
 
+            gBattleStruct->modernExpRestPartyMsgAtMonId = 0;
+
             for (viaSentIn = 0, i = 0; i < PARTY_SIZE; i++)
             {
                 if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE || GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0)
@@ -3433,6 +3435,19 @@ static void atk23_getexp(void)
         {
             bool8 modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
             bool8 shouldGetExp = FALSE;
+
+            // Show here (not in case 3/4): RunBattleScriptCommands only runs when exec flags are clear, and case 4 can run
+            // in the same frame as case 3 if exp was applied synchronously—so case 4 never sees a "pending" window.
+            if (modernExpAll
+                && gBattleStruct->modernExpRestPartyMsgAtMonId != 0
+                && gBattleStruct->expGetterMonId == gBattleStruct->modernExpRestPartyMsgAtMonId)
+            {
+                gBattleStruct->modernExpRestPartyMsgAtMonId = 0;
+                gActiveBattler = 0;
+                PrepareStringBattle(STRINGID_RESTPARTYGAINEDEXP, 0);
+                gBattleCommunication[MSG_DISPLAY] = 1;
+                break;
+            }
             
             item = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HELD_ITEM);
 
@@ -3544,12 +3559,12 @@ static void atk23_getexp(void)
                                 PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
                                 gBattleCommunication[MSG_DISPLAY] = 1;
                                 gBattleStruct->unk160A3 = 1; // Mark that we've shown the first message
-                                
-                                // If more than 1 Pokemon will get exp, set flag to show "rest of party" message
-                                // after the first message is displayed (before level ups and move learning)
                                 if (gBattleStruct->unk16019 > 1)
                                 {
-                                    gBattleStruct->unk160A6 = 1; // Use as flag to show rest of party message
+                                    if (gBattleStruct->expGetterMonId < PARTY_SIZE - 1)
+                                        gBattleStruct->modernExpRestPartyMsgAtMonId = gBattleStruct->expGetterMonId + 1;
+                                    else
+                                        gBattleStruct->modernExpRestPartyMsgAtMonId = PARTY_SIZE; // show in case 6 (no higher slot)
                                 }
                             }
                             // For subsequent Pokemon, skip the exp message but still give exp
@@ -3627,16 +3642,6 @@ static void atk23_getexp(void)
 
                 BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, expToGive);
                 MarkBattlerForControllerExec(gActiveBattler);
-                
-                // Show "rest of party" message after first Pokemon's exp is given (before level ups)
-                if (modernExpAll && gBattleStruct->unk160A6 == 1 && gBattleStruct->expGetterMonId == 0)
-                {
-                    // First Pokemon's exp has been given, now show "rest of party" message
-                    gActiveBattler = 0;
-                    PrepareStringBattle(STRINGID_RESTPARTYGAINEDEXP, 0);
-                    gBattleCommunication[MSG_DISPLAY] = 1;
-                    gBattleStruct->unk160A6 = 0; // Mark that we've shown the rest of party message
-                }
             }
             gBattleStruct->getexpStateTracker++;
         }
@@ -3711,6 +3716,17 @@ static void atk23_getexp(void)
     case 6: // increment instruction
         if (gBattleControllerExecFlags == 0)
         {
+            bool8 modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
+
+            if (modernExpAll && gBattleStruct->modernExpRestPartyMsgAtMonId == PARTY_SIZE)
+            {
+                gBattleStruct->modernExpRestPartyMsgAtMonId = 0;
+                gActiveBattler = 0;
+                PrepareStringBattle(STRINGID_RESTPARTYGAINEDEXP, 0);
+                gBattleCommunication[MSG_DISPLAY] = 1;
+                break;
+            }
+
             // not sure why gf clears the item and ability here
             gBattleMons[gBank1].item = 0;
             gBattleMons[gBank1].ability = 0;
