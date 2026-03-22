@@ -741,6 +741,19 @@ static bool8 GiveAllDecorations(void)
 // FISHING POINTS (Feebas)
 // =======================================================
 
+static EWRAM_DATA u32 sFeebasDebugRngValue = 0;
+
+static u16 FeebasDebugRandom(void)
+{
+    sFeebasDebugRngValue = 12345 + 0x41C64E6D * sFeebasDebugRngValue;
+    return sFeebasDebugRngValue >> 16;
+}
+
+static void FeebasDebugSeedRng(u16 seed)
+{
+    sFeebasDebugRngValue = seed;
+}
+
 #if (ENGLISH && REVISION == 0)
 static const u8 Str_843E58D[] = _(
                                     "つりばしょ     R119\n"
@@ -851,13 +864,13 @@ static bool8 FishingPoints(void)
     ConvertIntToDecimalStringN(gStringVar1, FeebasDebug_GetTrueNumberOfWaterTilesInMapThird(2), STR_CONV_MODE_RIGHT_ALIGN, 5);
     Menu_PrintText(gStringVar1, 11, 7);
 
-    FeebasSeedRng(gSaveBlock1.easyChatPairs[0].unk2);
+    FeebasDebugSeedRng(gSaveBlock1.easyChatPairs[0].unk2);
     nWaterTiles = FishingPoints_CountFishingTilesInMapThird(0) + FishingPoints_CountFishingTilesInMapThird(1) + FishingPoints_CountFishingTilesInMapThird(2);
     nFeebas = 0;
 
     while (nFeebas != 6)
     {
-        u16 randTile = FeebasRandom() % nWaterTiles;
+        u16 randTile = FeebasDebugRandom() % nWaterTiles;
         if (randTile == 0)
             randTile = nWaterTiles;
         if (randTile == 0 || randTile > 3)

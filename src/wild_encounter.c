@@ -20,23 +20,10 @@
 
 const struct WildPokemon gWildFeebasRoute119Data = {20, 25, SPECIES_FEEBAS};
 
-const u16 gRoute119WaterTileData[] =
-{
-	0, 0x2D, 0,
-	0x2E, 0x5B, 0x83,
-	0x5C, 0x8B, 0x12A,
-};
-
 extern u16 gSpecialVar_Result;
 extern u8 S_RepelWoreOff[];
 
 EWRAM_DATA u8 gWildEncountersDisabled = 0;
-EWRAM_DATA static u32 sFeebasRngValue = 0;
-
-#define NUM_FEEBAS_SPOTS 6
-
-u16 FeebasRandom(void);
-void FeebasSeedRng(u16 seed);
 
 static bool8 IsWildLevelAllowedByRepel(u8 level);
 static void ApplyFluteEncounterRateMod(u32 *encRate);
@@ -47,83 +34,26 @@ void DisableWildEncounters(bool8 disabled)
     gWildEncountersDisabled = disabled;
 }
 
-static u16 GetRoute119WaterTileNum(s16 x, s16 y, u8 section)
-{
-    u16 xCur;
-    u16 yCur;
-    u16 yMin = gRoute119WaterTileData[section * 3 + 0];
-    u16 yMax = gRoute119WaterTileData[section * 3 + 1];
-    u16 tileNum = gRoute119WaterTileData[section * 3 + 2];
-
-    for (yCur = yMin; yCur <= yMax; yCur++)
-    {
-        for (xCur = 0; xCur < gMapHeader.mapLayout->width; xCur++)
-        {
-            if (MetatileBehavior_IsFeebasEncounterable(MapGridGetMetatileBehaviorAt(xCur + 7, yCur + 7)) == TRUE)
-            {
-                tileNum++;
-                if (x == xCur && y == yCur)
-                    return tileNum;
-            }
-        }
-    }
-    return tileNum + 1;
-}
-
 static bool8 CheckFeebas(void)
 {
-    u8 i;
-    u16 feebasSpots[6];
     s16 x;
     s16 y;
-    u8 route119section = 0;
-    u16 waterTileNum;
 
-    if (gSaveBlock1.location.mapGroup == MAP_GROUP(ROUTE119)
-     && gSaveBlock1.location.mapNum == MAP_NUM(ROUTE119))
-    {
-        GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
-        x -= 7;
-        y -= 7;
+    if (gSaveBlock1.location.mapGroup != MAP_GROUP(ROUTE119)
+     || gSaveBlock1.location.mapNum != MAP_NUM(ROUTE119))
+        return FALSE;
 
-        if (y >= gRoute119WaterTileData[3 * 0 + 0] && y <= gRoute119WaterTileData[3 * 0 + 1])
-            route119section = 0;
-        if (y >= gRoute119WaterTileData[3 * 1 + 0] && y <= gRoute119WaterTileData[3 * 1 + 1])
-            route119section = 1;
-        if (y >= gRoute119WaterTileData[3 * 2 + 0] && y <= gRoute119WaterTileData[3 * 2 + 1])
-            route119section = 2;
+    GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
+    x -= 7;
+    y -= 7;
 
-        if (Random() % 100 > 49) //50% chance of encountering Feebas
-            return FALSE;
+    if (MetatileBehavior_IsFeebasEncounterable(MapGridGetMetatileBehaviorAt(x + 7, y + 7)) == FALSE)
+        return FALSE;
 
-        FeebasSeedRng(gSaveBlock1.easyChatPairs[0].unk2);
-        for (i = 0; i != NUM_FEEBAS_SPOTS;)
-        {
-            feebasSpots[i] = FeebasRandom() % 447;
-            if (feebasSpots[i] == 0)
-                feebasSpots[i] = 447;
-            if (feebasSpots[i] < 1 || feebasSpots[i] >= 4)
-                i++;
-        }
-        waterTileNum = GetRoute119WaterTileNum(x, y, route119section);
-        for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
-        {
-            if (waterTileNum == feebasSpots[i])
-                return TRUE;
-        }
-    }
+    if ((Random() % 100) < 10)
+        return TRUE;
+
     return FALSE;
-}
-
-u16 FeebasRandom(void)
-{
-    sFeebasRngValue = 12345 + 0x41C64E6D * sFeebasRngValue;
-    return sFeebasRngValue >> 16;
-}
-
-void FeebasSeedRng(u16 seed)
-{
-    sFeebasRngValue = seed;
 }
 
 #if DEBUG
