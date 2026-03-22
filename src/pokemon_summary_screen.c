@@ -1877,7 +1877,8 @@ static u8 SummaryScreen_LoadPokemonSprite(struct Pokemon *mon, u8 *state)
 
         palette = GetMonSpritePalStructFromOtIdPersonality(species, otId, personality);
         LoadCompressedObjectPalette(palette);
-        GetMonSpriteTemplate_803C56C(palette->tag, 1);
+        GetMonSpriteTemplate_803C56C(species, 1);
+        gCreatingSpriteTemplate.paletteTag = palette->tag;
         *state += 1;
         return 0xFF;
     }

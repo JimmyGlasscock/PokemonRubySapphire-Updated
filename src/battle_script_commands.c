@@ -3571,8 +3571,50 @@ static void atk23_getexp(void)
         if (gBattleControllerExecFlags == 0)
         {
             bool8 modernExpAll;
+            bool8 shouldGiveExp = FALSE;
+            u16 expToGive = 0;
             gBattleBufferB[gBattleStruct->expGetterBattlerId][0] = 0;
+            modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
+            
+            // Check if this Pokemon should get EXP
+            // In modern mode, ensure the first Pokemon gets EXP by always recalculating if needed
             if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP) && GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) != 100)
+            {
+                if (modernExpAll && gBattleStruct->expGetterMonId == 0)
+                {
+                    // First Pokemon in modern mode - ensure gBattleMoveDamage is set correctly
+                    // If it's 0, recalculate with multipliers (shouldn't happen, but safety check)
+                    if (gBattleMoveDamage == 0)
+                    {
+                        u16 item;
+                        u8 holdEffect;
+                        gBattleMoveDamage = gExpShareExp;
+                        
+                        item = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HELD_ITEM);
+                        if (item == ITEM_ENIGMA_BERRY)
+                            holdEffect = gSaveBlock1.enigmaBerry.holdEffect;
+                        else
+                            holdEffect = ItemId_GetHoldEffect(item);
+                        
+                        if (holdEffect == HOLD_EFFECT_LUCKY_EGG)
+                            gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+                        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+                            gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+                        if (IsTradedMon(&gPlayerParty[gBattleStruct->expGetterMonId]))
+                            gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+                    }
+                    expToGive = gBattleMoveDamage;
+                    shouldGiveExp = TRUE;
+                }
+                else
+                {
+                    // Normal case for other Pokemon (or first Pokemon in classic mode)
+                    expToGive = gBattleMoveDamage;
+                    shouldGiveExp = TRUE;
+                }
+            }
+            
+            if (shouldGiveExp && expToGive > 0)
             {
                 gBattleResources_statsBeforeLvlUp->hp = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MAX_HP);
                 gBattleResources_statsBeforeLvlUp->atk = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_ATK);
@@ -3583,11 +3625,10 @@ static void atk23_getexp(void)
 
                 gActiveBattler = gBattleStruct->expGetterBattlerId;
 
-                BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, gBattleMoveDamage);
+                BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, expToGive);
                 MarkBattlerForControllerExec(gActiveBattler);
                 
                 // Show "rest of party" message after first Pokemon's exp is given (before level ups)
-                modernExpAll = (gSaveBlock2.optionsExpShareMode == OPTIONS_EXP_SHARE_MODE_MODERN && gSaveBlock2.expAllEnabled);
                 if (modernExpAll && gBattleStruct->unk160A6 == 1 && gBattleStruct->expGetterMonId == 0)
                 {
                     // First Pokemon's exp has been given, now show "rest of party" message
