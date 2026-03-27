@@ -12,11 +12,7 @@ CaveOfOrigin_B4F_EventScript_15DDC1:: @ 815DDC1
 	return
 
 CaveOfOrigin_B4F_MapScript1_15DDC5:: @ 815DDC5
-	.ifdef SAPPHIRE
-	setmaplayoutindex 163
-	.else
-	setmaplayoutindex 313
-	.endif
+	setmaplayoutindex 163 @ LAYOUT_CAVE_OF_ORIGIN_B4F
 	call Common_EventScript_SetupLegendaryGfxIds
 	call_if_set FLAG_LEGENDARY_BATTLE_COMPLETED, CaveOfOrigin_EventScript_DisableTriggers
 	end
